@@ -199,3 +199,16 @@ A possible trigger is - last `deps` argument. If passed - the `write` method is 
 useAction((...deps) => {}, deps)
 useState(() => {}, deps)
 ```
+
+
+## See also
+
+* [enhook](https://ghub.io/enhook) - enable hooks in regular functions.
+* [any-hooks](https://ghub.io/any-hooks) - get available installed hooks.
+* [remorph](https://ghub.io/remorph) - react/preact-based DOM morphing.
+
+## License
+
+MIT
+
+<p align="right">HK</p>
