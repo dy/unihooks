@@ -1,11 +1,11 @@
-# unihook ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/dy/unihook.svg?branch=master)](https://travis-ci.org/dy/unihook)
+# unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/dy/unihooks.svg?branch=master)](https://travis-ci.org/dy/unihooks)
 
 Unified collection of framework-agnostic common-purpose hooks.
 
-[![NPM](https://nodei.co/npm/unihook.png?mini=true)](https://nodei.co/npm/unihook/)
+[![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
 ```js
-import { useLocation, useQueryParam, useLocalStorage } from 'unihook'
+import { useLocation, useQueryParam, useLocalStorage } from 'unihooks'
 
 function MyComponent () {
   // browser location
@@ -19,31 +19,69 @@ function MyComponent () {
 }
 ```
 
-_Unihook_ provides the following common domain hooks:
+_Unihooks_ provide the following common hooks:
 
-- local storage
-- query string
-- target state
-- browser location
-- html forms
--
+#### Data hooks
 
-_Unihooks_ are available for any framework, supporting hooks. The target framework is detected automatically: `react`, `preact`, `rax`, `augmentor`, `haunted`, `atomico` etc. via [enhook](https://ghub.io/enhook).
-If used framework is known in advance, the corresponding entry can be used:
+- `usePrevious`
+- `useProperty`
+- `useState`
+- `useQueryParam`
+- `useQuery`
+- `useStore`
+- `useAction` (similar to useProperties - exposed to current element)
+- `useRoute`
+- `useLocalStorage`
+- `useRemote`
+- `useStream`
+- `useObservable`
+
+#### DOM hooks
+
+- `useCookie`
+- `useEvent`
+- `useElement`
+- `useAttribute`
+- `useProperty`
+- `useLocation`
+- `useData`
+- `useClass`
+- `useForm`
+- `useRender`
+- `useIntersection`
+- `useResize`
+- `useMount`
+- `useStyle`
+- `useStyleSheet`
+- `useHost`
+
+#### Flow hooks
+
+- `useEffect`
+- `useTimeout`
+- `useRaf`
+- `useIdle`
+- `useInterval`
+- `useGenerator`
+- `usePromise`
+- `useTransition`
+- `useList`
+- `useThrottle`
+- `usePing`
+- `useToggle`
+- `useFSM`
+- `useAsync`
+- `useHooked` - run hooks-enabled effect
+
+
+_Unihooks_ are available for any framework, supporting hooks. Target framework is detected automatically via [any-hooks](https://ghub.io/any-hooks). If target framework is known in advance, the corresponding entry can be used:
 
 ```js
 // framework is detected automatically
-import * as hook from 'unihook'
+import * as hook from 'unihooks'
 
-// target framework hooks
-import * as hook from 'unihook/react'
-import * as hook from 'unihook/preact'
-import * as hook from 'unihook/rax'
-import * as hook from 'unihook/augmentor'
-import * as hook from 'unihook/haunted'
-import * as hook from 'unihook/atomico'
-import * as hook from 'unihook/tng-hooks'
-import * as hook from 'unihook/fn-with-hooks'
+// preact hooks
+import * as hook from 'unihooks/preact'
 ```
 
 
