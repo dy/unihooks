@@ -1,0 +1,41 @@
+{
+  "name": "unihook",
+  "version": "1.0.0",
+  "description": "All-purpose any-framework hooks",
+  "main": "index.js",
+  "dependencies": {
+    "any-hooks": "^1.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node -r esm -r raf/polyfill -r browser-env/register test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dy/unihook.git"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "enhook",
+    "augmentor",
+    "preact",
+    "haunted",
+    "atomico",
+    "rax",
+    "any-hooks",
+    "use-store",
+    "use-local-storage",
+    "use-query-string",
+    "use-prop",
+    "use-attr",
+    "use-effect",
+    "use-transition"
+  ],
+  "author": "Dmitry Yv. <df.creative@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dy/unihook/issues"
+  },
+  "homepage": "https://github.com/dy/unihook#readme"
+}

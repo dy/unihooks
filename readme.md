@@ -1,6 +1,6 @@
-# unihook
+# unihook ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/dy/unihook.svg?branch=master)](https://travis-ci.org/dy/unihook)
 
-Unified collection of hooks, providing access to various data domains.
+Unified collection of framework-agnostic common-purpose hooks.
 
 [![NPM](https://nodei.co/npm/unihook.png?mini=true)](https://nodei.co/npm/unihook/)
 
@@ -19,23 +19,40 @@ function MyComponent () {
 }
 ```
 
-_Unihook_ works with any hooks provider: react, preact, rax, augmentor, haunted, atomico etc.
+_Unihook_ provides the following common domain hooks:
+
+- local storage
+- query string
+- target state
+- browser location
+- html forms
+-
+
+_Unihooks_ are available for any framework, supporting hooks. The target framework is detected automatically: `react`, `preact`, `rax`, `augmentor`, `haunted`, `atomico` etc. via [enhook](https://ghub.io/enhook).
+If used framework is known in advance, the corresponding entry can be used:
 
 ```js
-// hooks framework is detected automatically
-import { useLocalStorage } from 'unihook'
+// framework is detected automatically
+import * as hook from 'unihook'
 
-// react hooks framework
-import { useLocalStorage } from 'unihook/react'
+// target framework hooks
+import * as hook from 'unihook/react'
+import * as hook from 'unihook/preact'
+import * as hook from 'unihook/rax'
+import * as hook from 'unihook/augmentor'
+import * as hook from 'unihook/haunted'
+import * as hook from 'unihook/atomico'
+import * as hook from 'unihook/tng-hooks'
+import * as hook from 'unihook/fn-with-hooks'
 ```
 
 
 ## Docs
 
-_Unihook_ establishes API convention, derived from `useState`/`useTransition`:
+_Unihook_ establishes API convention, derived from `useState` / `useTransition`:
 
-```js
-let [currentValue(s)?, setValue|doAction, isPending|isError?] = useDataSource(...params)
+```
+let [currentValue, changeValue, isPending|isError] = useDataSource( target?, key?, init?, deps? )
 ```
 
 ### `let [state, setState] = useState(target|key?, init, deps?)`
@@ -48,6 +65,8 @@ let [x, setX] = useState(element, null, [])
 // depending on component props - reinit the state
 let [value, setValue] = useState(() => props.x, [props.x])
 ```
+
+Ref: [use-store](https://ghub.io/use-store)
 
 ### `let [value, setValue] = useLocalStorage(key, default|init)`
 
