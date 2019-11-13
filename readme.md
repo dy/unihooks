@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/dy/unihooks.svg?branch=master)](https://travis-ci.org/dy/unihooks)
 
-Unified collection of framework-agnostic common-purpose hooks.
+Collection of essential framework-agnostic hooks with unified API.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -18,60 +18,6 @@ function MyComponent () {
   let [ cart, setCart ] = useLocalStorage('cart', [])
 }
 ```
-
-_Unihooks_ provide the following common hooks:
-
-#### Data hooks
-
-- `usePrevious`
-- `useProperty`
-- `useState`
-- `useQueryParam`
-- `useQuery`
-- `useStore`
-- `useAction` (similar to useProperties - exposed to current element)
-- `useRoute`
-- `useLocalStorage`
-- `useRemote`
-- `useStream`
-- `useObservable`
-
-#### DOM hooks
-
-- `useCookie`
-- `useEvent`
-- `useElement`
-- `useAttribute`
-- `useProperty`
-- `useLocation`
-- `useData`
-- `useClass`
-- `useForm`
-- `useRender`
-- `useIntersection`
-- `useResize`
-- `useMount`
-- `useStyle`
-- `useStyleSheet`
-- `useHost`
-
-#### Flow hooks
-
-- `useEffect`
-- `useTimeout`
-- `useRaf`
-- `useIdle`
-- `useInterval`
-- `useGenerator`
-- `usePromise`
-- `useTransition`
-- `useList`
-- `useThrottle`
-- `usePing`
-- `useToggle`
-- `useFSM`
-- `useAsync`
-- `useHooked` - run hooks-enabled effect
 
 
 _Unihooks_ are available for any framework, supporting hooks. Target framework is detected automatically via [any-hooks](https://ghub.io/any-hooks). If target framework is known in advance, the corresponding entry can be used:
