@@ -3,6 +3,7 @@ import { useLocalStorage } from '..'
 import enhook, { useEffect } from 'enhook'
 import { tick, idle, frame } from 'wait-please'
 
+
 t('useLocalStorage: basic', async t => {
   useLocalStorage.clear()
 
@@ -23,7 +24,6 @@ t('useLocalStorage: basic', async t => {
 
   t.end()
 })
-
 
 t('useLocalStorage: multiple components use same key', async t => {
   let log = []
@@ -52,5 +52,25 @@ t('useLocalStorage: multiple components use same key', async t => {
   await frame(2)
   t.deepEqual(log, [1, 1, 2, 2, 2])
 
+  useLocalStorage.clear()
+  t.end()
+})
+
+t.only('useLocalStorage: must not trigger unchanged updates', async t => {
+  let log = []
+  let f = enhook((i) => {
+    let [count, setCount] = useLocalStorage('count', i)
+    log.push(count)
+    useEffect(() => {
+      setCount(i + 1)
+      setCount(i)
+    }, [])
+  })
+  f(1)
+  t.deepEqual(log, [1])
+  await frame(2)
+  t.deepEqual(log, [1])
+
+  useLocalStorage.clear()
   t.end()
 })
