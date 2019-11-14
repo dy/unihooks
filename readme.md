@@ -1,10 +1,8 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/dy/unihooks.svg?branch=master)](https://travis-ci.org/dy/unihooks)
 
-Collection of essential framework-agnostic hooks with unified API.
+Unified essential multiframework hooks.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
-
-## W O R K &nbsp;&nbsp; I N &nbsp;&nbsp; P R O G R E S S
 
 ```js
 import { useLocation, useQueryParam, useLocalStorage } from 'unihooks'
@@ -25,7 +23,7 @@ function MyComponent () {
 
 #### 3. Cross-framework
 
-_Unihooks_ work in any hooks-enabled framework: [react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [atomico](https://ghub.io/atomico), [augmented](https://ghub.io/augmented), − via [any-hooks](https://ghub.io/any-hooks).
+_Unihooks_ work in any hooks-enabled framework: [react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [atomico](https://ghub.io/atomico), [augmented](https://ghub.io/augmented) – via [any-hooks](https://ghub.io/any-hooks).
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -39,27 +37,25 @@ import * as hook from 'unihooks/preact'
 ```
 -->
 
-#### 2. Unified API
+#### 2. Unified
 
-_Unihooks_ tend to follow generalized `useState` / `useEffect` hooks signature:
+_Unihooks_ follow generalized API signature, derived from `useState` / `useEffect`:
 
 ```
 let [ state, action ] = useDomain( key?, initialState? )
 let [ result, status ] = useCall( fn, deps? )
 ```
 
-#### 1. Reactivity
+#### 1. Reactive
 
-_Unihooks_ are reactive − each hook observes some data source and triggers rerendering on changes.
-Static hooks are prohibited.
+Hooks observe some changing data source and trigger update. Static hooks are not allowed.
 
 ```js
 // no
-import { useSaveData } from 'react-adaptive-hooks/save-data';
-function MyComponent () { let { saveData } = useSaveData() }
+function MyComponent () { let ua = useUserAgent() }
 
 // yes
-function MyComponent () { let saveData = useMemo(() => navigator.connection.saveData) }
+function MyComponent () { let us = useMemo(() => navigator.userAgent) }
 ```
 
 
