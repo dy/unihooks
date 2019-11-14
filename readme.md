@@ -39,12 +39,15 @@ import * as hook from 'unihooks/preact'
 
 #### 2. Unified
 
-_Unihooks_ follow generalized API signature, derived from `useState` / `useEffect`:
+_Unihooks_ follow generalized API signature, derived from `useState`:
+
+<!-- / `useEffect` and Observable / Promise: -->
 
 ```
 let [ state, action ] = useDomain( key?, initialState? )
-let [ result, status ] = useCall( fn, deps? )
 ```
+
+<!-- let [ value, { error, closed, pending } ] = useCall( fn, deps? ) -->
 
 #### 1. Reactive
 
