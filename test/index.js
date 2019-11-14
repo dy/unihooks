@@ -24,9 +24,10 @@ t('useLocalStorage: basic', async t => {
   t.end()
 })
 
-t('useLocalStorage: multiple components use same key', async t => {
 
+t('useLocalStorage: multiple components use same key', async t => {
   let log = []
+
   let f = (i) => {
     let [count, setCount] = useLocalStorage('count', i)
     log.push(count)

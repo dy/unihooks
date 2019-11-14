@@ -85,12 +85,22 @@ Ref: [use-store](https://ghub.io/use-store)
 
 -->
 
-### `useLocalStorage(key, init)`
+### `useLocalStorage(key, initialValue)`
 
 `useState` with persistency to local storage by `key`.
 
 ```js
-const [state, setState] = useLocalStorage('LOCAL_STORAGE_KEY', initialValue)
+function MyComponent1 () {
+  const [count, setCount] = useLocalStorage('my-count', 1)
+}
+
+function MyComponent2 () {
+  const [count, setCount] = useLocalStorage('my-count')
+  // count === 1
+
+  // updates MyComponent1 as well
+  setCount(2)
+}
 ```
 
 <!--
