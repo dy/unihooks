@@ -1,7 +1,7 @@
 {
   "name": "unihooks",
   "version": "1.0.0",
-  "description": "All-purpose any-framework hooks",
+  "description": "Essential unified hooks collection",
   "main": "index.js",
   "dependencies": {
     "any-hooks": "^1.0.1",
