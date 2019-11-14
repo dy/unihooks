@@ -52,14 +52,18 @@ Hooks observe some changing data source and trigger update. Static hooks are not
 
 ```js
 // no
-function MyComponent () { let ua = useUserAgent() }
+function MyComponent () {
+  let ua = useUserAgent()
+}
 
 // yes
-function MyComponent () { let us = useMemo(() => navigator.userAgent) }
+function MyComponent () {
+  let ua = useMemo(() => navigator.userAgent)
+}
 ```
 
 
-## API reference
+## API
 
 <!--
 
