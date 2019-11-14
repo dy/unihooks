@@ -25,8 +25,7 @@ function MyComponent () {
 
 #### 3. Cross-framework
 
-_Unihooks_ work in any hooks-enabled framework: [react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [atomico](https://ghub.io/atomico), [augmented](https://ghub.io/augmented), etc.
-The framework is detected via [any-hooks](https://ghub.io/any-hooks).
+_Unihooks_ work in any hooks-enabled framework: [react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [atomico](https://ghub.io/atomico), [augmented](https://ghub.io/augmented), etc., detected via [any-hooks](https://ghub.io/any-hooks).
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -50,18 +49,17 @@ let [ state, action ] = useDomain( key?, initialState? )
 
 #### 1. Reactivity
 
-_Unihooks_ are reactive - a hook triggers rerendering component, if underlying data changes.
-If a hook can be replaced with direct function − it should not exist.
-Therefore _unihooks_ don't contain hooks that simply obtain some value or access API without subscription.
+_Unihooks_ are reactive − each hook observes some data source and triggers rerendering on changes.
+Static hooks are prohibited.
 
 ```js
-// don't
+// no
 import { useSaveData } from 'react-adaptive-hooks/save-data';
 const MyComponent = () => {
   let { saveData } = useSaveData()
 }
 
-// do
+// yes
 const MyComponent = () => {
   let saveData = useMemo(() => navigator.connection.saveData)
 }
