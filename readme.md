@@ -19,8 +19,11 @@ function MyComponent () {
 }
 ```
 
+_Unihooks_ are available for any hooks-enabled framework, detected with [any-hooks](https://ghub.io/any-hooks).
 
-_Unihooks_ are available for any framework, supporting hooks. Target framework is detected automatically via [any-hooks](https://ghub.io/any-hooks). If target framework is known in advance, the corresponding entry can be used:
+<!--
+
+If target framework is known in advance, the corresponding entry can be used:
 
 ```js
 // framework is detected automatically
@@ -30,14 +33,18 @@ import * as hook from 'unihooks'
 import * as hook from 'unihooks/preact'
 ```
 
+-->
+
 
 ## Docs
 
-_Unihook_ establishes API convention, derived from `useState` / `useTransition`:
+_Unihook_ follows `useState` API convention:
 
 ```
 let [currentValue, changeValue, isPending|isError] = useDataSource( target?, key?, init?, deps? )
 ```
+
+<!--
 
 ### `let [state, setState] = useState(target|key?, init, deps?)`
 
@@ -52,9 +59,17 @@ let [value, setValue] = useState(() => props.x, [props.x])
 
 Ref: [use-store](https://ghub.io/use-store)
 
-### `let [value, setValue] = useLocalStorage(key, default|init)`
+-->
+
+### `useLocalStorage(key)`
 
 `useState` with persistency to local storage by `key`.
+
+```js
+const [state, setState] = useLocalStorage('LOCAL_STORAGE_KEY', initialValue)
+```
+
+<!--
 
 ### `let [value, setValue] = useQueryParam(name, default|type)`
 
@@ -89,7 +104,6 @@ Form values accessor hook.
 
 ### `let [value, setValue, isValid] = useFormValue(name, init, validate)`
 
-<!--
 ### `let [response, send, isPending] = useRemote(url, method|options?)`
 
 Remote source accessor, a generic AJAX calls hook.
@@ -100,7 +114,6 @@ useEffect(fetchUsers, [id])
 
 let [data, su]
 ```
--->
 
 ### `let [location, setLocation] = useLocation()`
 ### `let [params, setRoute] = useRoute('user/:id')`
@@ -120,7 +133,7 @@ Append, prepend, remove, update etc.
 
 ### `let [css, setCss] = useCSS(selector|element?, rule)`
 
-<!-- ### `let [value] = useArguments()` -->
+### `let [value] = useArguments()`
 
 ### `let [message, send] = useThread(pid)`
 
@@ -145,6 +158,8 @@ A possible trigger is - last `deps` argument. If passed - the `write` method is 
 useAction((...deps) => {}, deps)
 useState(() => {}, deps)
 ```
+
+-->
 
 
 ## See also
