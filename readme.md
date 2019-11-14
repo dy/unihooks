@@ -1,17 +1,10 @@
-# W O R K &nbsp;&nbsp; I N &nbsp;&nbsp; P R O G R E S S
-
-
-
-
-
-
-
-
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/dy/unihooks.svg?branch=master)](https://travis-ci.org/dy/unihooks)
 
 Collection of essential framework-agnostic hooks with unified API.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
+
+## W O R K &nbsp;&nbsp; I N &nbsp;&nbsp; P R O G R E S S
 
 ```js
 import { useLocation, useQueryParam, useLocalStorage } from 'unihooks'
@@ -28,10 +21,14 @@ function MyComponent () {
 }
 ```
 
-_Unihooks_ are available for any hooks-enabled framework, detected with [any-hooks](https://ghub.io/any-hooks).
+## Principles
+
+#### 3. Cross-framework
+
+_Unihooks_ work in any hooks-enabled framework: [react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [atomico](https://ghub.io/atomico), [augmented](https://ghub.io/augmented), etc.
+The framework is detected via [any-hooks](https://ghub.io/any-hooks).
 
 <!--
-
 If target framework is known in advance, the corresponding entry can be used:
 
 ```js
@@ -41,17 +38,38 @@ import * as hook from 'unihooks'
 // preact hooks
 import * as hook from 'unihooks/preact'
 ```
-
 -->
 
+#### 2. Unified API
 
-## Docs
-
-_Unihook_ follows `useState` API convention:
+_Unihooks_ tend to follow generalized `useState` / `useEffect` hooks signature:
 
 ```
-let [currentValue, changeValue, isPending|isError] = useDataSource( target?, key?, init?, deps? )
+let [ state, action ] = useDomain( key?, initialState? )
 ```
+
+#### 1. Reactivity
+
+_Unihooks_ are reactive - a hook triggers rerendering component, if underlying data changes.
+If a hook can be replaced with direct function − it should not exist.
+Therefore _unihooks_ don't contain hooks that simply obtain some value or access API without subscription.
+
+```js
+// don't
+import { useSaveData } from 'react-adaptive-hooks/save-data';
+const MyComponent = () => {
+  let { saveData } = useSaveData()
+}
+
+// do
+const MyComponent = () => {
+  let saveData = useMemo(() => navigator.connection.saveData)
+}
+```
+
+
+
+## API reference
 
 <!--
 
@@ -70,7 +88,7 @@ Ref: [use-store](https://ghub.io/use-store)
 
 -->
 
-### `useLocalStorage(key)`
+### `useLocalStorage(key, init)`
 
 `useState` with persistency to local storage by `key`.
 
