@@ -1,23 +1,19 @@
 import useState from './useState'
-import tuple from 'immutable-tuple'
+import useMemo from './useMemo'
 import globalCache from 'global-cache'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
+import tuple from 'immutable-tuple'
 
 
-const _cache = Symbol.for('unihooks')
-if (!globalCache.has(_cache)) globalCache.set(_cache, new WeakMap)
-const cache = globalCache.get(_cache)
+const SymbolUnihooks = Symbol.for('@@unihooks')
+if (!globalCache.has(SymbolUnihooks)) globalCache.set(SymbolUnihooks, new Map)
+const cache = globalCache.get(SymbolUnihooks)
 
-export default function useStorage(key, init, { get, set }) {
-  // multikey → tuple
-  key = tuple(key)
-
-  let store = cache.get(key)
-
-  if (!store) {
-    cache.set(key, store = value => {
-      store.set(value)
-    })
+export default function useStorage({ get, set }, init, param = {}) {
+  let store = useMemo(() => {
+    if (param.id && cache.has(param.id)) return cache.get(param.id)
+    const store = value => store.set(value)
+    if (param.id) cache.set(param.id, store)
 
     // mitt extract
     let subs = []
@@ -51,12 +47,15 @@ export default function useStorage(key, init, { get, set }) {
       set(store.value)
       store.emit('change', store.value)
     }
-  }
+
+    return store
+  }, [])
 
   const [value, setNativeState] = useState(() => {
     store.value = get()
-    if (store.value === null && init !== store.value) {
-      store.set(typeof init === 'function' ? init() : init)
+    if (store.value == null && init !== store.value) {
+      store.value = typeof init === 'function' ? init() : init
+      store.commit()
     }
 
     store.on('change', value => setNativeState(value))
