@@ -1,19 +1,23 @@
 // borrowed from https://github.com/chrisjpatty/crooks
 
-import useState from './useState'
-import createProvider from './provider'
-
+import { useMemo } from 'any-hooks'
+import useStorage from './useStorage'
 import ls from 'local-storage'
 
 const useLocalStorage = (key, initial) => {
-  let provider = createProvider(['useLocalStorage', key], ls)
+    ls.on(key, value => setValue(value))
 
-  const [value, setNativeState] = useState(() => {
-    provider.subscribe(value => setNativeState(value))
-    return provider.value
-  })
+    let storage = useMemo(() => {
+        return {
+            get: () => JSON.parse(ls.get(key)),
+            set: value => ls.set(key, value)
+        }
+    }, [])
 
-  return [value, provider]
+    // let [value, setValue] = useStore(['useLocalStorage', key], initial, store)
+    let [value, setValue] = useStorage(key, initial, storage)
+
+    return [value, setValue]
 }
 
 // export const clear = useLocalStorage.clear = () => {

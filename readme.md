@@ -81,7 +81,14 @@ Ref: [use-store](https://ghub.io/use-store)
 
 -->
 
-### `useLocalStorage(key, initialValue)`
+<!--
+### `useState(init)`
+
+Normalized `useState` across frameworks
+-->
+
+
+### `useLocalStorage(key, init)`
 
 `useState` with persistency to local storage by `key`.
 
@@ -98,6 +105,14 @@ function MyComponent2 () {
   setCount(2)
 }
 ```
+<!--
+### `useStorage(key, init, { get, set })`
+
+Generic storage hook
+
+```js
+```
+-->
 
 <!--
 
