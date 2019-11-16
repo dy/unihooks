@@ -21,9 +21,15 @@ function MyComponent () {
 
 ## Principles
 
-#### 3. Cross-framework
+#### 1. Cross-framework
 
-_Unihooks_ work in any hooks-enabled framework: [react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [atomico](https://ghub.io/atomico), [augmented](https://ghub.io/augmented) – via [any-hooks](https://ghub.io/any-hooks).
+_Unihooks_ work in any hooks-enabled framework:
+
+* [react](https://ghub.io/react)
+* [preact](https://ghub.io/preact)
+* [haunted](https://ghub.io/haunted)
+* [atomico](https://ghub.io/atomico)
+* [augmented](https://ghub.io/augmented)
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -39,17 +45,17 @@ import * as hook from 'unihooks/preact'
 
 #### 2. Unified
 
-_Unihooks_ follow generalized API signature, derived from `useState`:
+_Unihooks_ follow generalized API signature, derived from `useState`/`useEffect`:
 
 <!-- / `useEffect` and Observable / Promise: -->
 
 ```
-let [ state, action ] = useDomain( key?, initialState? )
+let [ state, action ] = useDomain( key?, init | fn?, deps? )
 ```
 
 <!-- let [ value, { error, closed, pending } ] = useCall( fn, deps? ) -->
 
-#### 1. Reactive
+#### 3. Reactive
 
 Hooks observe some changing data source and trigger update. Static hooks are not allowed.
 
@@ -81,16 +87,12 @@ Ref: [use-store](https://ghub.io/use-store)
 
 -->
 
-<!--
-### `useState(init)`
+### Data hooks
 
-Normalized `useState` across frameworks
--->
-
-
-### `useLocalStorage(key, init)`
+#### `useLocalStorage(key, init?, deps?)`
 
 `useState` with persistency to local storage by `key`.
+`init` can be a function or initial value. `deps` can indicate if `init` must be called (same as `useEffect`).
 
 ```js
 function MyComponent1 () {
@@ -104,9 +106,17 @@ function MyComponent2 () {
   // updates MyComponent1 as well
   setCount(2)
 }
+
+function MyComponent3 () {
+  const [count, setCount] = useLocalStorage('another-count', (value) => {
+    // ...initialize value from store
+    return value
+  })
+}
 ```
+
 <!--
-### `useStorage(key, init, { get, set })`
+#### `useStorage(key, init, { get, set })`
 
 Generic storage hook
 
@@ -114,42 +124,69 @@ Generic storage hook
 ```
 -->
 
+### Standard Hooks
+
+#### `useState(init, deps?)`
+
+Normalized `useState` across frameworks.
+
+1. Makes sure initialized works - augmentor and possibly other frameworks had it not supported.
+2. Takes optional `deps` param to trigger initializer. That can be useful for components, depending on props.
+
+```js
+function MyComponent(props) {
+  let [currentValue, setCurrentValue] = useState(props.value, [props.value])
+  // sets `currentValue` to `value` whenever passed `props.value` changes.
+}
+```
+
+#### `useEffect(fn, deps?)`
+
+Deopinionated `useEffect`.
+
+1. It guarantees microtask - react/preact behave unpredictably for whether effect is called as microtask or synchronously.
+2. No-deps call `useEffect(fn)` is equivalent to empty-array call `useEffect(fn, [])`. First, this is compatible with `useState(initFn)` (principle 2). Second, react's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, that violates principle 3. Third, single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)`, that reduces lib size and makes for principle 1.
+
+```js
+
+```
+
 <!--
 
-### `let [value, setValue] = useQueryParam(name, default|type)`
+#### `let [value, setValue] = useQueryParam(name, default|type)`
 
 `useState` with persistency to query string. `default` value indicates data type to serialize. If default value doesn't exist, directly type can be passed.
 
 ```js
 ```
 
-### `let [values, setValues] = useQueryString()`
+#### `let [values, setValues] = useQueryString()`
 
 Query string object accessor.
 
-### `let [prop, setProp] = useProperty(element, name)`
+#### `let [prop, setProp] = useProperty(element, name)`
 
 Property observer hook.
 
-### `let [attr, setAttr] = useAttribute(element, name)`
+#### `let [attr, setAttr] = useAttribute(element, name)`
 
 Element attribute observer hook.
 
-### `let [data, setData] = useDataset(element, name)`
+#### `let [data, setData] = useDataset(element, name)`
 
 `dataset`/`data-*` observer hook.
 
-### `let [cls, setClass] = useClassName(element, name)`
+#### `let [cls, setClass] = useClassName(element, name)`
 
 `className` observer hook.
 
-### `let [values, setValues, isValid] = useForm(init, validation)`
+#### `let [values, setValues, isValid] = useForm(init, validation)`
 
 Form values accessor hook.
 
-### `let [value, setValue, isValid] = useFormValue(name, init, validate)`
+#### `let [value, setValue, isValid] = useFormValue(name, init, validate)`
 
-### `let [response, send, isPending] = useRemote(url, method|options?)`
+#### `let [response, send, isPending] = useRemote(url, method|options?)`
 
 Remote source accessor, a generic AJAX calls hook.
 
@@ -160,37 +197,37 @@ useEffect(fetchUsers, [id])
 let [data, su]
 ```
 
-### `let [location, setLocation] = useLocation()`
-### `let [params, setRoute] = useRoute('user/:id')`
+#### `let [location, setLocation] = useLocation()`
+#### `let [params, setRoute] = useRoute('user/:id')`
 
-### `let [e, dispatch] = useEvent(target|selector?, event)`
+#### `let [e, dispatch] = useEvent(target|selector?, event)`
 
 Events hook.
 
-### `let [cookie, setCookie] = useCookie(name)`
+#### `let [cookie, setCookie] = useCookie(name)`
 
 
-### `let [ mutation, mutate ] = useMutations(selector|element)`
+#### `let [ mutation, mutate ] = useMutations(selector|element)`
 
 Append, prepend, remove, update etc.
 
-### `let [element, render] = useSelector(selector|element)`
+#### `let [element, render] = useSelector(selector|element)`
 
-### `let [css, setCss] = useCSS(selector|element?, rule)`
+#### `let [css, setCss] = useCSS(selector|element?, rule)`
 
-### `let [value] = useArguments()`
+#### `let [value] = useArguments()`
 
-### `let [message, send] = useThread(pid)`
+#### `let [message, send] = useThread(pid)`
 
-### `let [intersects] = useIntersection(elementA, elementB)`
+#### `let [intersects] = useIntersection(elementA, elementB)`
 
-### `let [size, setSize] = useResize(element)`
+#### `let [size, setSize] = useResize(element)`
 
-### `let [, startTransition, isPending] = useTransition()`
+#### `let [, startTransition, isPending] = useTransition()`
 
-### `let [ result, call ] = useFunction(() => {})`
+#### `let [ result, call ] = useFunction(() => {})`
 
-### `let [ result, call ] = useEffect(key?, () => {}, deps?)`
+#### `let [ result, call ] = useEffect(key?, () => {}, deps?)`
 
 In some way, a gateway to other hooks, same as direct aspect `effect(() => {})`.
 But if we follow convention, that's going to become `let [prevResult, call] = useEffect( () => {} | id ); call()`.

@@ -53,6 +53,7 @@ export default function useStorage({ get, set }, init, param = {}) {
 
   const [value, setNativeState] = useState(() => {
     store.value = get()
+
     if (store.value == null && init !== store.value) {
       store.value = typeof init === 'function' ? init() : init
       store.commit()

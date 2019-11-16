@@ -1,8 +1,6 @@
-import { useMemo } from 'any-hooks'
 import useStorage from './useStorage'
 
 const useProperty = (target, name) => {
-
   // check if prop is configurable
   const initialDesc = Object.getOwnPropertyDescriptor(target, name)
   const initialValue = initialDesc && ('value' in initialDesc) ? initialDesc.value : target[name]
