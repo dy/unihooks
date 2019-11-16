@@ -21,7 +21,7 @@ function MyComponent () {
 
 ## Principles
 
-#### 1. Cross-framework
+### 1. Cross-framework
 
 _Unihooks_ work in any hooks-enabled framework:
 
@@ -43,28 +43,28 @@ import * as hook from 'unihooks/preact'
 ```
 -->
 
-#### 2. Unified
+### 2. Unified
 
 _Unihooks_ follow generalized API signature, derived from `useState`/`useEffect`:
 
 <!-- / `useEffect` and Observable / Promise: -->
 
 ```
-let [ state, action ] = useDomain( key?, init | fn?, deps? )
+let [ state, action ] = useDomain( key?, init?, deps? )
 ```
 
 <!-- let [ value, { error, closed, pending } ] = useCall( fn, deps? ) -->
 
-#### 3. Reactive
+### 3. Reactive
 
-Hooks observe some changing data source and trigger update. Static hooks are not allowed.
+Hooks observe some changing data source and trigger update. Static hooks are not allowed. If hook can be replaced with regular function - it is not allowed.
 
 ```js
 // no
 const MyComponent = () => { let ua = useUserAgent() }
 
 // yes
-const MyComponent = () => { let ua = useMemo(() => navigator.userAgent, []) }
+const MyComponent = () => { let ua = navigator.userAgent }
 ```
 
 
@@ -115,6 +115,10 @@ function MyComponent3 () {
 }
 ```
 
+#### `useGlobalCache(key, init?, deps?)`
+
+Get value stored as global.
+
 <!--
 #### `useStorage(key, init, { get, set })`
 
@@ -124,32 +128,36 @@ Generic storage hook
 ```
 -->
 
-### Standard Hooks
+### Extended Standard Hooks
 
-#### `useState(init, deps?)`
+Use with caution or don't, these hooks are not 100% compatible with react hooks.
+
+#### `useState(init?, deps?)`
 
 1. Normalizes initializer function (some hook providers have it not implemented).
-2. Optional `deps` reinitialize value.
+2. Takes optional `deps` to reinitialize state.
 
 ```js
 function MyComponent(props) {
-  let [currentValue, setCurrentValue] = useState(props.value, [props.value])
   // sets `currentValue` to `value` whenever passed `props.value` changes.
+  let [currentValue, setCurrentValue] = useState(props.value, [props.value])
 }
 ```
 
 #### `useEffect(fn, deps?)`
 
-1. Guarantees microtask - react/preact unpredictably call microtask or sync.
-2. No-deps `useEffect(fn)` is equivalent to empty-deps `useEffect(fn, [])`.
-    1. Compatible with `useState(initFn)` (principle 2).
-    2. React's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, which is redundant hook (principle 3).
+1. Guarantees microtask - react/preact unpredictably call as microtask or sync.
+2. No-deps `useEffect(fn)` is the same as empty-deps `useEffect(fn, [])`.
+    1. React's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, which is redundant hook (principle 3).
+    2. That is compatible with `useState(initFn)` (principle 2).
     3. Single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)` − that reduces cognitive load / lib size (principle 1).
 3. Supports async functions.
 
 ```js
 function MyComponent(props) {
   let [result, setResult] = useState()
+
+  // called once on init
   useEffect(async () => setResult(await load('/data')))
 
   // ...

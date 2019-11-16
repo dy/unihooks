@@ -77,27 +77,29 @@ t('useLocalStorage: does not trigger unchanged updates', async t => {
   t.end()
 })
 
-t.only('useLocalStorage: lazy init should be called once per key, not per hook', async t => {
+t('useLocalStorage: fn init should be called per hook', async t => {
   localStorage.removeItem('count')
+
+  localStorage.count = 0
 
   let log = []
   let f = enhook(() => {
+    useLocalStorage('count', -1)
     useLocalStorage('count', (count) => {
       log.push(count)
       return 1
     })
-    useLocalStorage('count', (count) => {
+    let [value, setValue] = useLocalStorage('count', (count) => {
       log.push(count)
       return 2
     })
+    log.push(value)
   })
   f()
-
-  t.deepEqual(log, [null, 1])
+  t.deepEqual(log, [0, 1, 2])
 
   f()
-
-  t.deepEqual(log, [null, 1])
+  t.deepEqual(log, [0, 1, 2, 2])
 
   await frame(4)
   localStorage.removeItem('count')

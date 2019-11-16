@@ -1,3 +1,5 @@
-import { useMemo } from 'any-hooks'
+import { useMemo as useNativeMemo } from 'any-hooks'
 
-export default useMemo
+export default function useMemo(fn, deps=[]) {
+  return useNativeMemo(fn, deps)
+}

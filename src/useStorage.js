@@ -1,25 +1,25 @@
 import useState from './useState'
-import useMemo from './useMemo'
-import globalCache from 'global-cache'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
-import tuple from 'immutable-tuple'
+import useEffect from './useEffect'
+import globalCache from 'global-cache'
 
-
-const SymbolUnihooks = Symbol.for('@@unihooks')
+const SymbolUnihooks = Symbol.for('__unihooks__useStorage')
 if (!globalCache.has(SymbolUnihooks)) globalCache.set(SymbolUnihooks, new Map)
 const cache = globalCache.get(SymbolUnihooks)
 
-export default function useStorage({ get, set }, init, param = {}) {
-  let store = useMemo(() => {
-    if (param.id && cache.has(param.id)) return cache.get(param.id)
-    const store = value => store.set(value)
-    if (param.id) cache.set(param.id, store)
+export default function useStorage(storage, init, deps=[]) {
+  let store
+  if (cache.has(storage)) {
+    store = cache.get(storage)
+  }
+  else {
+    cache.set(storage, store = value => store.set(value))
 
     // mitt extract
-    let subs = []
-    store.on = (e, fn) => { (subs[e] || (subs[e] = [])).push(fn) }
-    store.off = (e, fn) => { subs[e].splice(subs[e].indexOf(fn) >>> 0, 1) }
-    store.emit = (e, arg) => { subs[e] && subs[e].slice().map(fn => fn(arg)) }
+    let subs = {}
+    store.on = (e, fn) => (subs[e] || (subs[e] = [])).push(fn)
+    store.off = (e, fn) => subs[e].splice(subs[e].indexOf(fn) >>> 0, 1)
+    store.emit = (e, arg) => subs[e] && subs[e].slice().map(fn => fn(arg))
 
     store.value
     store.planned
@@ -44,24 +44,34 @@ export default function useStorage({ get, set }, init, param = {}) {
 
     store.commit = () => {
       store.planned = null
-      set(store.value)
+      storage.set(store.value)
       store.emit('change', store.value)
     }
+  }
 
-    return store
-  }, [])
+  useEffect(() => {
+    const notify = value => setNativeState(value)
+    store.on('change', notify)
+    return () => store.off('change', notify)
+  })
 
   const [value, setNativeState] = useState(() => {
-    store.value = get()
+    if (store.planned) store.commit()
+    store.value = storage.get()
 
-    if (store.value == null && init !== store.value) {
-      store.value = typeof init === 'function' ? init() : init
+    // fn init is always called
+    if (typeof init === 'function') {
+      store.value = init(store.value)
+      store.commit()
+    }
+    // constant init is called if there's no value in storage
+    else if (store.value == null && init != store.value) {
+      store.value = init
       store.commit()
     }
 
-    store.on('change', value => setNativeState(value))
     return store.value
-  })
+  }, deps)
 
   return [value, store]
 }
