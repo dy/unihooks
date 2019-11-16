@@ -1,30 +1,35 @@
 import useStorage from './useStorage'
+import tuple from 'immutable-tuple'
 
-const useProperty = (target, name) => {
-  // check if prop is configurable
-  const initialDesc = Object.getOwnPropertyDescriptor(target, name)
-  const initialValue = initialDesc && ('value' in initialDesc) ? initialDesc.value : target[name]
+const cache = new WeakMap
 
-  let desc = {
-    configurable: true,
-    get() {
-      return initialDesc && initialDesc.get ? initialDesc.get.call(target) : target[name]
-    },
-    set(value) {
-      if (initialDesc && initialDesc.set) initialDesc.set.call(target, value)
-      else target[name]
+export default function useProperty (target, name, init, deps) {
+  let key = tuple(target, name)
+  let storage = cache.get(key)
+
+  if (!storage) {
+    const initialDesc = Object.getOwnPropertyDescriptor(target, name)
+
+    cache.set(key, storage = {
+      get: () => initialDesc && initialDesc.get ? initialDesc.get.call(target) : storage.value,
+      set: value => {
+        if (initialDesc && initialDesc.set) initialDesc.set.call(target, value)
+        else storage.value = value
+        // not `store.set(value)` because no need to write to storage
+        store.update(value)
+      },
+      value: initialDesc ? (('value' in initialDesc) ? initialDesc.value : null) : target[name]
+    })
+
+    const desc = {
+      configurable: true,
+      get() { return storage.get() },
+      set(value) { return storage.set(value) }
     }
+
+    Object.defineProperty(target, name, desc)
   }
 
-  Object.defineProperty(target, name, desc)
-
-  let storage = {
-    get: () => target[name],
-    set: value => target[name] = value
-  }
-
-  return useStorage(storage, initialValue, { id: 'useProperty' })
+  let [value, store] = useStorage(storage, init, deps)
+  return [value, store]
 }
-
-
-export default useProperty

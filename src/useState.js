@@ -1,6 +1,7 @@
 import { useState as useNativeState, useMemo } from 'any-hooks'
 
-export default function useState (init, deps = []) {
+export default function useState (init, deps=[]) {
+  let isFirst = false
   let [value, setValue] = useNativeState(init)
 
   // https://github.com/WebReflection/augmentor/issues/19 etc
@@ -8,7 +9,7 @@ export default function useState (init, deps = []) {
     value = init()
   }
 
-  let isFirst
+  // let isFirst
   useMemo(() => {
     isFirst = true
   }, [])

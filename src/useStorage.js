@@ -1,6 +1,6 @@
 import useState from './useState'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
-import useEffect from './useEffect'
+import useSyncEffect from './useSyncEffect'
 import globalCache from 'global-cache'
 
 const SymbolUnihooks = Symbol.for('__unihooks__useStorage')
@@ -24,6 +24,7 @@ export default function useStorage(storage, init, deps=[]) {
     store.value
     store.planned
 
+    // read from storage
     store.get = () => {
       if (store.planned) {
         clearMicrotask(store.planned)
@@ -32,6 +33,7 @@ export default function useStorage(storage, init, deps=[]) {
       return store.value
     }
 
+    // write to storage
     store.set = (newValue) => {
       if (Object.is(newValue, store.value)) {
         if (store.planned) clearMicrotask(store.planned)
@@ -42,18 +44,19 @@ export default function useStorage(storage, init, deps=[]) {
       store.value = newValue
     }
 
+    // put store into storage
     store.commit = () => {
       store.planned = null
       storage.set(store.value)
       store.emit('change', store.value)
     }
-  }
 
-  useEffect(() => {
-    const notify = value => setNativeState(value)
-    store.on('change', notify)
-    return () => store.off('change', notify)
-  })
+    // update store, not updating storage
+    store.update = (value) => {
+      store.value = value
+      store.emit('change', store.value)
+    }
+  }
 
   const [value, setNativeState] = useState(() => {
     if (store.planned) store.commit()
@@ -72,6 +75,14 @@ export default function useStorage(storage, init, deps=[]) {
 
     return store.value
   }, deps)
+
+  useSyncEffect(() => {
+    const notify = value => {
+      setNativeState(value)
+    }
+    store.on('change', notify)
+    return () => store.off('change', notify)
+  }, [])
 
   return [value, store]
 }

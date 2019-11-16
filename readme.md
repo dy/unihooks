@@ -89,7 +89,7 @@ Ref: [use-store](https://ghub.io/use-store)
 
 ### Data hooks
 
-#### `useLocalStorage(key, init?, deps?)`
+#### `useLocalStorage(key, init?)`
 
 `useState` with persistency to local storage by `key`.
 `init` can be a function or initial value. `deps` can indicate if `init` must be called (same as `useEffect`).
@@ -115,23 +115,29 @@ function MyComponent3 () {
 }
 ```
 
-#### `useGlobalCache(key, init?, deps?)`
+#### `let [prop, setProp] = useProperty(target, name)`
+
+Observe target property.
+
+#### `useGlobalCache(key, init?)`
 
 Get value stored as global.
 
-<!--
-#### `useStorage(key, init, { get, set })`
+#### `useStorage(storage, init?)`
 
-Generic storage hook
+Generic storage hook. Storage is `{ get, set }` object, providing access to some underlying data structure.
 
 ```js
 ```
--->
 
+
+<!--
 ### Extended Standard Hooks
 
 Use with caution or don't, these hooks are not 100% compatible with react hooks.
+-->
 
+<!--
 #### `useState(init?, deps?)`
 
 1. Normalizes initializer function (some hook providers have it not implemented).
@@ -144,6 +150,9 @@ function MyComponent(props) {
 }
 ```
 
+TODO: that can be replaced with simple `useMemo`. Think if you need deps here.
+-->
+<!--
 #### `useEffect(fn, deps?)`
 
 1. Guarantees microtask - react/preact unpredictably call as microtask or sync.
@@ -152,6 +161,7 @@ function MyComponent(props) {
     2. That is compatible with `useState(initFn)` (principle 2).
     3. Single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)` − that reduces cognitive load / lib size (principle 1).
 3. Supports async functions.
+4. Ignores non-functional returns.
 
 ```js
 function MyComponent(props) {
@@ -163,6 +173,12 @@ function MyComponent(props) {
   // ...
 }
 ```
+
+That's matter of diversity vs unification.
+- `useEffect(() => () => {})` can be useful to destroy/reinit effect, that is not the same as `queueMicrotask`.
+- `useState()` can be replaced with `useMemo(calc, deps)` to provide deps.
+- `useInit()` is something closer to sync effect, rather than microtask.
+-->
 
 <!--
 
@@ -177,9 +193,6 @@ function MyComponent(props) {
 
 Query string object accessor.
 
-#### `let [prop, setProp] = useProperty(element, name)`
-
-Property observer hook.
 
 #### `let [attr, setAttr] = useAttribute(element, name)`
 

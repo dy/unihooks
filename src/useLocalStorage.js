@@ -1,6 +1,6 @@
 import useStorage from './useStorage'
 import ls from 'local-storage'
-import useEffect from './useEffect'
+import useSyncEffect from './useSyncEffect'
 
 const cache = {}
 
@@ -14,13 +14,15 @@ const useLocalStorage = (key, init, deps) => {
         set: value => ls.set(key, value)
     }))
 
-    useEffect(() => {
-        const notify = value => setValue(value)
+    useSyncEffect(() => {
+        // it is possible instead to observe localStorage property
+        const notify = value => store.update(value)
         ls.on(key, notify)
         return () => ls.off(key, notify)
-    })
+    }, [])
 
-    return useStorage(storage, init, deps)
+    let [value, store] = useStorage(storage, init, deps)
+    return [value, store]
 }
 
 export default useLocalStorage

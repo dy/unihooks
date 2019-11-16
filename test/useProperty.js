@@ -1,6 +1,6 @@
 import t from 'tape'
-import { useProperty } from '..'
-import enhook, { useEffect } from 'enhook'
+import { useProperty, useEffect } from '..'
+import enhook from 'enhook'
 import { tick, idle, frame } from 'wait-please'
 
 
@@ -77,7 +77,24 @@ t.skip('useProperty: does not trigger unchanged updates', async t => {
   t.end()
 })
 
-t.only('useProperty: keeps prev setter/getter', async t => {
+t('useProperty: must be writable', async t => {
+  let log = []
+  let obj = { x : 1 }
+
+  enhook(() => {
+    let [x, setX] = useProperty(obj, 'x')
+    log.push(x)
+    setX(2)
+  })()
+
+  t.deepEqual(log, [1])
+  await tick(3)
+  t.deepEqual(log, [1, 2])
+
+  t.end()
+})
+
+t('useProperty: keeps prev setter/getter', async t => {
   let log = []
   let obj = {
     _x: 0,
@@ -96,26 +113,28 @@ t.only('useProperty: keeps prev setter/getter', async t => {
   })
   f()
 
-  t.is(log, ['get', 0, 'call', 0])
+  t.deepEqual(log, ['get', 0, 'call', 0])
 
-  // obj.x
-  // await frame(2)
-  // t.is(log, ['get', 0, 'call', 0, 'get', 0])
+  obj.x
+  await frame(2)
+  t.deepEqual(log, ['get', 0, 'call', 0, 'get', 0])
 
-  // obj.x = 1
-  // await frame(2)
-  // t.is(log, ['get', 0, 'call', 0, 'get', 0, 'set', 1, 'call', 1])
+  obj.x = 1
+  await frame(3)
+  t.deepEqual(log, ['get', 0, 'call', 0, 'get', 0, 'set', 1, 'call', 1])
 
   // log = []
   // xs.cancel()
-  // t.is(log, [])
+  // t.deepEqual(log, [])
 
   // obj.x
-  // t.is(log, ['get', 1])
+  // t.deepEqual(log, ['get', 1])
 
   // obj.x = 0
   // await frame(2)
-  // t.is(log, ['get', 1, 'set', 0])
+  // t.deepEqual(log, ['get', 1, 'set', 0])
+
+  t.end()
 })
 
 
