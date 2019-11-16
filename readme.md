@@ -144,11 +144,22 @@ function MyComponent(props) {
 
 Deopinionated `useEffect`.
 
-1. It guarantees microtask - react/preact behave unpredictably for whether effect is called as microtask or synchronously.
-2. No-deps call `useEffect(fn)` is equivalent to empty-array call `useEffect(fn, [])`. First, this is compatible with `useState(initFn)` (principle 2). Second, react's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, that violates principle 3. Third, single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)`, that reduces lib size and makes for principle 1.
+1. Guaranteed microtask - react/preact unpredictably call microtask or sync.
+2. No-deps call `useEffect(fn)` is equivalent to empty-deps call `useEffect(fn, [])`.
+  * First, this is compatible with `useState(initFn)` (principle 2).
+  * Second, react's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, which is redundant hook (principle 3).
+  * Third, single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)`, that reduces lib size and makes for principle 1.
+3. Async functions enabled.
 
 ```js
+function MyComponent(props) {
+  let [result, setResult] = useState()
 
+  // run once on init
+  useEffect(async () => setResult(await load('/data')))
+
+  return !result ? <>Loading</> : <>result.map(Item)</>
+}
 ```
 
 <!--
