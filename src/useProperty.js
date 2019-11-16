@@ -15,8 +15,6 @@ export default function useProperty (target, name, init, deps) {
       set: value => {
         if (initialDesc && initialDesc.set) initialDesc.set.call(target, value)
         else storage.value = value
-        // not `store.set(value)` because no need to write to storage
-        store.update(value)
       },
       value: initialDesc ? (('value' in initialDesc) ? initialDesc.value : null) : target[name]
     })
@@ -24,7 +22,11 @@ export default function useProperty (target, name, init, deps) {
     const desc = {
       configurable: true,
       get() { return storage.get() },
-      set(value) { return storage.set(value) }
+      set(value) {
+        storage.set(value)
+        // not `store.set(value)` because no need to write to storage
+        store.update(value)
+      }
     }
 
     Object.defineProperty(target, name, desc)

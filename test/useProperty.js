@@ -4,12 +4,12 @@ import enhook from 'enhook'
 import { tick, idle, frame } from 'wait-please'
 
 
-t.skip('useProperty: basic', async t => {
-  let obj = {x: 1}
+t('useProperty: basic', async t => {
+  let obj = {count: 0}
 
   let log = []
   let f = enhook(() => {
-    let [count, setCount] = useProperty(x, 'count')
+    let [count, setCount] = useProperty(obj, 'count')
     log.push(count)
     useEffect(() => {
       setCount(1)
@@ -19,20 +19,18 @@ t.skip('useProperty: basic', async t => {
   t.deepEqual(log, [0])
   await frame(4)
   t.deepEqual(log, [0, 1])
-
-  await frame(4)
-  localStorage.removeItem('count')
+  t.deepEqual(obj, {count: 1})
 
   t.end()
 })
 
-t.skip('useProperty: multiple components use same key', async t => {
+t('useProperty: multiple components use same key', async t => {
   let log = []
 
-  localStorage.removeItem('count')
+  let obj = {count: null}
 
   const f = (i, log) => {
-    let [count, setCount] = useProperty('count', i)
+    let [count, setCount] = useProperty(obj, 'count', i)
     log.push('call', i, count)
     useEffect(() => {
       log.push('effect', i)
@@ -51,16 +49,14 @@ t.skip('useProperty: multiple components use same key', async t => {
   await frame(4)
   t.deepEqual(log, ['call', 1, 1, 'effect', 1, 'call', 2, 1, 'effect', 2, 'call', 2, 2, 'call', 1, 2])
 
-  await frame(4)
-  localStorage.removeItem('count')
   t.end()
 })
 
-t.skip('useProperty: does not trigger unchanged updates', async t => {
-  localStorage.removeItem('count')
+t('useProperty: does not trigger unchanged updates', async t => {
+  let obj = {count: null}
   let log = []
   let f = enhook((i) => {
-    let [count, setCount] = useProperty('count', i)
+    let [count, setCount] = useProperty(obj, 'count', i)
     log.push(count)
     useEffect(() => {
       setCount(i + 1)
@@ -72,8 +68,6 @@ t.skip('useProperty: does not trigger unchanged updates', async t => {
   await frame(2)
   t.deepEqual(log, [1])
 
-  await frame(4)
-  localStorage.removeItem('count')
   t.end()
 })
 

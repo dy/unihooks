@@ -58,7 +58,7 @@ export default function useStorage(storage, init, deps=[]) {
     }
   }
 
-  const [value, setNativeState] = useState(() => {
+  const [value, setNativeState] = useState( () => {
     if (store.planned) store.commit()
     store.value = storage.get()
 
@@ -74,15 +74,15 @@ export default function useStorage(storage, init, deps=[]) {
     }
 
     return store.value
-  }, deps)
+  }, deps )
 
-  useSyncEffect(() => {
+  useSyncEffect( () => {
     const notify = value => {
       setNativeState(value)
     }
     store.on('change', notify)
     return () => store.off('change', notify)
-  }, [])
+  }, [] )
 
   return [value, store]
 }

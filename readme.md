@@ -130,56 +130,6 @@ Generic storage hook. Storage is `{ get, set }` object, providing access to some
 ```js
 ```
 
-
-<!--
-### Extended Standard Hooks
-
-Use with caution or don't, these hooks are not 100% compatible with react hooks.
--->
-
-<!--
-#### `useState(init?, deps?)`
-
-1. Normalizes initializer function (some hook providers have it not implemented).
-2. Takes optional `deps` to reinitialize state.
-
-```js
-function MyComponent(props) {
-  // sets `currentValue` to `value` whenever passed `props.value` changes.
-  let [currentValue, setCurrentValue] = useState(props.value, [props.value])
-}
-```
-
-TODO: that can be replaced with simple `useMemo`. Think if you need deps here.
--->
-<!--
-#### `useEffect(fn, deps?)`
-
-1. Guarantees microtask - react/preact unpredictably call as microtask or sync.
-2. No-deps `useEffect(fn)` is the same as empty-deps `useEffect(fn, [])`.
-    1. React's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, which is redundant hook (principle 3).
-    2. That is compatible with `useState(initFn)` (principle 2).
-    3. Single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)` − that reduces cognitive load / lib size (principle 1).
-3. Supports async functions.
-4. Ignores non-functional returns.
-
-```js
-function MyComponent(props) {
-  let [result, setResult] = useState()
-
-  // called once on init
-  useEffect(async () => setResult(await load('/data')))
-
-  // ...
-}
-```
-
-That's matter of diversity vs unification.
-- `useEffect(() => () => {})` can be useful to destroy/reinit effect, that is not the same as `queueMicrotask`.
-- `useState()` can be replaced with `useMemo(calc, deps)` to provide deps.
-- `useInit()` is something closer to sync effect, rather than microtask.
--->
-
 <!--
 
 #### `let [value, setValue] = useQueryParam(name, default|type)`
