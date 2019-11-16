@@ -128,10 +128,8 @@ Generic storage hook
 
 #### `useState(init, deps?)`
 
-Normalized `useState` across frameworks.
-
-1. Makes sure initialized works - augmentor and possibly other frameworks had it not supported.
-2. Takes optional `deps` param to trigger initializer. That can be useful for components, depending on props.
+1. Normalizes initializer function (some hook providers have it not implemented).
+2. Optional `deps` reinitialize value.
 
 ```js
 function MyComponent(props) {
@@ -142,14 +140,12 @@ function MyComponent(props) {
 
 #### `useEffect(fn, deps?)`
 
-Deopinionated `useEffect`.
-
-1. Guaranteed microtask - react/preact unpredictably call microtask or sync.
-2. No-deps call `useEffect(fn)` is equivalent to empty-deps call `useEffect(fn, [])`.
-  * First, this is compatible with `useState(initFn)` (principle 2).
-  * Second, react's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, which is redundant hook (principle 3).
-  * Third, single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)`, that reduces lib size and makes for principle 1.
-3. Async functions enabled.
+1. Guarantees microtask - react/preact unpredictably call microtask or sync.
+2. No-deps `useEffect(fn)` is equivalent to empty-deps `useEffect(fn, [])`.
+    a. First, this is compatible with `useState(initFn)` (principle 2).
+    b. Second, react's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, which is redundant hook (principle 3).
+    c. Third, single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)`, that reduces lib size and makes for principle 1.
+3. Async functions support.
 
 ```js
 function MyComponent(props) {
