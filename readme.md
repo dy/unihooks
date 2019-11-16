@@ -142,9 +142,9 @@ function MyComponent(props) {
 
 1. Guarantees microtask - react/preact unpredictably call microtask or sync.
 2. No-deps `useEffect(fn)` is equivalent to empty-deps `useEffect(fn, [])`.
-    a. First, this is compatible with `useState(initFn)` (principle 2).
-    b. Second, react's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, which is redundant hook (principle 3).
-    c. Third, single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)`, that reduces lib size and makes for principle 1.
+    * First, this is compatible with `useState(initFn)` (principle 2).
+    * Second, react's `useEffect(fn)` is equivalent to `queueMicrotask(fn)`, which is redundant hook (principle 3).
+    * Third, single-run `useEffect(fn)` is equivalent to `useInit(fn)`/`useMount(fn)`, that reduces lib size and makes for principle 1.
 3. Async functions support.
 
 ```js
