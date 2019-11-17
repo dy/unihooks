@@ -16,7 +16,7 @@ const useLocalStorage = (key, init) => {
 
     useSyncEffect(() => {
         // it is possible instead to observe localStorage property
-        const notify = value => store.update()
+        const notify = value => store.update(value)
         ls.on(key, notify)
         return () => ls.off(key, notify)
     }, [])

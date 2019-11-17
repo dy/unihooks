@@ -86,7 +86,7 @@ Ref: [use-store](https://ghub.io/use-store)
 
 ### Data hooks
 
-#### `useLocalStorage(key, init?, deps?)`
+#### `useLocalStorage(key, init?)`
 
 `useState` with persistency to local storage by `key`.
 `init` can be a function or initial value. `deps` can indicate if value must be reinitialized.
@@ -112,12 +112,12 @@ function MyComponent3 () {
 }
 ```
 
-#### `useQueryParam(name, init?, deps?)`
+#### `useQueryParam(name, init?)`
 
 `useState` with persistency to query string. `default` value indicates data type to serialize.
 
 ```js
-let [value, setValue] = useQueryParam(name, default)
+let [value, setValue] = useQueryParam(name, init)
 ```
 
 <!--
@@ -142,7 +142,7 @@ let [location, setLocation] = useLocation()
 
 -->
 
-#### `useProperty(target, path, init?, deps?)`
+#### `useProperty(target, path, init?)`
 
 Observe target property.
 
@@ -153,17 +153,17 @@ function MyComponent () {
 }
 ```
 
-<!--
 #### `useGlobalCache(key, init?)`
 
-Get value stored as global.
+Get access to value stored in [`globalCache`](https://ghub.io/global-cache).
 
 ```js
+function MyComponent () {
+  const [globalValue, setGlobalValue] = useGlobalCache('value')
+}
 ```
 
--->
-
-#### `useStorage(storage, init?, deps?)`
+#### `useStorage(storage, init?)`
 
 Generic storage hook. Storage is `{ get, set }` object, providing access to some underlying data structure.
 

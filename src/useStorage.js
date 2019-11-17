@@ -3,9 +3,9 @@ import { setMicrotask, clearMicrotask } from 'set-microtask'
 import useSyncEffect from './useSyncEffect'
 import globalCache from 'global-cache'
 
-const SymbolUnihooks = Symbol.for('__unihooks__useStorage')
-if (!globalCache.has(SymbolUnihooks)) globalCache.set(SymbolUnihooks, new Map)
-const cache = globalCache.get(SymbolUnihooks)
+const SymbolUseStorage = Symbol.for('__unihooks__useStorage')
+if (!globalCache.has(SymbolUseStorage)) globalCache.set(SymbolUseStorage, new Map)
+const cache = globalCache.get(SymbolUseStorage)
 
 export default function useStorage(storage, init) {
   let store
@@ -52,7 +52,7 @@ export default function useStorage(storage, init) {
 
     // update store, not updating storage
     store.update = (value) => {
-      store.value = !arguments.length ? storage.get() : value
+      store.value = value
       store.emit('change', store.value)
     }
   }
