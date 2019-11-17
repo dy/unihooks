@@ -3,17 +3,13 @@ import t from 'tape'
 import enhook from 'enhook'
 import { tick } from 'wait-please'
 
-t.only('useStorage: functional set param', async t => {
-  let x = 1
-  let myStorage = {
-    get() { return x },
-    set(v) { x = v }
-  }
+t('useStorage: functional set param', async t => {
+  let myStorage = new Map([['x', 1]])
 
   let log = []
 
   let f = enhook(() => {
-    let [value, setValue] = useStorage(myStorage, (value) => value + 1)
+    let [value, setValue] = useStorage(myStorage, 'x', (value) => value + 1)
     log.push(value)
     useEffect(() => {
       setValue((value) => {

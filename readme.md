@@ -163,7 +163,7 @@ function MyComponent () {
 }
 ```
 
-#### `useStorage(storage, init?)`
+#### `useStorage(storage, key, init?)`
 
 Generic storage hook. Storage is `{ get, set }` object, providing access to some underlying data structure.
 

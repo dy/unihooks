@@ -2,18 +2,19 @@ import useState from './useState'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
 import useSyncEffect from './useSyncEffect'
 import globalCache from 'global-cache'
+import tuple from 'immutable-tuple'
 
 const SymbolUseStorage = Symbol.for('__unihooks__useStorage')
 if (!globalCache.has(SymbolUseStorage)) globalCache.set(SymbolUseStorage, new Map)
 const cache = globalCache.get(SymbolUseStorage)
 
-export default function useStorage(storage, init) {
-  let store
-  if (cache.has(storage)) {
-    store = cache.get(storage)
+export default function useStorage(storage, key, init) {
+  let store, storeId = tuple(storage, key)
+  if (cache.has(storeId)) {
+    store = cache.get(storeId)
   }
   else {
-    cache.set(storage, store = value => store.set(value))
+    cache.set(storeId, store = value => store.set(value))
 
     // mitt extract
     let subs = {}
@@ -46,7 +47,7 @@ export default function useStorage(storage, init) {
     // put store into storage
     store.commit = () => {
       store.planned = null
-      storage.set(store.value)
+      storage.set(key, store.value)
       store.emit('change', store.value)
     }
 
@@ -59,7 +60,7 @@ export default function useStorage(storage, init) {
 
   const [value, setNativeState] = useState( () => {
     if (store.planned) store.commit()
-    store.value = storage.get()
+    store.value = storage.get(key)
 
     // fn init is always called
     if (typeof init === 'function') {

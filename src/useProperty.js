@@ -11,8 +11,8 @@ export default function useProperty (target, name, init) {
     const initialDesc = Object.getOwnPropertyDescriptor(target, name)
 
     cache.set(key, storage = {
-      get: () => initialDesc && initialDesc.get ? initialDesc.get.call(target) : storage.value,
-      set: value => {
+      get: (key) => initialDesc && initialDesc.get ? initialDesc.get.call(target) : storage.value,
+      set: (key, value) => {
         if (initialDesc && initialDesc.set) initialDesc.set.call(target, value)
         else storage.value = value
       },
@@ -21,9 +21,11 @@ export default function useProperty (target, name, init) {
 
     const desc = {
       configurable: true,
-      get() { return storage.get() },
+      get() {
+        return storage.get(key)
+      },
       set(value) {
-        storage.set(value)
+        storage.set(key, value)
         // not `store.set(value)` because no need to write to storage
         store.update(value)
       }
@@ -32,6 +34,6 @@ export default function useProperty (target, name, init) {
     Object.defineProperty(target, name, desc)
   }
 
-  let [value, store] = useStorage(storage, init)
+  let [value, store] = useStorage(storage, key, init)
   return [value, store]
 }
