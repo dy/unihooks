@@ -1,6 +1,6 @@
 import t from 'tape'
-import { useLocalStorage, useState } from '..'
-import enhook, { useEffect } from 'enhook'
+import { useLocalStorage, useEffect } from '..'
+import enhook from 'enhook'
 import { tick, idle, frame } from 'wait-please'
 
 
@@ -78,9 +78,7 @@ t('useLocalStorage: does not trigger unchanged updates', async t => {
 })
 
 t('useLocalStorage: fn init should be called per hook', async t => {
-  localStorage.removeItem('count')
-
-  localStorage.count = 0
+  localStorage.setItem('count', 0)
 
   let log = []
   let f = enhook(() => {

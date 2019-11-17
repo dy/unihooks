@@ -89,10 +89,10 @@ Ref: [use-store](https://ghub.io/use-store)
 
 ### Data hooks
 
-#### `useLocalStorage(key, init?)`
+#### `useLocalStorage(key, init?, deps?)`
 
 `useState` with persistency to local storage by `key`.
-`init` can be a function or initial value. `deps` can indicate if `init` must be called (same as `useEffect`).
+`init` can be a function or initial value. `deps` can indicate if value must be reinitialized.
 
 ```js
 function MyComponent1 () {
@@ -115,34 +115,59 @@ function MyComponent3 () {
 }
 ```
 
-#### `let [prop, setProp] = useProperty(target, name)`
+#### `useQueryParam(name, init?, deps?)`
 
-Observe target property.
-
-#### `useGlobalCache(key, init?)`
-
-Get value stored as global.
-
-#### `useStorage(storage, init?)`
-
-Generic storage hook. Storage is `{ get, set }` object, providing access to some underlying data structure.
+`useState` with persistency to query string. `default` value indicates data type to serialize.
 
 ```js
+let [value, setValue] = useQueryParam(name, default)
 ```
 
 <!--
 
-#### `let [value, setValue] = useQueryParam(name, default|type)`
-
-`useState` with persistency to query string. `default` value indicates data type to serialize. If default value doesn't exist, directly type can be passed.
+#### `useHistory()`
 
 ```js
+let [state, { back, forward, go }] = useHistory()
 ```
 
-#### `let [values, setValues] = useQueryString()`
+#### `useHash()`
 
-Query string object accessor.
+```js
+let [ref, setRef] = useHash()
+```
 
+#### `useLocation()`
+
+```js
+let [location, setLocation] = useLocation()
+```
+
+-->
+
+#### `useProperty(target, path, init?, deps?)`
+
+Observe target property.
+
+```js
+let target = { count: 1 }
+function MyComponent () {
+  const [count, setCount] = useProperty(target, 'count', 1)
+}
+```
+
+<!--
+#### `useGlobalCache(key, init?)`
+
+Get value stored as global.
+-->
+
+#### `useStorage(storage, init?, deps?)`
+
+Generic storage hook. Storage is `{ get, set }` object, providing access to some underlying data structure.
+
+
+<!--
 
 #### `let [attr, setAttr] = useAttribute(element, name)`
 

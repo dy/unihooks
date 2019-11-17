@@ -132,4 +132,9 @@ t('useProperty: keeps prev setter/getter', async t => {
 })
 
 
+t.skip('useProperty: observes path', async t => {
+  t.end()
+})
+
+
 

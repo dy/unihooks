@@ -39,7 +39,6 @@ export default function useStorage(storage, init, deps=[]) {
         if (store.planned) clearMicrotask(store.planned)
         return
       }
-
       if (!store.planned) store.planned = setMicrotask(store.commit)
       store.value = newValue
     }

@@ -5,11 +5,14 @@
   "main": "index.js",
   "dependencies": {
     "any-hooks": "^1.0.1",
+    "auto-parse": "^1.8.0",
     "global-cache": "^1.2.1",
     "immutable-tuple": "^0.4.10",
     "local-storage": "^2.0.0",
     "mitt": "^1.2.0",
+    "qss": "^2.0.3",
     "set-microtask": "^1.0.0",
+    "sorted-object": "^2.0.1",
     "symbol-observable": "^1.2.0"
   },
   "devDependencies": {
