@@ -44,14 +44,18 @@ export default function useQueryParam(name, init) {
         // ignore unchanged transition
         if (str === window.location.search.slice(1)) return
 
-        window.history.pushState(null, '', str ? '?' + str : window.location.href.split('?')[0])
+        window.history.replaceState(null, '', str ? '?' + str : window.location.href.split('?')[0])
       }
     }
+
+    window.addEventListener('popstate', () => {
+      store.update(storage.get())
+    })
   }
 
   // TODO: notify external history pushes
 
-  let [value, store] = useStorage(storage, init, [])
+  let [value, store] = useStorage(storage, init)
   return [value, store]
 }
 

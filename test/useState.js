@@ -21,7 +21,7 @@ t('useState: initial run once', async t => {
   t.end()
 })
 
-t('useState: deps reinit', async t => {
+t.skip('useState: deps reinit', async t => {
   let log = []
 
   let f = enhook((i) => {

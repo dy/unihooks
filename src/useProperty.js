@@ -3,7 +3,7 @@ import tuple from 'immutable-tuple'
 
 const cache = new WeakMap
 
-export default function useProperty (target, name, init, deps) {
+export default function useProperty (target, name, init) {
   let key = tuple(target, name)
   let storage = cache.get(key)
 
@@ -32,6 +32,6 @@ export default function useProperty (target, name, init, deps) {
     Object.defineProperty(target, name, desc)
   }
 
-  let [value, store] = useStorage(storage, init, deps)
+  let [value, store] = useStorage(storage, init)
   return [value, store]
 }

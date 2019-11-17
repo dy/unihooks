@@ -21,7 +21,7 @@ function MyComponent () {
 
 ## Principles
 
-### 1. Cross-framework
+### 1. Universal
 
 _Unihooks_ work in any hooks-enabled framework:
 
@@ -43,21 +43,18 @@ import * as hook from 'unihooks/preact'
 ```
 -->
 
-### 2. Unified
+### 2. Uniform
 
-_Unihooks_ follow generalized API signature, derived from `useState`/`useEffect`:
-
-<!-- / `useEffect` and Observable / Promise: -->
+_Unihooks_ follow `useState` or `useEffect` API signature.
 
 ```
-let [ state, action ] = useDomain( key?, init?, deps? )
+let [ state, action ] = useDomain( key?, init? )
+useEffect( fn, deps?)
 ```
 
-<!-- let [ value, { error, closed, pending } ] = useCall( fn, deps? ) -->
+### 3. Essential
 
-### 3. Reactive
-
-Hooks observe some changing data source and trigger update. Static hooks are not allowed. If hook can be replaced with regular function - it is not allowed.
+Hooks are reactive - they observe some data source and trigger update. Static hooks, or hooks that can be replaced with native API are not allowed.
 
 ```js
 // no
@@ -160,6 +157,10 @@ function MyComponent () {
 #### `useGlobalCache(key, init?)`
 
 Get value stored as global.
+
+```js
+```
+
 -->
 
 #### `useStorage(storage, init?, deps?)`

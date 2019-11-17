@@ -3,7 +3,7 @@ import { useQueryParam, useState, useEffect } from '..'
 import enhook from 'enhook'
 // import { decode, qs.stringify } from 'qss'
 import qs from 'qs'
-import { tick, idle, frame } from 'wait-please'
+import { tick, idle, frame, time } from 'wait-please'
 
 let isNode = !!(typeof process !== 'undefined' && process.versions && process.versions.node)
 
@@ -200,7 +200,30 @@ t.skip('useQueryParam: batch update', async t => {
 
 t('useQueryParam: custom toString method')
 
+!isNode && t('useQueryParam: observe updates', async t => {
+  clearSearch()
+  let log = []
+  let f = enhook(() => {
+    let [v, setV] = useQueryParam('x', 1)
+    log.push(v)
+    setV(2)
+  })
+  f()
+  await frame(2)
+  t.deepEqual(log, [1, 2])
 
+  window.history.pushState(null, "useQueryParam", "?x=3");
+  window.history.pushState(null, "useQueryParam", "?x=4");
+  window.history.back()
+
+  // FIXME: in some reason it waits 20 frames - for all prev tests or something
+  await frame(20)
+  t.deepEqual(log, [1, 2, 3, 2])
+
+  await frame(2)
+  clearSearch()
+  t.end()
+})
 
 function clearSearch () {
   window.history.pushState(null, '', window.location.href.split('?')[0])

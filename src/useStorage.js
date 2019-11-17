@@ -7,7 +7,7 @@ const SymbolUnihooks = Symbol.for('__unihooks__useStorage')
 if (!globalCache.has(SymbolUnihooks)) globalCache.set(SymbolUnihooks, new Map)
 const cache = globalCache.get(SymbolUnihooks)
 
-export default function useStorage(storage, init, deps=[]) {
+export default function useStorage(storage, init) {
   let store
   if (cache.has(storage)) {
     store = cache.get(storage)
@@ -52,7 +52,7 @@ export default function useStorage(storage, init, deps=[]) {
 
     // update store, not updating storage
     store.update = (value) => {
-      store.value = value
+      store.value = !arguments.length ? storage.get() : value
       store.emit('change', store.value)
     }
   }
@@ -73,7 +73,7 @@ export default function useStorage(storage, init, deps=[]) {
     }
 
     return store.value
-  }, deps )
+  })
 
   useSyncEffect( () => {
     const notify = value => {
