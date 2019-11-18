@@ -25,7 +25,7 @@ export default function useStorage(storage, key, init) {
     store.value
     store.planned
 
-    // read from storage
+    // commit any plans and read from storage
     store.get = () => {
       if (store.planned) {
         clearMicrotask(store.planned)
@@ -44,15 +44,14 @@ export default function useStorage(storage, key, init) {
       store.value = newValue
     }
 
-    // put value into storage
+    // update storage from store
     store.commit = () => {
       store.planned = null
       storage.set(key, store.value)
-      store.value = storage.get(key)
-      store.emit('change', store.value)
+      store.update(storage.get(key))
     }
 
-    // update store, not updating storage
+    // update store from storage
     store.update = (value) => {
       store.value = value
       store.emit('change', store.value)
