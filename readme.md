@@ -23,7 +23,7 @@ function MyComponent () {
 
 ### 1. Universal
 
-_Unihooks_ work in any hooks-enabled framework:
+_Unihooks_ work with any hooks-enabled framework:
 
 * [react](https://ghub.io/react)
 * [preact](https://ghub.io/preact)
@@ -45,16 +45,16 @@ import * as hook from 'unihooks/preact'
 
 ### 2. Uniform
 
-_Unihooks_ follow `useState` or `useEffect` API signature.
+_Unihooks_ follow `useState` / `useEffect` API signature.
 
 ```
 let [ state, action ] = useDomain( key?, init? )
-useEffect( fn, deps?)
+useInvocation( fn, deps?)
 ```
 
 ### 3. Essential
 
-Hooks are reactive - they observe some data source and trigger update. Static hooks, or hooks that can be replaced with native API are not allowed.
+_Unihooks_ provide extra value, related to reactivity. Static hooks, or hooks that can be replaced with functions are not allowed.
 
 ```js
 // no
@@ -114,11 +114,16 @@ function MyComponent3 () {
 
 #### `useQueryParam(name, init?)`
 
-`useState` with persistency to query string. `default` value indicates data type to serialize.
+`useState` with persistency to query string.
 
 ```js
-let [value, setValue] = useQueryParam(name, init)
+function MyComponent () {
+  let [id, setId] = useQueryParam('id')
+}
 ```
+
+It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate) and [`onpushstate`](https://ghub.io/onpushstate) events to trigger update.
+
 
 <!--
 
@@ -142,20 +147,38 @@ let [location, setLocation] = useLocation()
 
 -->
 
+#### `useCookie(name, init?)`
+
+Cookies accessor hook.
+
+```js
+function MyComponent () {
+  const [cookie, setCookie] = useCookie('foo')
+
+  setCookie('bar')
+}
+```
+
+Does not observe cookies (there's no implemented API for that).
+
+
 #### `useProperty(target, path, init?)`
 
-Observe target property.
+Observe any target property. Defines transparent getter/setter on a target.
 
 ```js
 let target = { count: 1 }
 function MyComponent () {
   const [count, setCount] = useProperty(target, 'count', 1)
 }
+
+// trigger update
+target.count++
 ```
 
 #### `useGlobalCache(key, init?)`
 
-Get access to value stored in [`globalCache`](https://ghub.io/global-cache).
+Get access to value stored in [globalCache](https://ghub.io/global-cache).
 
 ```js
 function MyComponent () {
@@ -165,7 +188,7 @@ function MyComponent () {
 
 #### `useStorage(storage, key, init?)`
 
-Generic storage hook. Storage is `{ get, set }` object, providing access to some underlying data structure.
+Generic storage hook. Storage is `{ get(key), set(key, value) }` object, providing access to some underlying data structure.
 
 
 <!--
@@ -206,8 +229,6 @@ let [data, su]
 
 Events hook.
 
-#### `let [cookie, setCookie] = useCookie(name)`
-
 
 #### `let [ mutation, mutate ] = useMutations(selector|element)`
 
@@ -216,6 +237,10 @@ Append, prepend, remove, update etc.
 #### `let [element, render] = useSelector(selector|element)`
 
 #### `let [css, setCss] = useCSS(selector|element?, rule)`
+
+#### `let [] = useMediaQuery()`
+
+#### useNetworkStatus()
 
 #### `let [value] = useArguments()`
 

@@ -3,6 +3,7 @@ import qs from 'qs'
 import autoParse from 'auto-parse'
 import sorted from 'sorted-object'
 import useEffect from './useEffect'
+import * as onpushstate from 'onpushstate'
 
 const storage = {
   get: (name) => {
@@ -47,6 +48,7 @@ export default function useQueryParam(name, init) {
     const notify = () => {
       store.update(storage.get(name))
     }
+    window.addEventListener('pushstate', notify)
     window.addEventListener('popstate', notify)
     return () => window.removeEventListener('popstate', notify)
   }, [])

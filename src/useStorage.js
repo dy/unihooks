@@ -14,7 +14,7 @@ export default function useStorage(storage, key, init) {
     store = cache.get(storeId)
   }
   else {
-    cache.set(storeId, store = value => store.set(value))
+    cache.set(storeId, store = (...args) => store.set(...args))
 
     // mitt extract
     let subs = {}
