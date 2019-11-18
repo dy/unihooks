@@ -23,13 +23,17 @@ function MyComponent () {
 
 ### 1. Universal
 
-_Unihooks_ work with any hooks-enabled framework:
+_Unihooks_ work with any hooks-enabled library:
 
 * [react](https://ghub.io/react)
 * [preact](https://ghub.io/preact)
 * [haunted](https://ghub.io/haunted)
 * [atomico](https://ghub.io/atomico)
 * [augmented](https://ghub.io/augmented)
+* [tng-hooks](https://ghub.io/tng-hooks)
+* [fn-with-hooks](https://ghub.io/fn-with-hooks)
+* [unhook](https://ghub.io/unhook)
+* ...
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -54,14 +58,11 @@ useInvocation( fn, deps?)
 
 ### 3. Essential
 
-_Unihooks_ provide extra value, related to reactivity. Static hooks, or hooks that can be replaced with functions are not allowed.
+_Unihooks_ provide extra value, related to reactivity. Static hooks, or hooks that can be replaced with native API are not allowed.
 
 ```js
-// no
-const MyComponent = () => { let ua = useUserAgent() }
-
-// yes
-const MyComponent = () => { let ua = navigator.userAgent }
+const MyComponent1 = () => { let ua = useUserAgent() } // ✘
+const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 ```
 
 
