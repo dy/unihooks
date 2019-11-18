@@ -155,7 +155,9 @@ Cookies accessor hook.
 function MyComponent () {
   const [cookie, setCookie] = useCookie('foo')
 
-  setCookie('bar')
+  useEffect(() => {
+    setCookie('baz')
+  })
 }
 ```
 

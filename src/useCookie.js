@@ -1,4 +1,4 @@
-import { get, set } from 'cookie-cutter'
+import { get, set } from 'es-cookie'
 import useStorage from './useStorage'
 
 const cookieStore = {
@@ -8,6 +8,9 @@ const cookieStore = {
     if (value && value.value) value = value.value
     options = value
     return set(key, value, options)
+  },
+  is(a, b) {
+    return a+'' === b+''
   }
 }
 

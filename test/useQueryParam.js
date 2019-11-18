@@ -78,8 +78,6 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
     let [str, setStr] = useQueryParam('str')
     let [num, setNum] = useQueryParam('num')
     let [bool, setBool] = useQueryParam('bool')
-    let [nul, setNul] = useQueryParam('nul')
-    let [undef, setUndef] = useQueryParam('undefined')
     let [arr1, setArr1] = useQueryParam('arr1')
     let [arr2, setArr2] = useQueryParam('arr2')
     let [arr3, setArr3] = useQueryParam('arr3')
@@ -90,8 +88,6 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
     setStr(params.str)
     setNum(params.num)
     setBool(params.bool)
-    setNul(params.nul)
-    setUndef(params.undef)
     setArr1(params.arr1)
     setArr2(params.arr2)
     setArr3(params.arr3)
@@ -104,8 +100,6 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
     str: 'foo',
     num: -123,
     bool: false,
-    nul: null,
-    undef: undefined,
     arr1: [1, 2, 3],
     arr2: ['a', 'b', 'c'],
     arr3: [['a', 1], ['b', 2], ['c', 3]],
@@ -122,7 +116,6 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
       "arr4": [{ "a": "1" }, { "b": "2" }, { "c": "3" }],
       "bool": "false",
       "date": "2019-11-17T00:00:00.000Z",
-      "nul": "",
       "num": "-123",
       "obj": { "a": "1", "b": "2", "c": "3", "foo": "bar" },
       "str": "foo"

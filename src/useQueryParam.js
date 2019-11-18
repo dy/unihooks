@@ -3,9 +3,10 @@ import qs from 'qs'
 import autoParse from 'auto-parse'
 import sorted from 'sorted-object'
 import useEffect from './useEffect'
-import * as onpushstate from 'onpushstate'
+// import 'onpushstate'
 
 const storage = {
+  is: (a, b) => stringifyParam(a) === stringifyParam(b),
   get: (name) => {
     let q = qs.parse(window.location.search.slice(1))
     let parsed = autoParse(q[name])

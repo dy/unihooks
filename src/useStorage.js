@@ -34,9 +34,9 @@ export default function useStorage(storage, key, init) {
       return store.value
     }
 
-    // write to storage
+    // plan write to storage
     store.set = (newValue) => {
-      if (Object.is(newValue, store.value)) {
+      if ((storage.is || Object.is)(newValue, store.value)) {
         if (store.planned) clearMicrotask(store.planned)
         return
       }
@@ -44,10 +44,11 @@ export default function useStorage(storage, key, init) {
       store.value = newValue
     }
 
-    // put store into storage
+    // put value into storage
     store.commit = () => {
       store.planned = null
       storage.set(key, store.value)
+      store.value = storage.get(key)
       store.emit('change', store.value)
     }
 
