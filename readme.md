@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Unified essential multiframework hooks.
+_Unihooks_ provide a set of essential unified multi-framework hooks.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -21,7 +21,7 @@ function MyComponent () {
 
 ## Principles
 
-### 1. Universal
+### 1. Multi-framework
 
 _Unihooks_ work with any hooks-enabled library:
 
@@ -32,6 +32,7 @@ _Unihooks_ work with any hooks-enabled library:
 * [atomico](https://ghub.io/atomico)
 * [augmentor](https://ghub.io/augmentor)
 * [dom-augmentor](https://ghub.io/dom-augmentor)
+* [spect](https://ghub.io/spect)
 * [tng-hooks](https://ghub.io/tng-hooks)
 * [fn-with-hooks](https://ghub.io/fn-with-hooks)
 * [unhook](https://ghub.io/unhook)
@@ -49,7 +50,7 @@ import * as hook from 'unihooks/preact'
 ```
 -->
 
-### 2. Uniform
+### 2. Unified
 
 _Unihooks_ follow `useState` / `useEffect` API signature.
 
