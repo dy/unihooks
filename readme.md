@@ -41,13 +41,13 @@ import * as hook from 'unihooks/preact'
 _Unihooks_ follow `useState` / `useEffect` API signature.
 
 ```js
-let [ state, action ] = useDataSource( key?, init? )
-useRunner( fn, deps?)
+let [ state, action ] = useData( key?, init? )
+let result = useCall( fn, deps? )
 ```
 
 ### 3. Essential
 
-_Unihooks_ provide extra value, related to reactivity. Static hooks, or hooks that can be replaced with native API are not included.
+_Unihooks_ provide extra value, related to reactivity. Static hooks, or hooks that can be replaced with native API are excluded.
 
 ```js
 const MyComponent1 = () => { let ua = useUserAgent() } // ✘
@@ -57,10 +57,144 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 ## Hooks
 
-| | | |
-|---|---|---|
-<td colspan=3> Data
-| `useLocalStorage(key, init?)` | | demo |
+#### App
+
+- [ ] `createStore` / `useStore`
+- [ ] `createAction` / `useAction`
+- [ ] `useHistory`
+- [ ] `useHotkey`
+
+#### UI
+
+- [ ] `useElement`
+- [ ] `useForm`
+- [ ] `useTable`
+- [ ] `useDialog`
+- [ ] `useMenu`
+- [ ] `useToast`
+- [ ] `usePopover`
+
+#### State
+
+- [ ] `useState`
+- [ ] `usePrevious`
+- [ ] `useCountdown`
+- [ ] `useCounter`
+<!-- - [ ] `useDefined` -->
+
+#### Effects
+
+- [ ] `useEffect`
+- [ ] `useInit`
+- [ ] `useDestroy`
+- [ ] `useDeep`
+- [ ] `useUpdate`
+- [ ] `useTween`
+- [ ] `useTimeout`
+- [ ] `useInterval`
+- [ ] `useRaf`
+- [ ] `useThrottle`
+- [ ] `useToggle`
+<!-- - [ ] `usePing` -->
+<!-- - [ ] `useFSM` -->
+<!-- - [ ] `useAsync` -->
+<!-- - [ ] `useHooked` - run hooks-enabled effect -->
+
+#### Data
+
+- [x] `useProperty`
+- [x] `useQueryParam`
+- [ ] `useQueryParams`
+- [x] `useLocalStorage`
+- [x] `useSessionStorage`
+- [ ] `useFiles`
+- [ ] `useClipboard`
+- [ ] `useFavicon`
+- [ ] `useTitle`
+- [ ] `useMeta`
+- [ ] `useProperty`
+- [ ] `useRoute`
+- [ ] `useCookie`
+<!-- - [ ] `useRemote` -->
+
+#### DOM
+
+- [ ] `useEvent` - subscribe to events
+- [ ] `useElement` / `useElements`
+- [ ] `useAttribute`
+- [ ] `useLocation`
+- [ ] `useData`
+- [ ] `useClass`
+- [ ] `useRender`
+- [ ] `useMount`
+- [ ] `useStyle`
+- [ ] `useHost`
+- [ ] `useMutation`
+- [ ] `usePermission`
+- [ ] `useMount`
+
+#### Appearance
+
+- [ ] `useMedia`
+- [ ] `useCSS`
+- [ ] `useSize`
+- [ ] `useFullscreen`
+- [ ] `useAudio`
+- [ ] `useSpeech`
+- [ ] `useLockBodyScroll`
+
+#### Interaction
+
+- [ ] `useHover`
+- [ ] `useEvent`
+- [ ] `useResize`
+- [ ] `useIntersection`
+- [ ] `useDrag` / `useDrop`
+- [ ] `useIdle`
+- [ ] `useMove`
+- [ ] `usePan`
+- [ ] `useZoom`
+- [ ] `useKey`
+- [ ] `useShortcut`
+- [ ] `useTyping`
+- [ ] `useArrows`
+- [ ] `useFocusOutside`
+- [ ] `usePageLeave`
+- [ ] `useScroll`
+- [ ] `useScrolling`
+- [ ] `useClickAway`
+
+#### Hardware
+
+- [ ] `useNetwork`
+- [ ] `useOrientation`
+- [ ] `useMedia`
+- [ ] `useAccelerometer`
+- [ ] `useBattery`
+- [ ] `useGeolocation`
+- [ ] `useMediaDevices`
+- [ ] `useVibrate`
+- [ ] `useMotion`
+
+#### Async / Stream
+
+- [ ] `useStream`
+- [ ] `useObservable`
+- [ ] `useAsyncIterator`
+- [ ] `useGenerator`
+- [ ] `usePromise`
+- [ ] `useEmitter`
+
+#### Standard
+
+- [ ] `useState`
+- [ ] `useEffect`
+- [ ] `useMemo`
+- [ ] `useCallback`
+- [ ] `useContext`
+- [ ] `useReducer`
+- [ ] `useLayoutEffect`
+- [ ] `useRef`
 
 <!--
 
