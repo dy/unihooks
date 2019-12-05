@@ -59,42 +59,34 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 #### App
 
-- [ ] `createStore` / `useStore`
-- [ ] `createAction` / `useAction`
-- [ ] `useHistory`
-- [ ] `useHotkey`
-
-#### UI
-
-- [ ] `useElement`
-- [ ] `useForm`
-- [ ] `useTable`
-- [ ] `useDialog`
-- [ ] `useMenu`
-- [ ] `useToast`
-- [ ] `usePopover`
+- [ ] `createStore` / `useStore` − model provider for an app, persistable contextless `useState`
+- [ ] `createAction` / `useAction` − controller provider, contextless `useEffect` with result
+<!-- - [ ] `useHistory` − -->
+<!-- - [ ] `useHotkey` -->
 
 #### State
 
-- [ ] `useState`
-- [ ] `usePrevious`
-- [ ] `useCountdown`
-- [ ] `useCounter`
+- [ ] `useState` − normalized standard `useState`
+- [ ] `usePrevious` − return previous state
 <!-- - [ ] `useDefined` -->
+<!-- - [ ] `useCounter` − track state of a number -->
 
 #### Effects
 
-- [ ] `useEffect`
-- [ ] `useInit`
-- [ ] `useDestroy`
-- [ ] `useDeep`
-- [ ] `useUpdate`
-- [ ] `useTween`
-- [ ] `useTimeout`
-- [ ] `useInterval`
-- [ ] `useRaf`
-- [ ] `useThrottle`
-- [ ] `useToggle`
+- [ ] `useEffect` − normalized standard `useEffect`
+<!-- - [ ] `useCountdown` − countdown timer -->
+<!-- - [ ] `useInit` -->
+<!-- - [ ] `useDestroy` -->
+<!-- - [ ] `useEffectDeep` -->
+<!-- - [ ] `useUpdate` -->
+<!-- - [ ] `useTween` -->
+<!-- - [ ] `useTimeout` -->
+<!-- - [ ] `useInterval` -->
+<!-- - [ ] `useIdle` -->
+<!-- - [ ] `useImmediate` -->
+<!-- - [ ] `useRaf` -->
+<!-- - [ ] `useThrottle` -->
+<!-- - [ ] `useToggle` -->
 <!-- - [ ] `usePing` -->
 <!-- - [ ] `useFSM` -->
 <!-- - [ ] `useAsync` -->
@@ -102,36 +94,43 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 #### Data
 
-- [x] `useProperty`
-- [x] `useQueryParam`
-- [ ] `useQueryParams`
-- [x] `useLocalStorage`
-- [x] `useSessionStorage`
-- [ ] `useFiles`
-- [ ] `useClipboard`
-- [ ] `useFavicon`
-- [ ] `useTitle`
-- [ ] `useMeta`
-- [ ] `useProperty`
-- [ ] `useRoute`
-- [ ] `useCookie`
+- [x] `useProperty` − any object/target property observer
+- [x] `useQueryParam` − `useState` with persistency to search string parameter
+- [x] `useLocalStorage` − `useState` with persistency to local storage
+- [x] `useSessionStorage` − `useState` with persistency to session storage
+- [x] `useCookie` − `useState` with persistency to cookies
+<!-- - [ ] `useFiles` -->
+<!-- - [ ] `useDB` -->
+<!-- - [ ] `useClipboard` -->
+<!-- - [ ] `useFavicon` -->
 <!-- - [ ] `useRemote` -->
 
 #### DOM
 
-- [ ] `useEvent` - subscribe to events
-- [ ] `useElement` / `useElements`
-- [ ] `useAttribute`
-- [ ] `useLocation`
-- [ ] `useData`
-- [ ] `useClass`
-- [ ] `useRender`
-- [ ] `useMount`
-- [ ] `useStyle`
-- [ ] `useHost`
-- [ ] `useMutation`
-- [ ] `usePermission`
-- [ ] `useMount`
+- [ ] `useEvent` − subscribe to events
+- [ ] `useElement` / `useElements` − query element or elements
+- [ ] `useAttribute` − `useState` with persistency to element attribute
+- [ ] `useLocation` − browser location
+- [ ] `useData` − read / write element dataset
+- [ ] `useClass` − manipulate element `classList`
+- [ ] `useMount` − `onconnected` / `ondisconnected` events
+- [ ] `useStyle` − set element style
+<!-- - [ ] `usePermission` -->
+<!-- - [ ] `useTitle` -->
+<!-- - [ ] `useMeta` -->
+<!-- - [ ] `useRoute` -->
+<!-- - [ ] `useMutation` − -->
+<!-- - [ ] `useHost` −  -->
+<!-- - [ ] `useRender` − -->
+
+#### UI
+
+- [ ] `useForm` − form builder helper
+- [ ] `useTable` − table builder helper
+- [ ] `useDialog` − dialog builder helper
+- [ ] `useMenu` − menu builder helper
+- [ ] `useToast` − toast builder helper
+- [ ] `usePopover` − popover builder helper
 
 #### Appearance
 
@@ -145,24 +144,24 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 #### Interaction
 
-- [ ] `useHover`
-- [ ] `useEvent`
-- [ ] `useResize`
-- [ ] `useIntersection`
-- [ ] `useDrag` / `useDrop`
-- [ ] `useIdle`
-- [ ] `useMove`
-- [ ] `usePan`
-- [ ] `useZoom`
-- [ ] `useKey`
-- [ ] `useShortcut`
-- [ ] `useTyping`
-- [ ] `useArrows`
-- [ ] `useFocusOutside`
-- [ ] `usePageLeave`
-- [ ] `useScroll`
-- [ ] `useScrolling`
-- [ ] `useClickAway`
+- [ ] `useHover` − hover state of an element
+- [ ] `useEvent` − subscribe to an event
+- [ ] `useResize` − track element size
+- [ ] `useIntersection` − track element intersection via Intersection observer
+- [ ] `useDrag` / `useDrop` − drag / drop interaction helper
+- [ ] `useIdle` − track idle state
+- [ ] `useMove` − track mouse/pointer move with inertia
+- [ ] `usePan` − track panning
+- [ ] `useZoom` − track zoom
+- [ ] `useKey` − track key press
+- [ ] `useShortcut` − track combination of keys
+- [ ] `useArrows` − track arrows
+- [ ] `useTyping` − detect if user is typing
+- [ ] `useScrolling` − detect if user is scolling
+- [ ] `usePageLeave` −
+- [ ] `useScroll` −
+- [ ] `useClickAway` −
+- [ ] `useFocusOutside` −
 
 #### Hardware
 
