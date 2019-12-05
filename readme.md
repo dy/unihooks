@@ -1,21 +1,18 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-_Unihooks_ provide a set of essential unified multi-framework hooks.
+Essential unified multi-framework hooks.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
 ```js
-import { useLocation, useQueryParam, useLocalStorage } from 'unihooks'
+import { useMedia, useQueryParam, useLocalStorage } from 'unihooks'
 
-function MyComponent () {
-  // browser location
-  let [ location, setLocation ] = useLocation()
-
-  // query string param
-  let [ id, setId ] = useQueryString('id', 0)
-
-  // local storage value
+const MyComponent = () => {
+  let [ location, setLocation ] = useMedia()
+  let [ id, setId ] = useQueryParam('id', 0)
   let [ cart, setCart ] = useLocalStorage('cart', [])
+
+  // ...
 }
 ```
 
@@ -25,18 +22,7 @@ function MyComponent () {
 
 _Unihooks_ work with any hooks-enabled library:
 
-* [react](https://ghub.io/react)
-* [preact](https://ghub.io/preact)
-* [haunted](https://ghub.io/haunted)
-* [neverland](https://ghub.io/neverland)
-* [atomico](https://ghub.io/atomico)
-* [augmentor](https://ghub.io/augmentor)
-* [dom-augmentor](https://ghub.io/dom-augmentor)
-* [spect](https://ghub.io/spect)
-* [tng-hooks](https://ghub.io/tng-hooks)
-* [fn-with-hooks](https://ghub.io/fn-with-hooks)
-* [unhook](https://ghub.io/unhook)
-* ...
+[react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [neverland](https://ghub.io/neverland), [atomico](https://ghub.io/atomico), [augmentor](https://ghub.io/augmentor), [dom-augmentor](https://ghub.io/dom-augmentor), [spect](https://ghub.io/spect), [tng-hooks](https://ghub.io/tng-hooks), [fn-with-hooks](https://ghub.io/fn-with-hooks), [unhook](https://ghub.io/unhook), ...
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -54,14 +40,14 @@ import * as hook from 'unihooks/preact'
 
 _Unihooks_ follow `useState` / `useEffect` API signature.
 
-```
-let [ state, action ] = useDomain( key?, init? )
-useInvocation( fn, deps?)
+```js
+let [ state, action ] = useDataSource( key?, init? )
+useRunner( fn, deps?)
 ```
 
 ### 3. Essential
 
-_Unihooks_ provide extra value, related to reactivity. Static hooks, or hooks that can be replaced with native API are not allowed.
+_Unihooks_ provide extra value, related to reactivity. Static hooks, or hooks that can be replaced with native API are not included.
 
 ```js
 const MyComponent1 = () => { let ua = useUserAgent() } // ✘
@@ -69,7 +55,12 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 ```
 
 
-## API
+## Hooks
+
+| | | |
+|---|---|---|
+<td colspan=3> Data
+| `useLocalStorage(key, init?)` | | demo |
 
 <!--
 
@@ -88,9 +79,7 @@ Ref: [use-store](https://ghub.io/use-store)
 
 -->
 
-### Data hooks
-
-#### `useLocalStorage(key, init?)`
+### `[value, ] = useLocalStorage(key, init?)`
 
 `useState` with persistency to local storage by `key`.
 `init` can be a function or initial value. `deps` can indicate if value must be reinitialized.
@@ -116,7 +105,7 @@ function MyComponent3 () {
 }
 ```
 
-#### `useQueryParam(name, init?)`
+### `useQueryParam(name, init?)`
 
 `useState` with persistency to query string.
 
@@ -131,19 +120,19 @@ It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/Wind
 
 <!--
 
-#### `useHistory()`
+### `useHistory()`
 
 ```js
 let [state, { back, forward, go }] = useHistory()
 ```
 
-#### `useHash()`
+### `useHash()`
 
 ```js
 let [ref, setRef] = useHash()
 ```
 
-#### `useLocation()`
+### `useLocation()`
 
 ```js
 let [location, setLocation] = useLocation()
@@ -151,7 +140,7 @@ let [location, setLocation] = useLocation()
 
 -->
 
-#### `useCookie(name, init?)`
+### `useCookie(name, init?)`
 
 Cookies accessor hook.
 
@@ -168,7 +157,7 @@ function MyComponent () {
 Does not observe cookies (there's no implemented API for that).
 
 
-#### `useProperty(target, path, init?)`
+### `useProperty(target, path, init?)`
 
 Observe any target property. Defines transparent getter/setter on a target.
 
@@ -182,7 +171,7 @@ function MyComponent () {
 target.count++
 ```
 
-#### `useGlobalCache(key, init?)`
+### `useGlobalCache(key, init?)`
 
 Get access to value stored in [globalCache](https://ghub.io/global-cache).
 
@@ -192,32 +181,32 @@ function MyComponent () {
 }
 ```
 
-#### `useStorage(storage, key, init?)`
+### `useStorage(storage, key, init?)`
 
 Generic storage hook. Storage is `{ get(key), set(key, value) }` object, providing access to some underlying data structure.
 
 
 <!--
 
-#### `let [attr, setAttr] = useAttribute(element, name)`
+### `let [attr, setAttr] = useAttribute(element, name)`
 
 Element attribute observer hook.
 
-#### `let [data, setData] = useDataset(element, name)`
+### `let [data, setData] = useDataset(element, name)`
 
 `dataset`/`data-*` observer hook.
 
-#### `let [cls, setClass] = useClassName(element, name)`
+### `let [cls, setClass] = useClassName(element, name)`
 
 `className` observer hook.
 
-#### `let [values, setValues, isValid] = useForm(init, validation)`
+### `let [values, setValues, isValid] = useForm(init, validation)`
 
 Form values accessor hook.
 
-#### `let [value, setValue, isValid] = useFormValue(name, init, validate)`
+### `let [value, setValue, isValid] = useFormValue(name, init, validate)`
 
-#### `let [response, send, isPending] = useRemote(url, method|options?)`
+### `let [response, send, isPending] = useRemote(url, method|options?)`
 
 Remote source accessor, a generic AJAX calls hook.
 
@@ -228,39 +217,39 @@ useEffect(fetchUsers, [id])
 let [data, su]
 ```
 
-#### `let [location, setLocation] = useLocation()`
-#### `let [params, setRoute] = useRoute('user/:id')`
+### `let [location, setLocation] = useLocation()`
+### `let [params, setRoute] = useRoute('user/:id')`
 
-#### `let [e, dispatch] = useEvent(target|selector?, event)`
+### `let [e, dispatch] = useEvent(target|selector?, event)`
 
 Events hook.
 
 
-#### `let [ mutation, mutate ] = useMutations(selector|element)`
+### `let [ mutation, mutate ] = useMutations(selector|element)`
 
 Append, prepend, remove, update etc.
 
-#### `let [element, render] = useSelector(selector|element)`
+### `let [element, render] = useSelector(selector|element)`
 
-#### `let [css, setCss] = useCSS(selector|element?, rule)`
+### `let [css, setCss] = useCSS(selector|element?, rule)`
 
-#### `let [] = useMediaQuery()`
+### `let [] = useMediaQuery()`
 
-#### useNetworkStatus()
+### useNetworkStatus()
 
-#### `let [value] = useArguments()`
+### `let [value] = useArguments()`
 
-#### `let [message, send] = useThread(pid)`
+### `let [message, send] = useThread(pid)`
 
-#### `let [intersects] = useIntersection(elementA, elementB)`
+### `let [intersects] = useIntersection(elementA, elementB)`
 
-#### `let [size, setSize] = useResize(element)`
+### `let [size, setSize] = useResize(element)`
 
-#### `let [, startTransition, isPending] = useTransition()`
+### `let [, startTransition, isPending] = useTransition()`
 
-#### `let [ result, call ] = useFunction(() => {})`
+### `let [ result, call ] = useFunction(() => {})`
 
-#### `let [ result, call ] = useEffect(key?, () => {}, deps?)`
+### `let [ result, call ] = useEffect(key?, () => {}, deps?)`
 
 In some way, a gateway to other hooks, same as direct aspect `effect(() => {})`.
 But if we follow convention, that's going to become `let [prevResult, call] = useEffect( () => {} | id ); call()`.
