@@ -1,4 +1,4 @@
-import { useState as useNativeState, useMemo } from 'any-hooks'
+import { useState as useNativeState } from 'any-hooks'
 
 export default function useState (init) {
   let [value, setValue] = useNativeState(init)

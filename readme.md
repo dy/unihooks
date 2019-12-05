@@ -76,7 +76,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 - [x] `useEffect` − normalized standard `useEffect`
 - [x] `useSyncEffect` − `useEffect` with synchronous invocation
 <!-- - [ ] `useCountdown` − countdown timer -->
-<!-- - [ ] `useInit` -->
+- [x] `useInit` − `useSyncEffect`, called once
 <!-- - [ ] `useDestroy` -->
 <!-- - [ ] `useEffectDeep` -->
 <!-- - [ ] `useUpdate` -->

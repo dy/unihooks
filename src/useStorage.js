@@ -8,12 +8,19 @@ const SymbolUseStorage = Symbol.for('__unihooks__useStorage')
 if (!globalCache.has(SymbolUseStorage)) globalCache.set(SymbolUseStorage, new Map)
 const cache = globalCache.get(SymbolUseStorage)
 
+
 export default function useStorage(storage, key, init) {
   let state, stateId = tuple(storage, key)
   if (cache.has(stateId)) {
     state = cache.get(stateId)
   }
   else {
+    if (!storage.plan) storage.plan = (fn) => {
+      let id = setMicrotask(fn)
+      return () => clearMicrotask(id)
+    }
+    if (!storage.is) storage.is = Object.is
+
     cache.set(stateId, state = (...args) => state.set(...args))
 
     // mitt extract
@@ -23,12 +30,12 @@ export default function useStorage(storage, key, init) {
     state.emit = (e, arg) => subs[e] && subs[e].slice().map(fn => fn(arg))
 
     state.value
-    state.planned
+    state.abort
 
     // commit any plans and read from storage
     state.get = () => {
-      if (state.planned) {
-        clearMicrotask(state.planned)
+      if (state.abort) {
+        clearMicrotask(state.abort)
         state.commit()
       }
       return state.value
@@ -36,17 +43,17 @@ export default function useStorage(storage, key, init) {
 
     // plan write to storage
     state.set = (newValue) => {
-      if ((storage.is || Object.is)(newValue, state.value)) {
-        if (state.planned) clearMicrotask(state.planned)
+      if (storage.is(newValue, state.value)) {
+        if (state.abort) clearMicrotask(state.abort)
         return
       }
-      if (!state.planned) state.planned = setMicrotask(state.commit)
+      if (!state.abort) state.abort = storage.plan(state.commit)
       state.value = newValue
     }
 
     // update storage from state
     state.commit = () => {
-      state.planned = null
+      state.abort = null
       storage.set(key, state.value)
       state.update(storage.get(key))
     }
@@ -59,7 +66,7 @@ export default function useStorage(storage, key, init) {
   }
 
   const [value, setNativeState] = useState(() => {
-    if (state.planned) state.commit()
+    if (state.abort) state.commit()
     state.value = storage.get(key)
 
     // if init is fn it's always called
