@@ -9,80 +9,80 @@ if (!globalCache.has(SymbolUseStorage)) globalCache.set(SymbolUseStorage, new Ma
 const cache = globalCache.get(SymbolUseStorage)
 
 export default function useStorage(storage, key, init) {
-  let store, storeId = tuple(storage, key)
-  if (cache.has(storeId)) {
-    store = cache.get(storeId)
+  let state, stateId = tuple(storage, key)
+  if (cache.has(stateId)) {
+    state = cache.get(stateId)
   }
   else {
-    cache.set(storeId, store = (...args) => store.set(...args))
+    cache.set(stateId, state = (...args) => state.set(...args))
 
     // mitt extract
     let subs = {}
-    store.on = (e, fn) => (subs[e] || (subs[e] = [])).push(fn)
-    store.off = (e, fn) => subs[e].splice(subs[e].indexOf(fn) >>> 0, 1)
-    store.emit = (e, arg) => subs[e] && subs[e].slice().map(fn => fn(arg))
+    state.on = (e, fn) => (subs[e] || (subs[e] = [])).push(fn)
+    state.off = (e, fn) => subs[e].splice(subs[e].indexOf(fn) >>> 0, 1)
+    state.emit = (e, arg) => subs[e] && subs[e].slice().map(fn => fn(arg))
 
-    store.value
-    store.planned
+    state.value
+    state.planned
 
     // commit any plans and read from storage
-    store.get = () => {
-      if (store.planned) {
-        clearMicrotask(store.planned)
-        store.commit()
+    state.get = () => {
+      if (state.planned) {
+        clearMicrotask(state.planned)
+        state.commit()
       }
-      return store.value
+      return state.value
     }
 
     // plan write to storage
-    store.set = (newValue) => {
-      if ((storage.is || Object.is)(newValue, store.value)) {
-        if (store.planned) clearMicrotask(store.planned)
+    state.set = (newValue) => {
+      if ((storage.is || Object.is)(newValue, state.value)) {
+        if (state.planned) clearMicrotask(state.planned)
         return
       }
-      if (!store.planned) store.planned = setMicrotask(store.commit)
-      store.value = newValue
+      if (!state.planned) state.planned = setMicrotask(state.commit)
+      state.value = newValue
     }
 
-    // update storage from store
-    store.commit = () => {
-      store.planned = null
-      storage.set(key, store.value)
-      store.update(storage.get(key))
+    // update storage from state
+    state.commit = () => {
+      state.planned = null
+      storage.set(key, state.value)
+      state.update(storage.get(key))
     }
 
-    // update store from storage
-    store.update = (value) => {
-      store.value = value
-      store.emit('change', store.value)
+    // update state from storage
+    state.update = (value) => {
+      state.value = value
+      state.emit('change', state.value)
     }
   }
 
-  const [value, setNativeState] = useState( () => {
-    if (store.planned) store.commit()
-    store.value = storage.get(key)
+  const [value, setNativeState] = useState(() => {
+    if (state.planned) state.commit()
+    state.value = storage.get(key)
 
-    // fn init is always called
+    // if init is fn it's always called
     if (typeof init === 'function') {
-      store.value = init(store.value)
-      store.commit()
+      state.value = init(state.value)
+      state.commit()
     }
     // constant init is called if there's no value in storage
-    else if (store.value == null && init != store.value) {
-      store.value = init
-      store.commit()
+    else if (state.value == null && init != state.value) {
+      state.value = init
+      state.commit()
     }
 
-    return store.value
+    return state.value
   })
 
   useSyncEffect( () => {
     const notify = value => {
       setNativeState(value)
     }
-    store.on('change', notify)
-    return () => store.off('change', notify)
+    state.on('change', notify)
+    return () => state.off('change', notify)
   }, [] )
 
-  return [value, store]
+  return [value, state]
 }

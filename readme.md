@@ -64,16 +64,17 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
-#### State
+<!-- #### State -->
 
-- [ ] `useState` − normalized standard `useState`
-- [ ] `usePrevious` − return previous state
+<!-- - [ ] `useState` − normalized standard `useState` -->
+<!-- - [ ] `usePrevious` − return previous state -->
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
-#### Effects
+<!-- #### Effects -->
 
-- [ ] `useEffect` − normalized standard `useEffect`
+- [x] `useEffect` − normalized standard `useEffect`
+- [x] `useSyncEffect` − `useEffect` with synchronous invocation
 <!-- - [ ] `useCountdown` − countdown timer -->
 <!-- - [ ] `useInit` -->
 <!-- - [ ] `useDestroy` -->
@@ -92,7 +93,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- - [ ] `useAsync` -->
 <!-- - [ ] `useHooked` - run hooks-enabled effect -->
 
-#### Data
+<!-- #### Data -->
 
 - [x] `useProperty` − any object/target property observer
 - [x] `useQueryParam` − `useState` with persistency to search string parameter
@@ -105,16 +106,16 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- - [ ] `useFavicon` -->
 <!-- - [ ] `useRemote` -->
 
-#### DOM
+<!-- #### DOM -->
 
-- [ ] `useEvent` − subscribe to events
-- [ ] `useElement` / `useElements` − query element or elements
-- [ ] `useAttribute` − `useState` with persistency to element attribute
-- [ ] `useLocation` − browser location
-- [ ] `useData` − read / write element dataset
-- [ ] `useClass` − manipulate element `classList`
-- [ ] `useMount` − `onconnected` / `ondisconnected` events
-- [ ] `useStyle` − set element style
+<!-- - [ ] `useEvent` − subscribe to events -->
+<!-- - [ ] `useElement` / `useElements` − query element or elements -->
+<!-- - [ ] `useAttribute` − `useState` with persistency to element attribute -->
+<!-- - [ ] `useLocation` − browser location -->
+<!-- - [ ] `useData` − read / write element dataset -->
+<!-- - [ ] `useClass` − manipulate element `classList` -->
+<!-- - [ ] `useMount` − `onconnected` / `ondisconnected` events -->
+<!-- - [ ] `useStyle` − set element style -->
 <!-- - [ ] `usePermission` -->
 <!-- - [ ] `useTitle` -->
 <!-- - [ ] `useMeta` -->
@@ -123,77 +124,77 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- - [ ] `useHost` −  -->
 <!-- - [ ] `useRender` − -->
 
-#### UI
+<!-- #### UI -->
 
-- [ ] `useForm` − form builder helper
-- [ ] `useTable` − table builder helper
-- [ ] `useDialog` − dialog builder helper
-- [ ] `useMenu` − menu builder helper
-- [ ] `useToast` − toast builder helper
-- [ ] `usePopover` − popover builder helper
+<!-- - [ ] `useForm` − form builder helper -->
+<!-- - [ ] `useTable` − table builder helper -->
+<!-- - [ ] `useDialog` − dialog builder helper -->
+<!-- - [ ] `useMenu` − menu builder helper -->
+<!-- - [ ] `useToast` − toast builder helper -->
+<!-- - [ ] `usePopover` − popover builder helper -->
 
-#### Appearance
+<!-- #### Appearance -->
 
-- [ ] `useMedia`
-- [ ] `useCSS`
-- [ ] `useSize`
-- [ ] `useFullscreen`
-- [ ] `useAudio`
-- [ ] `useSpeech`
-- [ ] `useLockBodyScroll`
+<!-- - [ ] `useMedia` -->
+<!-- - [ ] `useCSS` -->
+<!-- - [ ] `useSize` -->
+<!-- - [ ] `useFullscreen` -->
+<!-- - [ ] `useAudio` -->
+<!-- - [ ] `useSpeech` -->
+<!-- - [ ] `useLockBodyScroll` -->
 
-#### Interaction
+<!-- #### Interaction -->
 
-- [ ] `useHover` − hover state of an element
-- [ ] `useEvent` − subscribe to an event
-- [ ] `useResize` − track element size
-- [ ] `useIntersection` − track element intersection via Intersection observer
-- [ ] `useDrag` / `useDrop` − drag / drop interaction helper
-- [ ] `useIdle` − track idle state
-- [ ] `useMove` − track mouse/pointer move with inertia
-- [ ] `usePan` − track panning
-- [ ] `useZoom` − track zoom
-- [ ] `useKey` − track key press
-- [ ] `useShortcut` − track combination of keys
-- [ ] `useArrows` − track arrows
-- [ ] `useTyping` − detect if user is typing
-- [ ] `useScrolling` − detect if user is scolling
-- [ ] `usePageLeave` −
-- [ ] `useScroll` −
-- [ ] `useClickAway` −
-- [ ] `useFocusOutside` −
+<!-- - [ ] `useHover` − hover state of an element -->
+<!-- - [ ] `useEvent` − subscribe to an event -->
+<!-- - [ ] `useResize` − track element size -->
+<!-- - [ ] `useIntersection` − track element intersection via Intersection observer -->
+<!-- - [ ] `useDrag` / `useDrop` − drag / drop interaction helper -->
+<!-- - [ ] `useIdle` − track idle state -->
+<!-- - [ ] `useMove` − track mouse/pointer move with inertia -->
+<!-- - [ ] `usePan` − track panning -->
+<!-- - [ ] `useZoom` − track zoom -->
+<!-- - [ ] `useKey` − track key press -->
+<!-- - [ ] `useShortcut` − track combination of keys -->
+<!-- - [ ] `useArrows` − track arrows -->
+<!-- - [ ] `useTyping` − detect if user is typing -->
+<!-- - [ ] `useScrolling` − detect if user is scolling -->
+<!-- - [ ] `usePageLeave` − -->
+<!-- - [ ] `useScroll` − -->
+<!-- - [ ] `useClickAway` − -->
+<!-- - [ ] `useFocusOutside` − -->
 
-#### Hardware
+<!-- #### Hardware -->
 
-- [ ] `useNetwork`
-- [ ] `useOrientation`
-- [ ] `useMedia`
-- [ ] `useAccelerometer`
-- [ ] `useBattery`
-- [ ] `useGeolocation`
-- [ ] `useMediaDevices`
-- [ ] `useVibrate`
-- [ ] `useMotion`
+<!-- - [ ] `useNetwork` -->
+<!-- - [ ] `useOrientation` -->
+<!-- - [ ] `useMedia` -->
+<!-- - [ ] `useAccelerometer` -->
+<!-- - [ ] `useBattery` -->
+<!-- - [ ] `useGeolocation` -->
+<!-- - [ ] `useMediaDevices` -->
+<!-- - [ ] `useVibrate` -->
+<!-- - [ ] `useMotion` -->
 
-#### Async / Stream
+<!-- #### Async / Stream -->
 
-- [ ] `useStream`
-- [ ] `useObservable`
-- [ ] `useAsyncIterator`
-- [ ] `useGenerator`
-- [ ] `usePromise`
-- [ ] `useEmitter`
+<!-- - [ ] `useStream` -->
+<!-- - [ ] `useObservable` -->
+<!-- - [ ] `useAsyncIterator` -->
+<!-- - [ ] `useGenerator` -->
+<!-- - [ ] `usePromise` -->
+<!-- - [ ] `useEmitter` -->
 
-#### Standard
+<!-- #### Standard -->
 
-- [ ] `useState`
-- [ ] `useEffect`
-- [ ] `useMemo`
-- [ ] `useCallback`
-- [ ] `useContext`
-- [ ] `useReducer`
-- [ ] `useLayoutEffect`
-- [ ] `useRef`
+<!-- - [ ] `useState` -->
+<!-- - [ ] `useEffect` -->
+<!-- - [ ] `useMemo` -->
+<!-- - [ ] `useCallback` -->
+<!-- - [ ] `useContext` -->
+<!-- - [ ] `useReducer` -->
+<!-- - [ ] `useLayoutEffect` -->
+<!-- - [ ] `useRef` -->
 
 <!--
 
@@ -211,6 +212,8 @@ let [value, setValue] = useState(() => props.x, [props.x])
 Ref: [use-store](https://ghub.io/use-store)
 
 -->
+
+## API
 
 ### `[value, ] = useLocalStorage(key, init?)`
 
