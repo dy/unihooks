@@ -4,7 +4,7 @@ import { useAction, createAction, useStore, createStore, useEffect } from '..'
 import { tick, frame, time } from 'wait-please'
 
 
-t.skip('useAction: basic', async t => {
+t.only('useAction: basic', async t => {
   let log = []
 
   createStore('foo', { bar: 'baz' })
@@ -25,8 +25,9 @@ t.skip('useAction: basic', async t => {
   f()
 
   await frame(4)
-
-  t.deepEqual(log, [{ bar: 'baz'}])
+  t.deepEqual(log, [{ bar: 'baz'}, { bar: 'qux'}])
+  await frame(4)
+  t.deepEqual(log, [{ bar: 'baz'}, { bar: 'qux'}])
 
   t.end()
 })

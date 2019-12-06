@@ -60,7 +60,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 #### App
 
 - [x] `createStore` / `useStore` − store (model) provider, persistable contextless `useState`
-- [ ] `createAction` / `useAction` − action (controller) provider, contextless `useEffect` with result
+- [x] `createAction` / `useAction` − action (controller) provider, contextless `useEffect` with result
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
@@ -222,7 +222,7 @@ Ref: [use-store](https://ghub.io/use-store)
 ### `[value, setValue] = useStore(key, init?)`
 
 Store provider with persistency and broadcasting. Can be used as robust application model layer.
-Provides `createStore` entry to initialize store outside of components.
+Provides `createStore` entry to initialize store.
 
 ```js
 import { createStore, useStore } from 'unihooks'
@@ -245,7 +245,7 @@ Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadca
 
 ### `[result, call] = useAction(name, fn?)`
 
-App action provider. Can be used to organize app controllers. Provides `createAction` function to register actions outside of components.
+App action provider. Can be used to organize application controllers. Provides `createAction` function to register actions.
 
 ```js
 createAction('load-collection', async (id) => {
