@@ -19,9 +19,11 @@ t('useStore: debounce is 300ms', async t => {
   })
   f()
   t.deepEqual(log, [0])
-  await time(INTERVAL / 2)
+  await tick(1)
+  // await time(INTERVAL / 2)
   t.deepEqual(log, [0])
-  await time(INTERVAL)
+  await tick(1)
+  // await time(INTERVAL)
   t.deepEqual(log, [0, 1])
 
   await teardown()
@@ -32,7 +34,7 @@ t('useStore: multiple components use same key', async t => {
   let log = []
 
   await clearNodeFolder()
-  storage.get(PREFIX + 'count', null)
+  storage.set(PREFIX + 'count', null)
 
   const f = (i, log) => {
     let [count, setCount] = useStore('count', i)
@@ -64,15 +66,16 @@ t('useStore: does not trigger unchanged updates', async t => {
   storage.set(PREFIX + 'count', null)
 
   let log = []
-  let f = enhook((i) => {
+  let fn = enhook((i) => {
     let [count, setCount] = useStore('count', i)
+
     log.push(count)
     useEffect(() => {
       setCount(i + 1)
       setCount(i)
     }, [])
   })
-  f(1)
+  fn(1)
   t.deepEqual(log, [1])
   await time(INTERVAL)
   t.deepEqual(log, [1])
