@@ -1,7 +1,7 @@
 import useState from './useState'
 import useCallback from './useCallback'
 import useEffect from './useEffect'
-import * as timers from 'worker-timers'
+import * as timers from './util/timers'
 
 // start countdown timer
 export default function useCountdown(n, interval = 1000) {

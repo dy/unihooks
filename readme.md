@@ -68,8 +68,9 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- #### State -->
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
-- [x] `usePrevious` − returns the previous state or props.
+- [x] `usePrevious` − return the previous state or props.
 - [x] `useCountdown` − countdown state.
+- [ ] `useThrottle` − throttle state value.
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
@@ -87,7 +88,6 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- - [ ] `useIdle` -->
 <!-- - [ ] `useImmediate` -->
 <!-- - [ ] `useRaf` -->
-<!-- - [ ] `useThrottle` -->
 <!-- - [ ] `useToggle` -->
 <!-- - [ ] `usePing` -->
 <!-- - [ ] `useFSM` -->

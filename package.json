@@ -31,6 +31,9 @@
     "tape": "^4.11.0",
     "wait-please": "^1.1.0"
   },
+  "browser": {
+    "./src/util/timers.js": "./src/util/browser-timers.js"
+  },
   "browserslist": [
     "last 1 Chrome versions"
   ],
