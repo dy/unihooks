@@ -1,6 +1,6 @@
 import t from 'tape'
 import { useStore, useEffect } from '..'
-import { INTERVAL, storage, PREFIX, channels } from '../src/useStore'
+import { INTERVAL, storage, PREFIX, channels, createStore } from '../src/useStore'
 import enhook from 'enhook'
 import { tick, idle, frame, time } from 'wait-please'
 import { clearNodeFolder } from 'broadcast-channel'
@@ -84,7 +84,8 @@ t('useStore: does not trigger unchanged updates', async t => {
 
 t('useStore: fn init should be called per hook', async t => {
   await clearNodeFolder()
-  storage.set(PREFIX + 'count', 0)
+  storage.set(PREFIX + 'count', null)
+  createStore('count', 0)
 
   let log = []
   let f = enhook(() => {

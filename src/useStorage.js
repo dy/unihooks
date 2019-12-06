@@ -46,6 +46,7 @@ export default function useStorage(storage, key, init) {
       }
       if (!state.abort) state.abort = storage.plan(state.commit)
       state.value = newValue
+      // state.emit('change', state.value)
     }
 
     // update storage from state

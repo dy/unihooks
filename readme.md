@@ -59,7 +59,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 #### App
 
-- [x] `createStore` / `useStore` − store (model) provider - persistable contextless `useState`
+- [x] `createStore` / `useStore` − store (model) provider, persistable contextless `useState`
 - [ ] `createAction` / `useAction` − action (controller) provider, contextless `useEffect` with result
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
@@ -73,7 +73,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- #### Effects -->
 
-- [x] `useEffect` − normalized standard `useEffect`
+- [x] `useEffect` − normalized standard `useEffect` with async fn support
 - [x] `useSyncEffect` − `useEffect` with synchronous invocation
 <!-- - [ ] `useCountdown` − countdown timer -->
 - [x] `useInit` − `useSyncEffect`, called once
@@ -241,6 +241,30 @@ function Component () {
 ```
 
 Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
+
+
+### `[result, call] = useAction(name, fn?)`
+
+App action provider. Can be used to organize app controllers. Provides `createAction` function to register actions outside of components.
+
+```js
+createAction('load-collection', async (id) => {
+  // actions can use hooks internally
+  let [collection, setCollection] = useStore('collection')
+  setCollection({ ...collection, loading: true})
+  setCollection({ data: await load(`collection/${id}`), loading: false })
+
+  return collection
+})
+
+function MyComponent() {
+  let load = useAction('load-collection')
+
+  useEffect(() => {
+    let data = await load(id)
+  }, [id])
+}
+```
 
 ### `[value, setValue] = useLocalStorage(key, init?)`
 

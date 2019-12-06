@@ -47,3 +47,9 @@ export default (key, init) => {
 
   return [value, state]
 }
+
+export const createStore = (key, init) => {
+  key = PREFIX + key
+  storage.set(key, init)
+}
+

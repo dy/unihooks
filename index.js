@@ -7,7 +7,9 @@ export { default as useContext } from './src/useContext'
 export { default as useReducer } from './src/useReducer'
 export { default as useLayoutEffect } from './src/useLayoutEffect'
 
-export { default as useStore } from './src/useStore'
+export { default as useStore, createStore } from './src/useStore'
+export { default as useAction, createAction } from './src/useAction'
+
 export { default as useLocalStorage } from './src/useLocalStorage'
 export { default as useProperty } from './src/useProperty'
 export { default as useStorage } from './src/useStorage'
