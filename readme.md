@@ -57,10 +57,11 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 ## Hooks
 
-#### App
+#### App / MVC
 
-- [x] `createStore` / `useStore` − store (model) provider, persistable contextless `useState`.
-- [x] `createAction` / `useAction` − action (controller) provider, contextless `useEffect` with result.
+- [x] `useStore` + `createStore` − store (model) provider, persistable contextless `useState`.
+- [x] `useAction` + `createAction` − action (controller) provider, contextless `useEffect` with result.
+<!-- - [ ] `useRender` + `createRender` − render (view) provider, instead of direct result. -->
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
@@ -126,7 +127,6 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- - [ ] `useRoute` -->
 <!-- - [ ] `useMutation` − -->
 <!-- - [ ] `useHost` −  -->
-<!-- - [ ] `useRender` − -->
 
 <!-- #### UI -->
 
