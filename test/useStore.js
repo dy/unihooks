@@ -31,10 +31,11 @@ t('useStore: debounce is 300ms', async t => {
 })
 
 t('useStore: multiple components use same key', async t => {
-  let log = []
-
   await clearNodeFolder()
   storage.set(PREFIX + 'count', null)
+
+  let log = []
+
 
   const f = (i, log) => {
     let [count, setCount] = useStore('count', i)
@@ -88,6 +89,7 @@ t('useStore: does not trigger unchanged updates', async t => {
 t('useStore: fn init should be called per hook', async t => {
   await clearNodeFolder()
   storage.set(PREFIX + 'count', null)
+
   createStore('count', 0)
 
   let log = []
