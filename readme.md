@@ -59,24 +59,24 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 #### App
 
-- [x] `createStore` / `useStore` − store (model) provider, persistable contextless `useState`
-- [x] `createAction` / `useAction` − action (controller) provider, contextless `useEffect` with result
+- [x] `createStore` / `useStore` − store (model) provider, persistable contextless `useState`.
+- [x] `createAction` / `useAction` − action (controller) provider, contextless `useEffect` with result.
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
 <!-- #### State -->
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
-<!-- - [ ] `usePrevious` − return previous state -->
+- [x] `usePrevious` − returns the previous state or props.
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
 <!-- #### Effects -->
 
-- [x] `useEffect` − normalized standard `useEffect` with async fn support
-- [x] `useSyncEffect` − `useEffect` with synchronous invocation
+- [x] `useEffect` − normalized standard `useEffect` with async fn support.
+- [x] `useSyncEffect` − `useEffect` with synchronous invocation.
 <!-- - [ ] `useCountdown` − countdown timer -->
-- [x] `useInit` − `useSyncEffect`, called once
+- [x] `useInit` − `useSyncEffect`, called once.
 <!-- - [ ] `useDestroy` -->
 <!-- - [ ] `useEffectDeep` -->
 <!-- - [ ] `useUpdate` -->
@@ -95,12 +95,12 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- #### Data -->
 
-- [x] `useProperty` − any object/target property observer
-- [x] `useQueryParam` − `useState` with persistency to search string parameter
-- [x] `useLocalStorage` − `useState` with persistency to local storage
-- [x] `useSessionStorage` − `useState` with persistency to session storage
-- [x] `useCookie` − `useState` with persistency to cookies
-- [x] `useGlobalCache` − [global-cache](https://ghub.io/global-cache) storage
+- [x] `useProperty` − any object/target property observer.
+- [x] `useQueryParam` − `useState` with persistency to search string parameter.
+- [x] `useLocalStorage` − `useState` with persistency to local storage.
+- [x] `useSessionStorage` − `useState` with persistency to session storage.
+- [x] `useCookie` − `useState` with persistency to cookies.
+- [x] `useGlobalCache` − [global-cache](https://ghub.io/global-cache) storage.
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->
 <!-- - [ ] `useChannel` − contextless `useState` -->
 <!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
@@ -292,7 +292,7 @@ function MyComponent3 () {
 }
 ```
 
-### `useQueryParam(name, init?)`
+### `[value, setValue] = useQueryParam(name, init?)`
 
 `useState` with persistency to query string.
 
@@ -327,7 +327,7 @@ let [location, setLocation] = useLocation()
 
 -->
 
-### `useCookie(name, init?)`
+### `[value, setValue] = useCookie(name, init?)`
 
 Cookies accessor hook.
 
@@ -344,7 +344,7 @@ function MyComponent () {
 Does not observe cookies (there's no implemented API for that).
 
 
-### `useProperty(target, path, init?)`
+### `[value, setValue] = useProperty(target, path, init?)`
 
 Observe any target property. Defines transparent getter/setter on a target.
 
@@ -358,7 +358,7 @@ function MyComponent () {
 target.count++
 ```
 
-### `useGlobalCache(key, init?)`
+### `[value, setValue] = useGlobalCache(key, init?)`
 
 Get access to value stored in [globalCache](https://ghub.io/global-cache).
 
@@ -368,10 +368,32 @@ function MyComponent () {
 }
 ```
 
-### `useStorage(storage, key, init?)`
+### `[value, setValue] = useStorage(storage, key, init?)`
 
 Generic storage hook. Storage is `{ get(key), set(key, value) }` object, providing access to some underlying data structure.
 
+### `prev = usePrevious(value)`
+
+Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
+
+```js
+import { usePrevious, useState, useRender } from 'unihooks';
+
+const Demo = () => {
+  const [count, setCount] = useState(0);
+  const prevCount = usePrevious(count);
+
+  useRender(
+    <p>
+      <button onClick={() => setCount(count + 1)}>+</button>
+      <button onClick={() => setCount(count - 1)}>-</button>
+      <p>
+        Now: {count}, before: {prevCount}
+      </p>
+    </p>
+  );
+};
+```
 
 <!--
 

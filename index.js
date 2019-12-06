@@ -19,6 +19,8 @@ export { default as useCookie } from './src/useCookie'
 export { default as useFormField } from './src/useFormField'
 export { default as useOnLine } from './src/useOnLine'
 
+export { default as usePrevious } from './src/usePrevious'
+
 export { default as useInit } from './src/useInit'
 export { default as useSyncEffect } from './src/useSyncEffect'
 export { default as useTimeout } from './src/useTimeout'
