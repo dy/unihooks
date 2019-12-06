@@ -69,6 +69,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
 - [x] `usePrevious` − returns the previous state or props.
+- [x] `useCountdown` − countdown state.
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
@@ -76,7 +77,6 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 - [x] `useEffect` − normalized standard `useEffect` with async fn support.
 - [x] `useSyncEffect` − `useEffect` with synchronous invocation.
-<!-- - [ ] `useCountdown` − countdown timer -->
 - [x] `useInit` − `useSyncEffect`, called once.
 <!-- - [ ] `useDestroy` -->
 <!-- - [ ] `useEffectDeep` -->
@@ -383,15 +383,27 @@ const Demo = () => {
   const [count, setCount] = useState(0);
   const prevCount = usePrevious(count);
 
-  useRender(
+  return <p>
+    <button onClick={() => setCount(count + 1)}>+</button>
+    <button onClick={() => setCount(count - 1)}>-</button>
     <p>
-      <button onClick={() => setCount(count + 1)}>+</button>
-      <button onClick={() => setCount(count - 1)}>-</button>
-      <p>
-        Now: {count}, before: {prevCount}
-      </p>
+      Now: {count}, before: {prevCount}
     </p>
-  );
+  </p>
+};
+```
+
+### `[n, reset] = useCountdown(start, interval=1000)`
+
+Countdown state from `start` down to `0` with indicated `interval`. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
+
+```js
+import { useCountdown } from 'unihooks'
+
+const Demo = () => {
+  const [count, reset] = useCountdown(30);
+
+  return `Remains: ${count}s`
 };
 ```
 

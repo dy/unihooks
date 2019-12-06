@@ -16,7 +16,8 @@
     "set-microtask": "^1.0.0",
     "sorted-object": "^2.0.1",
     "store": "^2.0.12",
-    "symbol-observable": "^1.2.0"
+    "symbol-observable": "^1.2.0",
+    "worker-timers": "^5.0.35"
   },
   "devDependencies": {
     "augmentor": "^1.1.5",
