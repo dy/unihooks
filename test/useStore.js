@@ -19,10 +19,7 @@ t('useStore: debounce is 300ms', async t => {
   })
   f()
   t.deepEqual(log, [0])
-  await tick(1)
-  // await time(INTERVAL / 2)
-  t.deepEqual(log, [0])
-  await tick(1)
+  await tick(2)
   // await time(INTERVAL)
   t.deepEqual(log, [0, 1])
 
