@@ -101,8 +101,8 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 - [x] `useSessionStorage` − `useState` with persistency to session storage
 - [x] `useCookie` − `useState` with persistency to cookies
 - [x] `useGlobalCache` − [global-cache](https://ghub.io/global-cache) storage
-- [ ] `useSharedState` − state, shared between browser tabs
-- [ ] `useChannel` − contextless `useState`
+<!-- - [ ] `useSharedState` − state, shared between browser tabs -->
+<!-- - [ ] `useChannel` − contextless `useState` -->
 <!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
 <!-- - [ ] `useFiles` -->
 <!-- - [ ] `useDB` -->
@@ -240,7 +240,7 @@ function Component () {
 }
 ```
 
-References: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
+Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
 
 ### `[value, setValue] = useLocalStorage(key, init?)`
 
