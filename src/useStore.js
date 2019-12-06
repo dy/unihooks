@@ -1,34 +1,44 @@
-// inspired by https://github.com/kwhitley/use-store/blob/master/src/index.js
 import useStorage from './useStorage'
 import useInit from './useInit'
+import store from 'store'
+import observe from 'store/plugins/observe'
+import { BroadcastChannel } from 'broadcast-channel'
 
-const PREFIX = '!uh::'
 
-const storage = {
-  get: key => {
-    let str = ls.get(key)
-    let result = JSON.parse(str)
-    return result
+export const PREFIX = '!uhx::'
+export const INTERVAL = 150
+
+store.addPlugin(observe)
+export { store }
+
+export const storage = {
+  get: (key) => store.get(key),
+  set: (key, value) => {
+    if (value == null) store.remove(key)
+    else store.set(key, value)
+    if (channels[key]) channels[key].postMessage(value)
   },
-  set: ls.set
+  plan: (fn) => {
+    let id = setTimeout(() => fn(), INTERVAL)
+    return () => clearTimeout(id)
+  }
 }
 
-// https://stackoverflow.com/a/2117523/11599918
-const uuid = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
+const channels = {}
 
-export default function useStore (key, init, options) {
+export default (key, init) => {
+  key = PREFIX + key
+
+  let [value, state] = useStorage(storage, key, init)
+
   useInit(() => {
-    // it is possible instead to observe localStorage property
-    const notify = value => store.update(value)
-    ls.on(key, notify)
-    return () => ls.off(key, notify)
+    const channel = channels[key] || (channels[key] = new BroadcastChannel(key))
+    channel.addEventListener('message', value => state.fetch(value))
+
+    const obsId = store.observe(key, value => state.fetch(value))
+    return () => store.unobserve(obsId)
   })
 
-  let [value, store] = useStorage(storage, key, init)
-  return [value, store]
+
+  return [value, state]
 }

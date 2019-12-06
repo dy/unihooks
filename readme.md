@@ -59,7 +59,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 #### App
 
-- [ ] `createStore` / `useStore` − model provider for an app, persistable contextless `useState`
+- [ ] `createStore` / `useStore` − store provider - persistable contextless `useState`
 - [ ] `createAction` / `useAction` − controller provider, contextless `useEffect` with result
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
@@ -100,6 +100,10 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 - [x] `useLocalStorage` − `useState` with persistency to local storage
 - [x] `useSessionStorage` − `useState` with persistency to session storage
 - [x] `useCookie` − `useState` with persistency to cookies
+- [x] `useGlobalCache` − [global-cache](https://ghub.io/global-cache) storage
+- [ ] `useSharedState` − state, shared between browser tabs
+- [ ] `useChannelState` − contextless `useState`
+<!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
 <!-- - [ ] `useFiles` -->
 <!-- - [ ] `useDB` -->
 <!-- - [ ] `useClipboard` -->
@@ -215,10 +219,31 @@ Ref: [use-store](https://ghub.io/use-store)
 
 ## API
 
-### `[value, ] = useLocalStorage(key, init?)`
+### `[value, setValue] = useStore(key, init?)`
 
-`useState` with persistency to local storage by `key`.
-`init` can be a function or initial value. `deps` can indicate if value must be reinitialized.
+Store provider with persistency and broadcasting. Can be used as robust application model layer.
+Provides `createStore` entry to initialize store outside of components.
+
+```js
+createStore('users', {
+  data: [],
+  loading: false,
+  current: null
+})
+
+function Component () {
+  let [users, setUsers] = useStore('users')
+
+  setUsers({ ...users, loading: true })
+}
+```
+
+References: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
+
+### `[value, setValue] = useLocalStorage(key, init?)`
+
+`useState` with persistency to local storage by `key`. Unlike `useStore`, provides raw `localStorage` access.
+`init` can be a function or initial value. Provides
 
 ```js
 function MyComponent1 () {

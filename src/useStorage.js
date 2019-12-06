@@ -1,13 +1,9 @@
 import useState from './useState'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
-import useSyncEffect from './useSyncEffect'
-import globalCache from 'global-cache'
 import tuple from 'immutable-tuple'
+import { useInit } from '..'
 
-const SymbolUseStorage = Symbol.for('__unihooks__useStorage')
-if (!globalCache.has(SymbolUseStorage)) globalCache.set(SymbolUseStorage, new Map)
-const cache = globalCache.get(SymbolUseStorage)
-
+const cache = new Map
 
 export default function useStorage(storage, key, init) {
   let state, stateId = tuple(storage, key)
@@ -35,7 +31,7 @@ export default function useStorage(storage, key, init) {
     // commit any plans and read from storage
     state.get = () => {
       if (state.abort) {
-        clearMicrotask(state.abort)
+        state.abort()
         state.commit()
       }
       return state.value
@@ -43,8 +39,9 @@ export default function useStorage(storage, key, init) {
 
     // plan write to storage
     state.set = (newValue) => {
+      // FIXME: not sure if special `is` is needed here
       if (storage.is(newValue, state.value)) {
-        if (state.abort) clearMicrotask(state.abort)
+        if (state.abort) state.abort()
         return
       }
       if (!state.abort) state.abort = storage.plan(state.commit)
@@ -55,11 +52,12 @@ export default function useStorage(storage, key, init) {
     state.commit = () => {
       state.abort = null
       storage.set(key, state.value)
-      state.update(storage.get(key))
+      state.fetch(storage.get(key))
     }
 
     // update state from storage
-    state.update = (value) => {
+    state.fetch = (value) => {
+      // if (storage.is(value, state.value)) return
       state.value = value
       state.emit('change', state.value)
     }
@@ -83,13 +81,13 @@ export default function useStorage(storage, key, init) {
     return state.value
   })
 
-  useSyncEffect( () => {
+  useInit(() => {
     const notify = value => {
       setNativeState(value)
     }
     state.on('change', notify)
     return () => state.off('change', notify)
-  }, [] )
+  })
 
   return [value, state]
 }
