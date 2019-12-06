@@ -24,7 +24,7 @@ export const storage = {
   }
 }
 
-const channels = {}
+export const channels = {}
 
 export default (key, init) => {
   key = PREFIX + key
@@ -33,10 +33,15 @@ export default (key, init) => {
 
   useInit(() => {
     const channel = channels[key] || (channels[key] = new BroadcastChannel(key))
-    channel.addEventListener('message', value => state.fetch(value))
+    const notify = value => state.fetch(value)
+    channel.addEventListener('message', notify)
 
-    const obsId = store.observe(key, value => state.fetch(value))
-    return () => store.unobserve(obsId)
+    const obsId = store.observe(key, notify)
+    return () => {
+      store.unobserve(obsId)
+      channel.removeEventListener('message', notify)
+      channel.close()
+    }
   })
 
 

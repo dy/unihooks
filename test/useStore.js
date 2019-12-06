@@ -1,10 +1,12 @@
 import t from 'tape'
 import { useStore, useEffect } from '..'
-import { INTERVAL, storage, PREFIX } from '../src/useStore'
+import { INTERVAL, storage, PREFIX, channels } from '../src/useStore'
 import enhook from 'enhook'
 import { tick, idle, frame, time } from 'wait-please'
+import { clearNodeFolder } from 'broadcast-channel'
 
 t('useStore: debounce is 300ms', async t => {
+  await clearNodeFolder()
   storage.set(PREFIX + 'count', undefined)
 
   let log = []
@@ -22,13 +24,14 @@ t('useStore: debounce is 300ms', async t => {
   await time(INTERVAL)
   t.deepEqual(log, [0, 1])
 
-  storage.set(PREFIX + 'count', undefined)
+  await teardown()
   t.end()
 })
 
 t('useStore: multiple components use same key', async t => {
   let log = []
 
+  await clearNodeFolder()
   storage.get(PREFIX + 'count', null)
 
   const f = (i, log) => {
@@ -52,12 +55,14 @@ t('useStore: multiple components use same key', async t => {
   t.deepEqual(log, ['call', 1, 1, 'effect', 1, 'call', 2, 1, 'effect', 2, 'call', 2, 2, 'call', 1, 2])
 
   await time(INTERVAL)
-  storage.set(PREFIX + 'count', null)
+  await teardown()
   t.end()
 })
 
 t('useStore: does not trigger unchanged updates', async t => {
+  await clearNodeFolder()
   storage.set(PREFIX + 'count', null)
+
   let log = []
   let f = enhook((i) => {
     let [count, setCount] = useStore('count', i)
@@ -73,11 +78,12 @@ t('useStore: does not trigger unchanged updates', async t => {
   t.deepEqual(log, [1])
 
   await time(INTERVAL * 2)
-  storage.set(PREFIX + 'count', null)
+  await teardown()
   t.end()
 })
 
 t('useStore: fn init should be called per hook', async t => {
+  await clearNodeFolder()
   storage.set(PREFIX + 'count', 0)
 
   let log = []
@@ -100,7 +106,8 @@ t('useStore: fn init should be called per hook', async t => {
   t.deepEqual(log, [0, 1, 2, 2])
 
   await time(INTERVAL)
-  storage.set(PREFIX + 'count', null)
+  await teardown()
+
   t.end()
 })
 
@@ -108,20 +115,24 @@ t.skip('useStore: broadcast', async t => {
   // let React = await import('react')
   // let ReactDOM = await import('react-dom')
 
-  let el = document.createElement('div')
-  document.body.appendChild(el)
+  // let el = document.createElement('div')
+  // document.body.appendChild(el)
 
-  ReactDOM.render(<App />, el)
+  // ReactDOM.render(<App />, el)
 
-  function App() {
-    let [value, setValue] = useStore('foo', 0, { persist: true })
+  // function App() {
+  //   let [value, setValue] = useStore('foo', 0, { persist: true })
 
-    return <button onClick={e => {
-      setValue(++value)
-    }}>Click</button>
-  }
+  //   return <button onClick={e => {
+  //     setValue(++value)
+  //   }}>Click</button>
+  // }
 
   t.end()
 })
 
+async function teardown() {
+  storage.set(PREFIX + 'count', null)
+  for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }
+}
 

@@ -59,8 +59,8 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 #### App
 
-- [ ] `createStore` / `useStore` − store provider - persistable contextless `useState`
-- [ ] `createAction` / `useAction` − controller provider, contextless `useEffect` with result
+- [x] `createStore` / `useStore` − store (model) provider - persistable contextless `useState`
+- [ ] `createAction` / `useAction` − action (controller) provider, contextless `useEffect` with result
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
@@ -102,7 +102,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 - [x] `useCookie` − `useState` with persistency to cookies
 - [x] `useGlobalCache` − [global-cache](https://ghub.io/global-cache) storage
 - [ ] `useSharedState` − state, shared between browser tabs
-- [ ] `useChannelState` − contextless `useState`
+- [ ] `useChannel` − contextless `useState`
 <!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
 <!-- - [ ] `useFiles` -->
 <!-- - [ ] `useDB` -->
@@ -225,6 +225,8 @@ Store provider with persistency and broadcasting. Can be used as robust applicat
 Provides `createStore` entry to initialize store outside of components.
 
 ```js
+import { createStore, useStore } from 'unihooks'
+
 createStore('users', {
   data: [],
   loading: false,
