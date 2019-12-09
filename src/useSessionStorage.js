@@ -3,6 +3,8 @@ import ls from 'local-storage'
 import useInit from './useInit'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
 
+ls.backend(sessionStorage)
+
 export const storage = {
     get: key => {
         let str = ls.get(key)

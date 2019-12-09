@@ -61,6 +61,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 - [x] `useStore` + `createStore` − store (model) provider, persistable contextless `useState`.
 - [x] `useAction` + `createAction` − action (controller) provider, contextless `useEffect` with result.
+<!-- - [ ] `useProps` − component props (view) provider. -->
 <!-- - [ ] `useRender` + `createRender` − render (view) provider, instead of direct result. -->
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
@@ -102,8 +103,8 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 - [x] `useSessionStorage` − `useState` with persistency to session storage.
 - [x] `useCookie` − `useState` with persistency to cookies.
 - [x] `useGlobalCache` − [global-cache](https://ghub.io/global-cache) storage.
+- [ ] `useChannel` − intercommunication between components.
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->
-<!-- - [ ] `useChannel` − contextless `useState` -->
 <!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
 <!-- - [ ] `useFiles` -->
 <!-- - [ ] `useDB` -->
@@ -115,7 +116,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- - [ ] `useEvent` − subscribe to events -->
 <!-- - [ ] `useElement` / `useElements` − query element or elements -->
-<!-- - [ ] `useAttribute` − `useState` with persistency to element attribute -->
+- [x] `useAttribute` − element attribute state
 <!-- - [ ] `useLocation` − browser location -->
 <!-- - [ ] `useData` − read / write element dataset -->
 <!-- - [ ] `useClass` − manipulate element `classList` -->
@@ -222,8 +223,7 @@ Ref: [use-store](https://ghub.io/use-store)
 
 ### `[value, setValue] = useStore(key, init?)`
 
-Store provider with persistency and broadcasting. Can be used as robust application model layer.
-Provides `createStore` entry to initialize store.
+Store provider with persistency and changes broadcasting. Can be used as robust application model layer.
 
 ```js
 import { createStore, useStore } from 'unihooks'
@@ -247,9 +247,10 @@ function Component () {
 Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
 
 
-### `[result, call] = useAction(name, fn?)`
+### `[result, action] = useAction(name, fn?)`
 
-App action provider. Can be used to organize application controllers. Provides `createAction` function to register actions.
+App action provider. Can be used to organize application controllers. `createAction` registers action outside of components.
+
 
 ```js
 createAction('load-collection', async (id) => {
@@ -262,13 +263,28 @@ createAction('load-collection', async (id) => {
 })
 
 function MyComponent() {
-  let load = useAction('load-collection')
+  let [collection, load] = useAction('load-collection')
 
   useEffect(() => {
     let data = await load(id)
   }, [id])
 }
 ```
+
+
+<!--
+### `[props, setProps] = useProps(target, defaults?)`
+
+Provides target element/object props. Useful for organizing component API.
+Unlike `useAttribute`/`useProperty`, `useProps` handles both attributes/properties.
+
+```js
+function MyComponent () {
+  const [] = useProps(element)
+}
+```
+-->
+
 
 ### `[value, setValue] = useLocalStorage(key, init?)`
 
@@ -295,6 +311,20 @@ function MyComponent3 () {
   })
 }
 ```
+
+### `[value, setValue] = useSessionStorage(key, init?)`
+
+`useLocalStorage` with `sessionStorage` as backend.
+
+```js
+function MyComponent () {
+  const [count, setCount] = useSessionStorage('count', (value) => {
+    // ...initialize value from store
+    return value
+  })
+}
+```
+
 
 ### `[value, setValue] = useQueryParam(name, init?)`
 
@@ -411,12 +441,20 @@ const Demo = () => {
 };
 ```
 
+
+### `let [attr, setAttr] = useAttribute(element|ref, name)`
+
+Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` values remove attribute from element.
+
+```js
+function MyButton() {
+  let [attr, setAttr] = useAttribute(el, 'loading')
+
+  setAttr(true)
+}
+```
+
 <!--
-
-### `let [attr, setAttr] = useAttribute(element, name)`
-
-Element attribute observer hook.
-
 ### `let [data, setData] = useDataset(element, name)`
 
 `dataset`/`data-*` observer hook.

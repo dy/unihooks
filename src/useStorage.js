@@ -39,6 +39,8 @@ export default function useStorage(storage, key, init) {
 
     // plan write to storage
     state.set = (newValue) => {
+      if (typeof newValue === 'function') newValue = newValue(state.value)
+
       // FIXME: not sure if special `is` is needed here
       if (storage.is(newValue, state.value)) {
         if (state.abort) state.abort()
@@ -53,11 +55,11 @@ export default function useStorage(storage, key, init) {
     state.commit = () => {
       state.abort = null
       storage.set(key, state.value)
-      state.fetch(storage.get(key))
+      state.update(storage.get(key))
     }
 
     // update state from storage
-    state.fetch = (value) => {
+    state.update = (value) => {
       // if (storage.is(value, state.value)) return
       state.value = value
       state.emit('change', state.value)

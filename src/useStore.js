@@ -61,7 +61,7 @@ export default (key, init) => {
   useInit(() => {
     const channel = channels[key] || (channels[key] = new BroadcastChannel(key))
     const notify = (value, ...args) => {
-      return state.fetch(value)
+      return state.update(value)
     }
     channel.addEventListener('message', notify)
 

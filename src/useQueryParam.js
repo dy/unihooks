@@ -47,7 +47,7 @@ const storage = {
 export default function useQueryParam(name, init) {
   useEffect(() => {
     const notify = () => {
-      store.fetch(storage.get(name))
+      store.update(storage.get(name))
     }
     window.addEventListener('pushstate', notify)
     window.addEventListener('popstate', notify)
