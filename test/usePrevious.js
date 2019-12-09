@@ -7,7 +7,7 @@ t('usePrevious: basics', async t => {
   let log = []
   let f = enhook(() => {
     let [foo, setFoo] = useState(1)
-    let fooPrev = usePrevious(foo)
+    let [fooPrev] = usePrevious(foo)
     log.push(foo, fooPrev)
   })
   f()

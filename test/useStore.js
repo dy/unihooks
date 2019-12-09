@@ -139,3 +139,27 @@ async function teardown() {
   for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }
 }
 
+
+t('useStore: functional setter', async t => {
+  await clearNodeFolder()
+  storage.set(PREFIX + 'count', undefined)
+
+  let log = []
+  let f = enhook(() => {
+    let [count, setCount] = useStore('count', 0)
+    log.push(count)
+    useEffect(() => {
+      setCount(count => {
+        return count + 1
+      })
+    }, [])
+  })
+  f()
+  t.deepEqual(log, [0])
+  await tick(2)
+  // await time(INTERVAL)
+  t.deepEqual(log, [0, 1])
+
+  await teardown()
+  t.end()
+})
