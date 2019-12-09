@@ -1,4 +1,4 @@
-import useEffect from './useEffect'
+import { useEffect } from './util/hooks'
 
 export default function useClickInside (ref, callback) {
   const handleClick = e => {

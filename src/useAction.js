@@ -1,7 +1,5 @@
 import enhook from 'enhook'
-import useMemo from './useMemo'
-import useRef from './useRef'
-import useCallback from './useCallback'
+import { useMemo, useRef, useCallback } from './util/hooks'
 
 const cache = {}
 
@@ -27,5 +25,5 @@ export const createAction = (name, action) => {
     name = action.name
   }
 
-  cache[name] = enhook(action)
+  return cache[name] = enhook(action)
 }

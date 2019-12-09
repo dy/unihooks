@@ -1,6 +1,5 @@
 // credit of https://github.com/21kb/react-hooks/blob/master/packages/react-dom-status-hook/src/index.ts
-
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from './util/hooks'
 
 
 export const initialState = {

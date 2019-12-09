@@ -1,7 +1,5 @@
 // credit of https://github.com/21kb/react-hooks/blob/master/packages/react-device-orientation-hook/src/index.ts
-
-import useState from './useState'
-import useEffect from './useEffect'
+import { useEffect, useState } from './util/hooks'
 
 
 export const defaultState = {

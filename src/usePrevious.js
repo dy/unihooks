@@ -1,5 +1,4 @@
-import useRef from './useRef.js'
-import useEffect from './useEffect.js'
+import { useEffect, useRef } from './util/hooks'
 
 export default function usePrevious(value) {
   const ref = useRef();

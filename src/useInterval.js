@@ -1,6 +1,4 @@
-import useRef from './useRef'
-import useEffect from './useEffect'
-import useState from './useState'
+import { useEffect, useState, useRef } from './util/hooks'
 
 export default function useInterval (callback, delay, deps) {
   const savedCallback = useRef();

@@ -12,6 +12,8 @@ const useAttribute = (el, name, init) => {
     },
     get(key) {
       if (!el.hasAttribute(key)) return null
+      let attr = el.getAttribute(key)
+      if (attr === 'true') return true
       return el.getAttribute(key)
     },
     set(key, value) {

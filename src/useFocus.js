@@ -1,12 +1,10 @@
 // credit https://github.com/21kb/react-hooks/blob/master/packages/react-element-focus-hook/src/index.ts
-
-import useState from './useState'
-import useEffect from './useEffect'
+import { useEffect, useState } from './util/hooks'
 
 const useElementFocus = $el => {
   const [state, setState] = useState({});
 
-  const onFocusEvent = (event: FocusEvent) => {
+  const onFocusEvent = (event) => {
     setState({
       type: event.type,
     });

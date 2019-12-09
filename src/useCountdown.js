@@ -1,6 +1,4 @@
-import useState from './useState'
-import useCallback from './useCallback'
-import useEffect from './useEffect'
+import { useEffect, useCallback, useState } from './util/hooks'
 import * as timers from './util/timers'
 
 // start countdown timer

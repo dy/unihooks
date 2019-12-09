@@ -1,13 +1,7 @@
 // credit https://github.com/21kb/react-hooks/blob/master/packages/react-page-visible-hook/src/index.ts
+import { useEffect, useState } from './util/hooks'
 
-import { useEffect, useState } from 'react';
-
-export interface IPageVisibilityState {
-  readonly hidden: boolean;
-  readonly visibilityState: string;
-}
-
-export const initialState: IPageVisibilityState = {
+export const initialState = {
   hidden: document.hidden,
   visibilityState: document.visibilityState,
 };
@@ -15,7 +9,7 @@ export const initialState: IPageVisibilityState = {
 const useVisible = () => {
   const [state, setState] = useState(initialState);
 
-  const onVisibilityChangeEvent = (event: any) => {
+  const onVisibilityChangeEvent = (event) => {
     setState({
       hidden: document.hidden,
       visibilityState: document.visibilityState,

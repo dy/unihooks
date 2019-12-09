@@ -36,3 +36,29 @@ t('useAction: basic', async t => {
   for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }
   t.end()
 })
+
+
+t.skip('useAction: must not deadlock setStore', async t => {
+  await clearNodeFolder()
+
+  let log = []
+  let store = createStore('items', [1, 2, 3])
+  let action = createAction('push', e => {
+    let [items, setItems] = useStore('items')
+    setItems([...items, items.length])
+  })
+
+  // action()
+
+  t.end()
+})
+
+t.skip('useAction: actions are not reactive', async t => {
+  let action = createAction(function () {
+    let [x, setX] = useState(0)
+    setX(1)
+  })
+  action()
+
+  t.end()
+})

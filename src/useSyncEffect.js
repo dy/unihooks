@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'any-hooks'
+import { useRef, useMemo } from './util/hooks'
 
 export default function useSyncEffect(fn, deps) {
   const ref = useRef()

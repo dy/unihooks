@@ -2,8 +2,8 @@ import useStorage from './useStorage'
 import qs from 'qs'
 import autoParse from 'auto-parse'
 import sorted from 'sorted-object'
-import useEffect from './useEffect'
-// import 'onpushstate'
+import { useEffect,  } from './util/hooks'
+import 'onpushstate'
 
 const storage = {
   is: (a, b) => stringifyParam(a) === stringifyParam(b),

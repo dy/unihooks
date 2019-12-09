@@ -1,6 +1,5 @@
-import useState from './useState'
-import useEffect from './useEffect'
-import useRef from './useRef'
+import { useState, useEffect, useRef } from './util/hooks'
+
 
 
 export const useAsyncCall = (fn, deps) => {

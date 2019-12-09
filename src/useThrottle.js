@@ -1,6 +1,4 @@
-import useRef from './useRef.js'
-import useEffect from './useEffect.js'
-import useState from './useState.js'
+import { useEffect, useState, useRef } from './util/hooks'
 
 export default function useThrottle (value, limit) {
   const [throttledValue, setThrottledValue] = useState(value);

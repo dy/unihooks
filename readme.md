@@ -244,13 +244,17 @@ function Component () {
 }
 ```
 
+#### `store = createStore(name, init)`
+
+Create store. Can be used outside of components or hookable scope.
+
 Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
 
 
-### `[result, action] = useAction(name, fn?)`
+### `[result, action] = useAction(name?, fn?)`
 
-App action provider. Can be used to organize application controllers. `createAction` registers action outside of components.
-
+App action provider. Can be used to organize application controllers. If `name` is omitted, function name is used as directly.
+Actions can use hooks, but they're not reactive: changing state does not cause self-recursion.
 
 ```js
 createAction('load-collection', async (id) => {
@@ -271,6 +275,9 @@ function MyComponent() {
 }
 ```
 
+#### `action = createAction(name?, fn)`
+
+Register new action, can be used independent of components/hooked scope.
 
 <!--
 ### `[props, setProps] = useProps(target, defaults?)`

@@ -1,6 +1,4 @@
-import useState from './useState'
-import useMemo from './useMemo'
-import useEffect from './useEffect'
+import { useEffect, useState, useMemo } from './util/hooks'
 
 const isDOMavailable = !!(
   typeof window !== 'undefined' &&
