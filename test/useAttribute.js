@@ -32,4 +32,6 @@ t('useAttribute: basics', async t => {
   t.end()
 })
 
-t('useAttribute: run ref')
+t.skip('useAttribute: run ref', async t => {
+  t.end()
+})

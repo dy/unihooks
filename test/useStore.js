@@ -134,10 +134,6 @@ t.skip('useStore: broadcast', async t => {
   t.end()
 })
 
-async function teardown() {
-  storage.set(PREFIX + 'count', null)
-  for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }
-}
 
 
 t('useStore: functional setter', async t => {
@@ -163,3 +159,8 @@ t('useStore: functional setter', async t => {
   await teardown()
   t.end()
 })
+
+export async function teardown() {
+  storage.set(PREFIX + 'count', null)
+  for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }
+}

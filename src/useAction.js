@@ -25,5 +25,5 @@ export const createAction = (name, action) => {
     name = action.name
   }
 
-  return cache[name] = enhook(action)
+  return cache[name] = enhook(action, { passive: true })
 }
