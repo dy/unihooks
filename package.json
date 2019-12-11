@@ -1,6 +1,6 @@
 {
   "name": "unihooks",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Essential unified hooks collection",
   "main": "./src/index.js",
   "dependencies": {
