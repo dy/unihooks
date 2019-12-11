@@ -1,4 +1,3 @@
-import queueMicrotask from 'queue-microtask'
 import { useState as useNativeState, useRef, useMemo } from 'any-hooks'
 
 // standard
