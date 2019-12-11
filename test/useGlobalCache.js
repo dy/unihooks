@@ -1,5 +1,5 @@
 import t from 'tape'
-import { useGlobalCache, useEffect } from '..'
+import { useGlobalCache, useEffect } from '../src/index'
 import enhook from 'enhook'
 import { tick, idle, frame } from 'wait-please'
 import globalCache from 'global-cache'

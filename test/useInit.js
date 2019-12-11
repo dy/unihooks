@@ -1,6 +1,6 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { useInit } from '..'
+import { useInit } from '../src/index'
 
 t('useInit: basic', t => {
   let log = []

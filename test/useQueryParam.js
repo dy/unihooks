@@ -1,5 +1,5 @@
 import t from 'tape'
-import { useQueryParam, useState, useEffect } from '..'
+import { useQueryParam, useState, useEffect } from '../src/index'
 import enhook from 'enhook'
 // import { decode, qs.stringify } from 'qss'
 import qs from 'qs'

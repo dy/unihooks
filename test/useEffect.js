@@ -1,6 +1,6 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { useEffect } from '..'
+import { useEffect } from '../src/index'
 import { tick, frame } from 'wait-please'
 
 t('useEffect: microtask guaranteed', async t => {

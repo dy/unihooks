@@ -1,6 +1,6 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { usePrevious, useState } from '..'
+import { usePrevious, useState } from '../src/index'
 import { tick } from 'wait-please'
 
 t('usePrevious: basics', async t => {

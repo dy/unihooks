@@ -1,6 +1,6 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { useAction, createAction, useStore, createStore, useEffect } from '..'
+import { useAction, createAction, useStore, createStore, useEffect } from '../src/index'
 import { channels } from '../src/useStore'
 import { tick, frame, time } from 'wait-please'
 import { clearNodeFolder } from 'broadcast-channel'

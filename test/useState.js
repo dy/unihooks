@@ -1,6 +1,7 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { useState } from '..'
+import { useState, useEffect, useCallback } from '../src/util/hooks'
+import { tick, frame } from 'wait-please'
 
 t('useState: initial run once', async t => {
   let log = []
@@ -21,21 +22,23 @@ t('useState: initial run once', async t => {
   t.end()
 })
 
-t.skip('useState: deps reinit', async t => {
+t('useState: unchanged value does not cause rerender', async t => {
   let log = []
-
-  let f = enhook((i) => {
-    let [v, setV] = useState((prev) => {
-      log.push(prev)
-      return 1
-    }, [i])
+  let x = 0
+  let f = enhook(() => {
+    let [v, setV] = useState(0)
+    log.push(v)
+    useEffect(() => {
+      setV(() => x)
+    }, [x])
   })
+  f()
 
-  f(1)
-  t.deepEqual(log, [undefined])
+  t.deepEqual(log, [0])
 
-  f(2)
-  t.deepEqual(log, [undefined, 1])
+  await frame(4)
+
+  t.deepEqual(log, [0])
 
   t.end()
 })

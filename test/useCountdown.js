@@ -1,6 +1,6 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { useCountdown } from '..'
+import { useCountdown } from '../src/index'
 import { time } from 'wait-please'
 
 t('useCountdown: basics', async t => {

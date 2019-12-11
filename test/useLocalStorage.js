@@ -1,5 +1,5 @@
 import t from 'tape'
-import { useLocalStorage, useEffect } from '..'
+import { useLocalStorage, useEffect } from '../src/index'
 import enhook from 'enhook'
 import { tick, idle, frame } from 'wait-please'
 

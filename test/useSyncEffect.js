@@ -1,6 +1,6 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { useSyncEffect } from '..'
+import { useSyncEffect } from '../src/index'
 import { tick, frame } from 'wait-please'
 
 t('useSyncEffect: destructor is fine ', t => {

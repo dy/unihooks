@@ -1,14 +1,14 @@
-// standard hooks constructor
 import queueMicrotask from 'queue-microtask'
+import setBaseHooks, {
+  useRef,
+  useReducer,
+  useLayoutEffect,
+  useCallback,
+  useContext,
+  useMemo,
+  useState as useNativeState
+} from 'any-hooks'
 
-export let useRef
-export let useReducer
-export let useLayoutEffect
-export let useCallback
-export let useContext
-export let useMemo
-
-let useNativeState
 export function useState(init) {
   let [value, setValue] = useNativeState(init)
 
@@ -32,13 +32,19 @@ export function useEffect(fn, deps) {
   }, deps)
 }
 
-export default function initHooks(hooks) {
-  useNativeState = hooks.useState
-  useRef = hooks.useRef
-  useReducer = hooks.useReducer
-  useLayoutEffect = hooks.useLayoutEffect
-  useCallback = hooks.useCallback
-  useContext = hooks.useContext
-  useMemo = hooks.useMemo
+export { useMemo, useContext, useLayoutEffect, useCallback, useReducer, useRef }
+export default (hooks) => {
+  setBaseHooks(hooks)
 }
+
+// export default function setHooks(hooks) {
+//   setBaseHooks(hooks)
+//   useNativeState = hooks.useState
+  // useRef = hooks.useRef
+  // useReducer = hooks.useReducer
+  // useLayoutEffect = hooks.useLayoutEffect
+  // useCallback = hooks.useCallback
+  // useContext = hooks.useContext
+  // useMemo = hooks.useMemo
+// }
 

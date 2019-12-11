@@ -1,5 +1,5 @@
 import t from 'tape'
-import { useStore, useEffect } from '..'
+import { useStore, useEffect } from '../src/index'
 import { INTERVAL, storage, PREFIX, channels, createStore } from '../src/useStore'
 import enhook from 'enhook'
 import { tick, idle, frame, time } from 'wait-please'

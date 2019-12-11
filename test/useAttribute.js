@@ -1,7 +1,7 @@
 import t from 'tape'
 import enhook from 'enhook'
 import { tick } from 'wait-please'
-import { useAttribute, useEffect } from '..'
+import { useAttribute, useEffect } from '../src/index'
 
 t('useAttribute: basics', async t => {
   let log = []

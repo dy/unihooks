@@ -1,4 +1,4 @@
-import { useStorage, useEffect } from '..'
+import { useStorage, useEffect } from '../src/index'
 import t from 'tape'
 import enhook from 'enhook'
 import { tick } from 'wait-please'

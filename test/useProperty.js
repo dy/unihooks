@@ -1,5 +1,5 @@
 import t from 'tape'
-import { useProperty, useEffect } from '..'
+import { useProperty, useEffect } from '../src/index'
 import enhook from 'enhook'
 import { tick, idle, frame } from 'wait-please'
 

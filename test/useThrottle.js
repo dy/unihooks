@@ -1,6 +1,6 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { useThrottle } from '..'
+import { useThrottle } from '../src/index'
 import { time } from 'wait-please'
 
 t.skip('useThrottle: basics', async t => {

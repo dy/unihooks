@@ -1,5 +1,5 @@
 import t from 'tape'
-import { useCookie, useEffect } from '..'
+import { useCookie, useEffect } from '../src/index'
 import enhook from 'enhook'
 import { tick, idle, frame } from 'wait-please'
 import * as cookie from 'es-cookie'

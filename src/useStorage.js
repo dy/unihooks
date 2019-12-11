@@ -1,7 +1,7 @@
 import { useState } from './util/hooks'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
 import tuple from 'immutable-tuple'
-import { useInit } from '..'
+import useInit from './useInit'
 
 const cache = new Map
 

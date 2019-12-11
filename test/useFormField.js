@@ -1,3 +1,3 @@
 import t from 'tape'
-import { useFormField } from '..'
+import { useFormField } from '../src/index'
 
