@@ -1,6 +1,6 @@
 // credit https://github.com/21kb/react-hooks/blob/master/packages/react-vibration-hook/src/index.ts
 
-import { useCallback } from './util/hooks'
+import { useCallback } from './standard'
 
 export const defaultValue = 200;
 

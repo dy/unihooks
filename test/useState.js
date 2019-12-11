@@ -1,6 +1,6 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { useState, useEffect, useCallback } from '../src/util/hooks'
+import { useState, useEffect, useCallback } from '../src/standard'
 import { tick, frame } from 'wait-please'
 
 t('useState: initial run once', async t => {

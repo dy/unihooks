@@ -3,7 +3,7 @@ import hyphenate from 'hyphenate-style-name'
 import areObjectsEqual from 'shallow-equal/objects'
 import toQuery from './toQuery'
 import Context from './Context'
-import { useEffect, useState, useRef, useContext } from './util/hooks'
+import { useEffect, useState, useRef, useContext } from './standard'
 
 
 const makeQuery = (settings) => settings.query || toQuery(settings)

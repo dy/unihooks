@@ -1,4 +1,4 @@
-import { useEffect, useRef } from './util/hooks'
+import { useEffect, useRef } from './standard'
 
 export default function useTimeout (callback, delay, deps) {
   const savedCallback = useRef();

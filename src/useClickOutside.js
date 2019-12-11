@@ -1,4 +1,4 @@
-import { useEffect } from './util/hooks'
+import { useEffect } from './standard'
 
 export default function useClickOutside (ref, callback) {
   const handleClick = e => {

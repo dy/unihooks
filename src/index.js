@@ -1,4 +1,4 @@
-export * from './util/hooks'
+export * from './standard'
 
 // component
 export { default as useStore, createStore } from './useStore'

@@ -1,5 +1,5 @@
 import enhook from 'enhook'
-import { useMemo, useRef, useCallback } from './util/hooks'
+import { useMemo, useRef, useCallback } from './standard'
 
 const cache = {}
 

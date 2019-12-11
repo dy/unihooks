@@ -2,7 +2,7 @@ import useStorage from './useStorage'
 import qs from 'qs'
 import autoParse from 'auto-parse'
 import sorted from 'sorted-object'
-import { useEffect,  } from './util/hooks'
+import { useEffect,  } from './standard'
 import 'onpushstate'
 
 const storage = {

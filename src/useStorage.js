@@ -1,4 +1,4 @@
-import { useState } from './util/hooks'
+import { useState } from './standard'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
 import tuple from 'immutable-tuple'
 import useInit from './useInit'

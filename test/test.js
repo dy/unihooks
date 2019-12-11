@@ -1,4 +1,4 @@
-import setHooks from '../src/util/hooks'
+import setHooks from 'any-hooks'
 
 // any-hooks by default
 // setHooks('augmentor')

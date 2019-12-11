@@ -1,5 +1,5 @@
 // https://github.com/30-seconds/30-seconds-of-react#usenavigatoronline
-import { useEffect, useState } from './util/hooks'
+import { useEffect, useState } from './standard'
 
 
 export default function useOnLine () {
