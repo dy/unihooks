@@ -1,5 +1,9 @@
 import { useEffect, useCallback, useState } from './standard'
-import * as timers from './util/timers'
+import * as timers from 'worker-timers'
+import isNode from 'is-node'
+
+const setInterval = (isNode ? global : timers).setInterval
+const clearInterval = (isNode ? global : timers).clearInterval
 
 // start countdown timer
 export default function useCountdown(n, interval = 1000) {
@@ -10,15 +14,15 @@ export default function useCountdown(n, interval = 1000) {
   }, [n])
 
   useEffect(() => {
-    let timeoutId = timers.setInterval(() => {
+    let timeoutId = setInterval(() => {
       set(count => {
-        if (count <= 0) return (timers.clearInterval(timeoutId), 0)
+        if (count <= 0) return (clearInterval(timeoutId), 0)
         else return count - 1
       })
     }, interval)
 
     return () => {
-      timers.clearInterval(timeoutId)
+      clearInterval(timeoutId)
     }
   }, [interval])
 
