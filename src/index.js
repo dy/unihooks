@@ -1,3 +1,5 @@
+export { default } from 'any-hooks'
+
 export * from './standard'
 
 // component

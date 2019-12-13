@@ -55,7 +55,10 @@ export default (key, init) => {
 
 export const createStore = (key, init) => {
   key = PREFIX + key
-  storage.set(key, init)
+
+  if (storage.get(key) === undefined) {
+    storage.set(key, init)
+  }
 
   return storage.get(key)
 }

@@ -161,6 +161,19 @@ t('useStore: functional setter', async t => {
   t.end()
 })
 
+t('useStore: createStore must not rewrite existing data', async t => {
+  await clearNodeFolder()
+  storage.set(PREFIX + 'count', undefined)
+
+  storage.set(PREFIX + 'xxx', {x: 1})
+
+  let s = createStore('xxx', {y: 2})
+  t.deepEqual(s, {x: 1})
+
+  await teardown()
+  t.end()
+})
+
 export async function teardown() {
   storage.set(PREFIX + 'count', null)
   for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }
