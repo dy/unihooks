@@ -61,3 +61,20 @@ t('useEffect: async fn is fine', async t => {
 
   t.end()
 })
+
+t('useEffect: dispose should clean up effects', async t => {
+  let log = []
+  let f = enhook(() => {
+    useEffect(() => {
+      log.push('in')
+      return () => log.push('out')
+    })
+  })
+  f()
+  await frame(2)
+  f.unhook()
+  await frame(2)
+  t.deepEqual(log, ['in', 'out'])
+
+  t.end()
+})

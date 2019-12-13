@@ -54,6 +54,10 @@ const MyComponent1 = () => { let ua = useUserAgent() } // ✘
 const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 ```
 
+## Who Uses Unihooks
+
+* [wishbox](https://wishbox.gift)
+* [mobeewave]()
 
 ## Hooks
 

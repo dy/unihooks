@@ -7,7 +7,7 @@
     "any-hooks": "^2.3.0",
     "auto-parse": "^1.8.0",
     "broadcast-channel": "^3.0.3",
-    "enhook": "^2.0.7",
+    "enhook": "^2.1.0",
     "es-cookie": "^1.3.0",
     "global-cache": "^1.2.1",
     "immutable-tuple": "^0.4.10",

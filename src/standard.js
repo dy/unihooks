@@ -1,5 +1,5 @@
 import queueMicrotask from 'queue-microtask'
-import { useState as useNativeState, useRef, useMemo } from 'any-hooks'
+import { useState as useNativeState, useRef, useMemo, useEffect as useNativeEffect } from 'any-hooks'
 
 // standard
 export { useRef, useReducer, useLayoutEffect, useCallback, useContext, useMemo } from 'any-hooks'
@@ -25,4 +25,9 @@ export function useEffect(fn, deps) {
       ref.current = fn()
     })
   }, deps)
+
+  // end effect
+  useNativeEffect(() => () =>
+    ref.current && ref.current.call && ref.current()
+    , [])
 }
