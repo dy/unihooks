@@ -2,10 +2,10 @@ import setHooks from 'any-hooks'
 
 // any-hooks by default
 // setHooks('augmentor')
-// setHooks('preact')
+setHooks('preact')
 // setHooks('react')
 // setHooks('haunted')
-setHooks('atomico')
+// setHooks('atomico')
 runTests()
 
 async function runTests() {
