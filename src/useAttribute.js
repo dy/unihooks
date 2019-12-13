@@ -30,7 +30,7 @@ const useAttribute = (el, name, init) => {
 
   useInit(() => {
     let observer = new MutationObserver(records => {
-      store.update(el.getAttribute(name))
+      store.set(el.getAttribute(name))
     })
     observer.observe(el, {
       attributes: true,

@@ -103,6 +103,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 - [x] `useSessionStorage` − `useState` with persistency to session storage.
 - [x] `useCookie` − `useState` with persistency to cookies.
 - [x] `useGlobalCache` − [global-cache](https://ghub.io/global-cache) storage.
+- [x] `useStorage` − generic storage hook with scheduling persistency.
 - [ ] `useChannel` − intercommunication between components.
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->
 <!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
@@ -411,7 +412,24 @@ function MyComponent () {
 
 ### `[value, setValue] = useStorage(storage, key, init?)`
 
-Generic storage hook. Storage is `{ get(key), set(key, value) }` object, providing access to some underlying data structure.
+Generic customizable storage hook with persistency.
+`storage` object provides data to some underlying data structure.
+
+```js
+useStorage({
+  // read value from storage
+  get: (key) => myStore.get(key),
+
+  // write value from storage
+  set: (key, value) => myStore.set(key, value),
+
+  // compare if value must be written. By default Object.is.
+  is: (a, b) => a.toString() === b.toString(),
+
+  // scheduler for persistency
+  plan(fn) { let id = setTimeout(fn); return () => clearTimeout(id) }
+})
+```
 
 ### `[prev] = usePrevious(value)`
 

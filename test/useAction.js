@@ -4,7 +4,7 @@ import { useAction, createAction, useStore, createStore, useEffect, useState } f
 import { channels } from '../src/useStore'
 import { tick, frame, time } from 'wait-please'
 import { clearNodeFolder } from 'broadcast-channel'
-import { teardown } from './useStore'
+
 
 t('useAction: basic', async t => {
   await clearNodeFolder()
@@ -37,27 +37,35 @@ t('useAction: basic', async t => {
   t.end()
 })
 
-
 t('useAction: must not deadlock setStore', async t => {
   await clearNodeFolder()
 
   let log = []
   let store = createStore('items', [0])
-  let action = createAction('push', e => {
+  let action = createAction('push', async e => {
     let [items, setItems] = useStore('items')
     log.push(items.length)
+    await tick()
     setItems([...items, items.length])
   })
+  let fn = enhook(() => {
+    useEffect(() => {
+      action()
+    })
+  })
 
-  action()
+  fn()
+  await time()
   t.deepEqual(log, [1])
-  await tick()
-  action()
+
+  fn()
+  await time()
   t.deepEqual(log, [1, 2])
 
   teardown()
   t.end()
 })
+
 
 t('useAction: actions are not reactive', async t => {
   let log = []
@@ -92,3 +100,8 @@ t('useAction: actions are not reactive with array', async t => {
 
   t.end()
 })
+
+
+export async function teardown() {
+  for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }
+}

@@ -40,13 +40,13 @@ t('useCookie: multiple components use same key', async t => {
   let f2 = enhook(f)
 
   f1(1, log)
-  t.deepEqual(log, ['call', 1, '1'])
+  t.deepEqual(log, ['call', 1, 1])
   await frame(2)
-  t.deepEqual(log, ['call', 1, '1', 'effect', 1])
+  t.deepEqual(log, ['call', 1, 1, 'effect', 1])
 
   f2(2, log)
   await frame(4)
-  t.deepEqual(log, ['call', 1, '1', 'effect', 1, 'call', 2, '1', 'effect', 2, 'call', 2, '2', 'call', 1, '2'])
+  t.deepEqual(log, ['call', 1, 1, 'effect', 1, 'call', 2, 1, 'effect', 2, 'call', 2, 2, 'call', 1, 2])
 
   cookie.remove('count')
   t.end()

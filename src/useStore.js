@@ -61,7 +61,7 @@ export default (key, init) => {
   useInit(() => {
     const channel = channels[key] || (channels[key] = new BroadcastChannel(key))
     const notify = (value, ...args) => {
-      return state.update(value)
+      return state.set(value)
     }
     channel.addEventListener('message', notify)
 
@@ -74,7 +74,7 @@ export default (key, init) => {
   })
 
 
-  return [value, state]
+  return state
 }
 
 export const createStore = (key, init) => {

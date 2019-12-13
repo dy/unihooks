@@ -1,8 +1,11 @@
 import { get, set } from 'es-cookie'
 import useStorage from './useStorage'
+import parseAuto from 'auto-parse'
 
 const cookieStore = {
-  get,
+  get(key) {
+    return parseAuto(get(key))
+  },
   set(key, value) {
     let options
     if (value && value.value) value = value.value

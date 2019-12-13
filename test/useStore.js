@@ -1,5 +1,5 @@
 import t from 'tape'
-import { useStore, useEffect } from '../src/index'
+import { useStore, useEffect, useState } from '../src/index'
 import { INTERVAL, storage, PREFIX, channels, createStore } from '../src/useStore'
 import enhook from 'enhook'
 import { tick, idle, frame, time } from 'wait-please'
@@ -93,20 +93,21 @@ t('useStore: fn init should be called per hook', async t => {
   let f = enhook(() => {
     useStore('count', -1)
     useStore('count', (count) => {
-      log.push(count)
+      log.push('init', count)
       return 1
     })
     let [value, setValue] = useStore('count', (count) => {
-      log.push(count)
+      log.push('reinit', count)
       return 2
     })
-    log.push(value)
+    log.push('call', value)
   })
   f()
-  t.deepEqual(log, [0, 1, 2])
+  t.deepEqual(log, ['init', 0, 'reinit', 1, 'call', 2])
 
+  log = []
   f()
-  t.deepEqual(log, [0, 1, 2, 2])
+  t.deepEqual(log, ['call', 2])
 
   await time(INTERVAL)
   await teardown()

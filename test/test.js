@@ -2,20 +2,22 @@ import setHooks from 'any-hooks'
 
 // any-hooks by default
 // setHooks('augmentor')
-setHooks('preact')
+// setHooks('preact')
 // setHooks('react')
+// setHooks('haunted')
+setHooks('atomico')
 runTests()
 
 async function runTests() {
-  require('./useStore')
+  require('./useStorage')
+  require('./useGlobalCache')
   require('./useLocalStorage')
+  require('./useStore')
   require('./useProperty')
   require('./useState')
   require('./useEffect')
   require('./useSyncEffect')
-  require('./useGlobalCache')
   require('./useQueryParam')
-  require('./useStorage')
   require('./useCookie')
   require('./useInit')
   require('./useAction')

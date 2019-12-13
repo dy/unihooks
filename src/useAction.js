@@ -7,11 +7,13 @@ export default function useAction (name, action) {
   let ref = useRef()
 
   let storedAction = useMemo(() => {
-    if (action || typeof name === 'function') createAction(name, action)
+    if (action || typeof name === 'function') return createAction(name, action)
     return cache[name]
   }, [name, action])
 
-  let call = useCallback(() => ref.current = storedAction())
+  let call = useCallback(() => {
+    ref.current = storedAction()
+  })
 
   call[0] = ref.current
   call[1] = call
@@ -25,5 +27,7 @@ export const createAction = (name, action) => {
     name = action.name
   }
 
-  return cache[name] = enhook(action, { passive: true })
+  return cache[name] = enhook((...args) => {
+    return action(...args)
+  }, { passive: true })
 }

@@ -63,7 +63,7 @@ t('useGlobalCache: does not trigger unchanged updates', async t => {
   })
   f(1)
   t.deepEqual(log, [1])
-  await frame(2)
+  await frame(3)
   t.deepEqual(log, [1])
 
   globalCache.delete('count')

@@ -2,8 +2,7 @@ import globalCache from 'global-cache'
 import useStorage from './useStorage'
 
 const useGlobalCache = (key, init) => {
-  let [value, store] = useStorage(globalCache, key, init)
-  return [value, store]
+  return useStorage(globalCache, key, init)
 }
 
 export default useGlobalCache

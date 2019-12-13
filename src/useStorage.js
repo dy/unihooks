@@ -1,96 +1,108 @@
-import { useState } from './standard'
+import { useState, useEffect } from './standard'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
 import tuple from 'immutable-tuple'
 import useInit from './useInit'
 
-const cache = new Map
+export const cache = new Map
 
 export default function useStorage(storage, key, init) {
+  // state is cached per-key, since it is returned from hook
   let state, stateId = tuple(storage, key)
+
   if (cache.has(stateId)) {
     state = cache.get(stateId)
   }
   else {
-    if (!storage.plan) storage.plan = (fn) => {
-      let id = setMicrotask(fn)
-      return () => clearMicrotask(id)
-    }
-    if (!storage.is) storage.is = Object.is
-
     cache.set(stateId, state = (...args) => state.set(...args))
 
-    // mitt extract
-    let subs = {}
-    state.on = (e, fn) => (subs[e] || (subs[e] = [])).push(fn)
-    state.off = (e, fn) => subs[e].splice(subs[e].indexOf(fn) >>> 0, 1)
-    state.emit = (e, arg) => subs[e] && subs[e].slice().map(fn => fn(arg))
+    // persistency scheduler
+    state.plan = storage.plan || (fn => {
+      let id = setMicrotask(fn)
+      return () => clearMicrotask(id)
+    })
+    // changed value comparator
+    state.is = storage.is || Object.is
 
     state.value
-    state.abort
 
-    // commit any plans and read from storage
-    state.get = () => {
-      if (state.abort) {
-        state.abort()
-        state.commit()
-      }
-      return state.value
-    }
+    // mitt extract (event emiiter)
+    state.subs = {}
+    state.on = (e, fn) => (state.subs[e] || (state.subs[e] = [])).push(fn)
+    state.off = (e, fn) => state.subs[e].splice(state.subs[e].indexOf(fn) >>> 0, 1)
+    state.emit = (e, arg) => state.subs[e] && state.subs[e].slice().map(fn => fn(arg))
 
-    // plan write to storage
+    state.get = () => state.value
     state.set = (newValue) => {
       if (typeof newValue === 'function') newValue = newValue(state.value)
 
-      // FIXME: not sure if special `is` is needed here
-      if (storage.is(newValue, state.value)) {
-        if (state.abort) state.abort()
-        return
-      }
-      if (!state.abort) state.abort = storage.plan(state.commit)
+      if (state.is(newValue, state.value)) return
+
       state.value = newValue
-      // state.emit('change', state.value)
+      state.planPersist()
+      state.planNotify()
+
+      return state.value
     }
 
-    // update storage from state
-    state.commit = () => {
-      state.abort = null
+    state.plannedNotify
+    state.notifyValue
+    state.planNotify = () => {
+      // plan update, unless that's going to change back
+      if (!state.plannedNotify) {
+        state.notifyValue = state.value
+        state.plannedNotify = setMicrotask(state.notify)
+      }
+      else {
+        if (state.notifyValue === state.value) {
+          clearMicrotask(state.plannedNotify)
+          state.notifyValue = null
+          state.plannedNotify = null
+        }
+        else {
+          state.notifyValue = state.value
+        }
+      }
+    }
+    state.notify = () => {
+      state.emit('change', state.notifyValue)
+      state.notifyValue = null
+      state.plannedNotify = null
+    }
+
+    state.plannedPersist
+    state.planPersist = () => {
+      if (state.plannedPersist) return
+      state.plannedPersist = state.plan(state.persist) || true
+    }
+    state.persist = () => {
       storage.set(key, state.value)
-      state.update(storage.get(key))
+      state.plannedPersist = null
     }
-
-    // update state from storage
-    state.update = (value) => {
-      // if (storage.is(value, state.value)) return
-      state.value = value
-      state.emit('change', state.value)
-    }
+    state.valueOf = () => state.value
+    state[Symbol.iterator] = function* () { yield state.value; yield state; }
   }
 
-  const [value, setNativeState] = useState(() => {
-    if (state.abort) state.commit()
-    state.value = storage.get(key)
 
-    // if init is fn it's always called
-    if (typeof init === 'function') {
-      state.value = init(state.value)
-      state.commit()
-    }
-    // constant init is called if there's no value in storage
-    else if (state.value == null && init != state.value) {
-      state.value = init
-      state.commit()
-    }
+  const [value, setInstanceValue] = useState(() => {
+    // state.value can be unsynced from storage
+    // eg. not all storages have `change` notifications: globalCache, cookies etc.
+    // so we have to read `state.value` from store
+    if (state.plannedPersist) state.persist()
+    state.value = storage.get(key)
+    state.set(typeof init === 'function' || (state.value == null && init != state.value) ? init : state.value)
 
     return state.value
   })
 
   useInit(() => {
     const notify = value => {
-      setNativeState(value)
+      setInstanceValue(value)
     }
     state.on('change', notify)
-    return () => state.off('change', notify)
+    return () => {
+      state.off('change', notify)
+    }
   })
 
-  return [value, state]
+  return state
 }

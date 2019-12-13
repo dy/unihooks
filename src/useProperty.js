@@ -25,9 +25,7 @@ export default function useProperty (target, name, init) {
         return storage.get(key)
       },
       set(value) {
-        storage.set(key, value)
-        // not `store.set(value)` because no need to write to storage
-        store.update(value)
+        store.set(value)
       }
     }
 
