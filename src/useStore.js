@@ -11,45 +11,22 @@ export const INTERVAL = 150
 store.addPlugin(events)
 export { store }
 
-// tmp non-persisted storage
-const tmp = {}
-
 export const storage = {
   get(key) {
-    if (key in tmp) return tmp[key]
-    tmp[key] = store.get(key)
-    return tmp[key]
+    return store.get(key)
   },
   set(key, value) {
     if (value == null) {
       store.remove(key)
-      delete tmp[key]
     }
-    else tmp[key] = value
-    persist(key, value)
+    else store.set(key, value)
     if (channels[key]) channels[key].postMessage(value)
   },
-}
-
-const debounce = (func, delay = 100) => {
-  let timer
-  return function () {
-    const context = this
-    const args = arguments
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      func.apply(context, args)
-    }, delay)
+  plan(fn) {
+    let id = setInterval(fn, INTERVAL);
+    return clearInterval(id)
   }
 }
-const persist = debounce((key, value) => {
-  if (value == null) store.remove(key)
-  else store.set(key, value)
-
-  tmp[key] = store.get(key)
-}, INTERVAL)
-
-
 
 export const channels = {}
 
@@ -72,7 +49,6 @@ export default (key, init) => {
       channel.close()
     }
   })
-
 
   return state
 }
