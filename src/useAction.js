@@ -11,13 +11,13 @@ export default function useAction (name, action) {
     return cache[name]
   }, [name, action])
 
-  let call = useCallback(() => {
-    ref.current = storedAction()
+  let call = useMemo(() => {
+    let call =  (...args) => {
+      ref.current = storedAction(...args)
+    }
+    call[Symbol.iterator] = function* () { yield ref.current; yield call }
+    return call
   })
-
-  call[0] = ref.current
-  call[1] = call
-
   return call
 }
 

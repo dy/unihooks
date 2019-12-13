@@ -101,6 +101,21 @@ t('useAction: actions are not reactive with array', async t => {
   t.end()
 })
 
+t('useAction: passes args', async t => {
+  let log = []
+  let action = createAction('args', function (...args) {
+    log.push(...args)
+  })
+  enhook(() => {
+    let action = useAction('args')
+    action(1, 2, 3)
+  })()
+
+  t.deepEqual(log, [1, 2, 3])
+
+  t.end()
+})
+
 
 export async function teardown() {
   for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }
