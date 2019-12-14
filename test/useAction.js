@@ -116,6 +116,14 @@ t('useAction: passes args', async t => {
   t.end()
 })
 
+t('useAction: unknow action throws error', t => {
+  t.plan(1)
+  enhook(() => {
+    t.throws(() => useAction('xxx'))
+  })()
+  t.end()
+})
+
 
 export async function teardown() {
   for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }

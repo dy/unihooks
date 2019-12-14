@@ -11,6 +11,8 @@ export default function useAction (name, action) {
     return cache[name]
   }, [name, action])
 
+  if (!action && !storedAction) throw Error('useAction: unknown action `' + name + '`')
+
   let call = useMemo(() => {
     let call =  (...args) => {
       ref.current = storedAction(...args)
