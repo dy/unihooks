@@ -89,6 +89,7 @@ export default function useStorage(storage, key, init) {
     // so we have to read `state.value` from store
     if (state.plannedPersist) state.persist()
     state.value = storage.get(key)
+
     state.set(typeof init === 'function' || (state.value == null && init != state.value) ? init : state.value)
 
     return state.value

@@ -124,6 +124,33 @@ t('useAction: unknow action throws error', t => {
   t.end()
 })
 
+t('useAction: async action must be awaitable', async t => {
+  let log = []
+
+  let a = createAction(async () => {
+    log.push(1)
+    await tick()
+    log.push(2)
+  })
+  await a()
+  t.deepEqual(log, [1, 2])
+
+  t.end()
+})
+
+t('useAction: must return result', async t => {
+  t.equal(createAction(() => {
+    return 123
+  })(), 123)
+
+  t.equal(await createAction(async () => {
+    await ''
+    return 123
+  })(), 123)
+
+  t.end()
+})
+
 
 export async function teardown() {
   for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }

@@ -9,6 +9,7 @@ setHooks('preact')
 runTests()
 
 async function runTests() {
+  require('./useAction')
   require('./useStorage')
   require('./useGlobalCache')
   require('./useLocalStorage')
@@ -20,7 +21,6 @@ async function runTests() {
   require('./useQueryParam')
   require('./useCookie')
   require('./useInit')
-  require('./useAction')
   require('./usePrevious')
   require('./useCountdown')
   require('./useThrottle')

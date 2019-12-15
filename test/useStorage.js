@@ -54,3 +54,22 @@ t('useStorage: fn init should be called per hook', async t => {
 
   t.end()
 })
+
+t.skip('useStorage: async setter is fine', async t => {
+  // FIXME: seems to be useless
+  let log = []
+
+  let f = enhook(() => {
+    let [foo] = useStorage({get(){return 'foo'}, set(){}}, 'xyz', async () => {
+      await tick()
+      return 'foo'
+    })
+
+    log.push(foo)
+  })
+  f()
+
+  t.deepEqual(log, ['foo'])
+
+  t.end()
+})
