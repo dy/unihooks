@@ -15,7 +15,7 @@ export default function useAction (name, action) {
 
   let call = useMemo(() => {
     let call =  (...args) => {
-      ref.current = storedAction(...args)
+      return ref.current = storedAction(...args)
     }
     call[Symbol.iterator] = function* () { yield ref.current; yield call }
     return call

@@ -139,14 +139,18 @@ t('useAction: async action must be awaitable', async t => {
 })
 
 t('useAction: must return result', async t => {
-  t.equal(createAction(() => {
-    return 123
-  })(), 123)
+  createAction('f',async () => {
+    return Promise.resolve(123)
+  })
 
-  t.equal(await createAction(async () => {
-    await ''
-    return 123
-  })(), 123)
+  let log = []
+  enhook(async () => {
+    let f = useAction('f')
+    log.push(await f())
+  })()
+
+  await frame()
+  t.deepEqual(log, [123])
 
   t.end()
 })
