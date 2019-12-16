@@ -8,6 +8,7 @@ import { tick, idle, frame, time } from 'wait-please'
 let isNode = !!(typeof process !== 'undefined' && process.versions && process.versions.node)
 
 !isNode && t('useQueryParam: read values properly', async t => {
+  clearSearch()
   let log = []
 
   let str = qs.stringify({
@@ -19,8 +20,8 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
     arr1: [1, 2, 3],
     arr2: ['a', 'b', 'c'],
     arr3: [['a', 1], ['b', 2], ['c', 3]],
-    arr4: [{ a: 1}, {b: 2}, {c: 3}],
-    obj: {a:1, b:2, c:3, foo: 'bar'},
+    arr4: [{ a: 1 }, { b: 2 }, { c: 3 }],
+    obj: { a: 1, b: 2, c: 3, foo: 'bar' },
     date: new Date('2019-11-17')
   }, { encode: false })
   window.history.pushState(null, '', '?' + str)
@@ -61,12 +62,13 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
     [1, 2, 3],
     ['a', 'b', 'c'],
     [['a', 1], ['b', 2], ['c', 3]],
-    [{a: 1}, {b: 2}, {c: 3}],
-    {a: 1, b: 2, c: 3, foo: 'bar'},
+    [{ a: 1 }, { b: 2 }, { c: 3 }],
+    { a: 1, b: 2, c: 3, foo: 'bar' },
     +new Date('2019-11-17T00:00:00.000Z')
   ])
 
   await frame(2)
+  f.unhook()
   clearSearch()
   t.end()
 })
@@ -110,23 +112,20 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
   await frame(2)
   let params = qs.parse(window.location.search.slice(1))
   t.deepEqual(params, {
-      "arr1": ["1", "2", "3"],
-      "arr2": ["a", "b", "c"],
-      "arr3": [["a", "1"], ["b", "2"], ["c", "3"]],
-      "arr4": [{ "a": "1" }, { "b": "2" }, { "c": "3" }],
-      "bool": "false",
-      "date": "2019-11-17T00:00:00.000Z",
-      "num": "-123",
-      "obj": { "a": "1", "b": "2", "c": "3", "foo": "bar" },
-      "str": "foo"
-    })
+    "arr1": ["1", "2", "3"],
+    "arr2": ["a", "b", "c"],
+    "arr3": [["a", "1"], ["b", "2"], ["c", "3"]],
+    "arr4": [{ "a": "1" }, { "b": "2" }, { "c": "3" }],
+    "bool": "false",
+    "date": "2019-11-17T00:00:00.000Z",
+    "num": "-123",
+    "obj": { "a": "1", "b": "2", "c": "3", "foo": "bar" },
+    "str": "foo"
+  })
 
-  await frame(2)
+  await frame(3)
+  f.unhook()
   clearSearch()
-  t.end()
-})
-
-t.skip('useQueryParam: batch update', async t => {
   t.end()
 })
 
@@ -134,6 +133,7 @@ t.skip('useQueryParam: batch update', async t => {
   let log = []
 
   clearSearch()
+  await time(10)
 
   let f = enhook(() => {
     let [str, setStr] = useQueryParam('str', 'foo')
@@ -169,8 +169,8 @@ t.skip('useQueryParam: batch update', async t => {
     { a: 1, b: 2, c: 3, foo: 'bar' },
     +new Date('2019-11-17T00:00:00.000Z')
   ])
+  await tick()
 
-  await frame(2)
   let params = qs.parse(window.location.search.slice(1))
 
   t.deepEqual(params, {
@@ -186,7 +186,8 @@ t.skip('useQueryParam: batch update', async t => {
   })
 
 
-  await frame(2)
+  f.unhook()
+  await time(100)
   clearSearch()
   t.end()
 })
@@ -199,25 +200,24 @@ t('useQueryParam: custom toString method')
   let f = enhook(() => {
     let [v, setV] = useQueryParam('x', 1)
     log.push(v)
-    setV(2)
   })
   f()
   await frame(2)
+  t.deepEqual(log, [1])
+
+  window.history.pushState(null, "useQueryParam", "?x=2");
+  await frame()
   t.deepEqual(log, [1, 2])
 
-  // window.history.pushState(null, "useQueryParam", "?x=3");
-  // window.history.pushState(null, "useQueryParam", "?x=4");
-  // window.history.back()
+  window.history.pushState(null, "useQueryParam", "?x=3");
+  await frame(3)
+  t.deepEqual(log, [1, 2, 3])
 
-  // // FIXME: in some reason it waits 20 frames - for all prev tests or something
-  // await frame(40)
-  // t.deepEqual(log, [1, 2, 3, 2])
-
-  // await frame(2)
+  f.unhook()
   clearSearch()
   t.end()
 })
 
-function clearSearch () {
+function clearSearch() {
   window.history.pushState(null, '', window.location.href.split('?')[0])
 }

@@ -340,7 +340,7 @@ function MyComponent () {
 
 ### `[value, setValue] = useQueryParam(name, init?)`
 
-`useState` with persistency to query string.
+`useState` with persistency to query string. Enables `pushstate`, `replacestate` observers, as well as links withing the same origin. Reflects updates back in search string.
 
 ```js
 function MyComponent () {
