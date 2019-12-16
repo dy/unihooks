@@ -3,7 +3,7 @@ import qs from 'qs'
 import autoParse from 'auto-parse'
 import sorted from 'sorted-object'
 import { useEffect,  } from './standard'
-import 'onpushstate'
+// import 'onpushstate'
 
 const storage = {
   is: (a, b) => stringifyParam(a) === stringifyParam(b),

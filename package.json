@@ -23,7 +23,7 @@
     "worker-timers": "^5.1.0"
   },
   "devDependencies": {
-    "atomico": "^0.15.4",
+    "atomico": "^0.16.1",
     "augmentor": "^2.1.3",
     "browser-env": "^3.3.0",
     "dom-augmentor": "^2.0.3",
