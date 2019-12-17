@@ -227,7 +227,9 @@ Ref: [use-store](https://ghub.io/use-store)
 
 ## API
 
-### [value, setValue] = useStore(key, init?)
+### useStore
+
+`[value, setValue] = useStore(key, init?)`
 
 Store provider with persistency and changes broadcasting. Can be used as robust application model layer.
 
@@ -257,7 +259,9 @@ Create store. Can be used outside of components or hookable scope.
 Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
 
 
-### [result, action] = useAction(name?, fn?)
+### useAction
+
+`[result, action] = useAction(name?, fn?)`
 
 App action provider. Can be used to organize application controllers. If `name` is omitted, function name is used as directly.
 Actions can use hooks, but they're not reactive: changing state does not cause self-recursion.
@@ -299,7 +303,9 @@ function MyComponent () {
 -->
 
 
-### [value, setValue] = useLocalStorage(key, init?)
+### useLocalStorage
+
+`[value, setValue] = useLocalStorage(key, init?)`
 
 `useState` with persistency to local storage by `key`. Unlike `useStore`, provides raw `localStorage` access.
 `init` can be a function or initial value. Provides
@@ -325,7 +331,9 @@ function MyComponent3 () {
 }
 ```
 
-### [value, setValue] = useSessionStorage(key, init?)
+### useSessionStorage
+
+`[value, setValue] = useSessionStorage(key, init?)`
 
 `useLocalStorage` with `sessionStorage` as backend.
 
@@ -339,7 +347,9 @@ function MyComponent () {
 ```
 
 
-### [value, setValue] = useQueryParam(name, init?)
+### useQueryParam
+
+`[value, setValue] = useQueryParam(name, init?)`
 
 `useState` with persistency to query string. Enables `pushstate`, `replacestate` observers, as well as links withing the same origin. Reflects updates back in search string.
 
@@ -374,7 +384,9 @@ let [location, setLocation] = useLocation()
 
 -->
 
-### [value, setValue] = useCookie(name, init?)
+### useCookie
+
+`[value, setValue] = useCookie(name, init?)`
 
 Cookies accessor hook.
 
@@ -391,7 +403,9 @@ function MyComponent () {
 Does not observe cookies (there's no implemented API for that).
 
 
-### [value, setValue] = useProperty(target, path, init?)
+### useProperty
+
+`[value, setValue] = useProperty(target, path, init?)`
 
 Observe any target property. Defines transparent getter/setter on a target.
 
@@ -405,7 +419,9 @@ function MyComponent () {
 target.count++
 ```
 
-### [value, setValue] = useGlobalCache(key, init?)
+### useGlobalCache
+
+`[value, setValue] = useGlobalCache(key, init?)`
 
 Get access to value stored in [globalCache](https://ghub.io/global-cache).
 
@@ -415,7 +431,9 @@ function MyComponent () {
 }
 ```
 
-### [value, setValue] = useStorage(storage, key, init?)
+### useStorage
+
+`[value, setValue] = useStorage(storage, key, init?)`
 
 Generic customizable storage hook with persistency.
 `storage` object provides data to some underlying data structure.
@@ -436,7 +454,9 @@ useStorage({
 })
 ```
 
-### [prev] = usePrevious(value)
+### usePrevious
+
+`[prev] = usePrevious(value)`
 
 Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
 
@@ -457,7 +477,9 @@ const Demo = () => {
 };
 ```
 
-### [n, reset] = useCountdown(start, interval=1000)
+### useCountdown
+
+`[n, reset] = useCountdown(start, interval=1000)`
 
 Countdown state from `start` down to `0` with indicated `interval`. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
 
@@ -474,7 +496,7 @@ const Demo = () => {
 
 ### useAttribute
 
-`let [attr, setAttr] = useAttribute(element|ref, name)`
+`[attr, setAttr] = useAttribute(element|ref, name)`
 
 Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` values remove attribute from element.
 
@@ -488,7 +510,7 @@ function MyButton() {
 
 ### useInput
 
-`let [value, setValue] = useInput(name|selector|element|ref)`
+`[value, setValue] = useInput( name|selector|element|ref )`
 
 Input element hook. Serializes value to input, creates input observer, handles edge-cases. `null`/`undefined` values remove attribute from element.
 
