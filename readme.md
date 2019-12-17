@@ -253,7 +253,7 @@ function Component () {
 }
 ```
 
-> store = createStore(name, init)
+> **store = createStore(name, init)**
 
 Create store. Can be used outside of components or hookable scope.
 
@@ -286,7 +286,7 @@ function MyComponent() {
 }
 ```
 
-> action = createAction(name?, fn)
+> **action = createAction(name?, fn)**
 
 Register new action, can be used independent of components/hooked scope.
 
