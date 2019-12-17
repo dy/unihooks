@@ -229,7 +229,7 @@ Ref: [use-store](https://ghub.io/use-store)
 
 ### useStore
 
-##### [value, setValue] = useStore(key, init?)
+> [value, setValue] = useStore(key, init?)
 
 Store provider with persistency and changes broadcasting. Can be used as robust application model layer.
 
@@ -252,7 +252,7 @@ function Component () {
 }
 ```
 
-##### store = createStore(name, init)
+> store = createStore(name, init)
 
 Create store. Can be used outside of components or hookable scope.
 
@@ -261,7 +261,7 @@ Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadca
 
 ### useAction
 
-##### [result, action] = useAction(name?, fn?)
+> [result, action] = useAction(name?, fn?)
 
 App action provider. Can be used to organize application controllers. If `name` is omitted, function name is used as directly.
 Actions can use hooks, but they're not reactive: changing state does not cause self-recursion.
@@ -285,7 +285,7 @@ function MyComponent() {
 }
 ```
 
-##### action = createAction(name?, fn)
+> action = createAction(name?, fn)
 
 Register new action, can be used independent of components/hooked scope.
 
@@ -305,7 +305,7 @@ function MyComponent () {
 
 ### useLocalStorage
 
-##### [value, setValue] = useLocalStorage(key, init?)
+> [value, setValue] = useLocalStorage(key, init?)
 
 `useState` with persistency to local storage by `key`. Unlike `useStore`, provides raw `localStorage` access.
 `init` can be a function or initial value. Provides
@@ -333,7 +333,7 @@ function MyComponent3 () {
 
 ### useSessionStorage
 
-##### [value, setValue] = useSessionStorage(key, init?)
+> [value, setValue] = useSessionStorage(key, init?)
 
 `useLocalStorage` with `sessionStorage` as backend.
 
@@ -349,7 +349,7 @@ function MyComponent () {
 
 ### useQueryParam
 
-##### [value, setValue] = useQueryParam(name, init?)
+> [value, setValue] = useQueryParam(name, init?)
 
 `useState` with persistency to query string. Enables `pushstate`, `replacestate` observers, as well as links withing the same origin. Reflects updates back in search string.
 
@@ -386,7 +386,7 @@ let [location, setLocation] = useLocation()
 
 ### useCookie
 
-##### [value, setValue] = useCookie(name, init?)
+> [value, setValue] = useCookie(name, init?)
 
 Cookies accessor hook.
 
@@ -405,7 +405,7 @@ Does not observe cookies (there's no implemented API for that).
 
 ### useProperty
 
-##### [value, setValue] = useProperty(target, path, init?)
+> [value, setValue] = useProperty(target, path, init?)
 
 Observe any target property. Defines transparent getter/setter on a target.
 
@@ -421,7 +421,7 @@ target.count++
 
 ### useGlobalCache
 
-##### [value, setValue] = useGlobalCache(key, init?)
+> [value, setValue] = useGlobalCache(key, init?)
 
 Get access to value stored in [globalCache](https://ghub.io/global-cache).
 
@@ -433,7 +433,7 @@ function MyComponent () {
 
 ### useStorage
 
-##### [value, setValue] = useStorage(storage, key, init?)
+> [value, setValue] = useStorage(storage, key, init?)
 
 Generic customizable storage hook with persistency.
 `storage` object provides data to some underlying data structure.
@@ -456,7 +456,7 @@ useStorage({
 
 ### usePrevious
 
-##### [prev] = usePrevious(value)
+> [prev] = usePrevious(value)
 
 Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
 
@@ -479,7 +479,7 @@ const Demo = () => {
 
 ### useCountdown
 
-##### [n, reset] = useCountdown(start, interval=1000)
+> [n, reset] = useCountdown(start, interval=1000)
 
 Countdown state from `start` down to `0` with indicated `interval`. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
 
@@ -496,7 +496,7 @@ const Demo = () => {
 
 ### useAttribute
 
-##### [attr, setAttr] = useAttribute(element|ref, name)
+> [attr, setAttr] = useAttribute(element|ref, name)
 
 Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` values remove attribute from element.
 
@@ -510,7 +510,7 @@ function MyButton() {
 
 ### useInput
 
-##### [value, setValue] = useInput( name|selector|element|ref )
+> [value, setValue] = useInput( name|selector|element|ref )
 
 Input element hook. Serializes value to input, creates input observer, handles edge-cases. `null`/`undefined` values remove attribute from element.
 
