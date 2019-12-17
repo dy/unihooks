@@ -136,6 +136,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- #### UI -->
 
+- [ ] `useInput` − input field state
 <!-- - [ ] `useForm` − form builder helper -->
 <!-- - [ ] `useTable` − table builder helper -->
 <!-- - [ ] `useDialog` − dialog builder helper -->
@@ -209,7 +210,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!--
 
-### `let [state, setState] = useState(target|key?, init, deps?)`
+### let [state, setState] = useState(target|key?, init, deps?)
 
 `useState` extension with `target` or `key` first argument and `deps` the last argument. State can be identified, read and reinitialized that way.
 
@@ -226,7 +227,7 @@ Ref: [use-store](https://ghub.io/use-store)
 
 ## API
 
-### `[value, setValue] = useStore(key, init?)`
+### [value, setValue] = useStore(key, init?)
 
 Store provider with persistency and changes broadcasting. Can be used as robust application model layer.
 
@@ -249,14 +250,14 @@ function Component () {
 }
 ```
 
-#### `store = createStore(name, init)`
+#### store = createStore(name, init)
 
 Create store. Can be used outside of components or hookable scope.
 
 Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
 
 
-### `[result, action] = useAction(name?, fn?)`
+### [result, action] = useAction(name?, fn?)
 
 App action provider. Can be used to organize application controllers. If `name` is omitted, function name is used as directly.
 Actions can use hooks, but they're not reactive: changing state does not cause self-recursion.
@@ -280,12 +281,12 @@ function MyComponent() {
 }
 ```
 
-#### `action = createAction(name?, fn)`
+#### action = createAction(name?, fn)
 
 Register new action, can be used independent of components/hooked scope.
 
 <!--
-### `[props, setProps] = useProps(target, defaults?)`
+### [props, setProps] = useProps(target, defaults?)
 
 Provides target element/object props. Useful for organizing component API.
 Unlike `useAttribute`/`useProperty`, `useProps` handles both attributes/properties.
@@ -298,7 +299,7 @@ function MyComponent () {
 -->
 
 
-### `[value, setValue] = useLocalStorage(key, init?)`
+### [value, setValue] = useLocalStorage(key, init?)
 
 `useState` with persistency to local storage by `key`. Unlike `useStore`, provides raw `localStorage` access.
 `init` can be a function or initial value. Provides
@@ -324,7 +325,7 @@ function MyComponent3 () {
 }
 ```
 
-### `[value, setValue] = useSessionStorage(key, init?)`
+### [value, setValue] = useSessionStorage(key, init?)
 
 `useLocalStorage` with `sessionStorage` as backend.
 
@@ -338,7 +339,7 @@ function MyComponent () {
 ```
 
 
-### `[value, setValue] = useQueryParam(name, init?)`
+### [value, setValue] = useQueryParam(name, init?)
 
 `useState` with persistency to query string. Enables `pushstate`, `replacestate` observers, as well as links withing the same origin. Reflects updates back in search string.
 
@@ -353,19 +354,19 @@ It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/Wind
 
 <!--
 
-### `useHistory()`
+### useHistory()
 
 ```js
 let [state, { back, forward, go }] = useHistory()
 ```
 
-### `useHash()`
+### useHash()
 
 ```js
 let [ref, setRef] = useHash()
 ```
 
-### `useLocation()`
+### useLocation()
 
 ```js
 let [location, setLocation] = useLocation()
@@ -373,7 +374,7 @@ let [location, setLocation] = useLocation()
 
 -->
 
-### `[value, setValue] = useCookie(name, init?)`
+### [value, setValue] = useCookie(name, init?)
 
 Cookies accessor hook.
 
@@ -390,7 +391,7 @@ function MyComponent () {
 Does not observe cookies (there's no implemented API for that).
 
 
-### `[value, setValue] = useProperty(target, path, init?)`
+### [value, setValue] = useProperty(target, path, init?)
 
 Observe any target property. Defines transparent getter/setter on a target.
 
@@ -404,7 +405,7 @@ function MyComponent () {
 target.count++
 ```
 
-### `[value, setValue] = useGlobalCache(key, init?)`
+### [value, setValue] = useGlobalCache(key, init?)
 
 Get access to value stored in [globalCache](https://ghub.io/global-cache).
 
@@ -414,7 +415,7 @@ function MyComponent () {
 }
 ```
 
-### `[value, setValue] = useStorage(storage, key, init?)`
+### [value, setValue] = useStorage(storage, key, init?)
 
 Generic customizable storage hook with persistency.
 `storage` object provides data to some underlying data structure.
@@ -435,7 +436,7 @@ useStorage({
 })
 ```
 
-### `[prev] = usePrevious(value)`
+### [prev] = usePrevious(value)
 
 Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
 
@@ -456,7 +457,7 @@ const Demo = () => {
 };
 ```
 
-### `[n, reset] = useCountdown(start, interval=1000)`
+### [n, reset] = useCountdown(start, interval=1000)
 
 Countdown state from `start` down to `0` with indicated `interval`. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
 
@@ -471,7 +472,9 @@ const Demo = () => {
 ```
 
 
-### `let [attr, setAttr] = useAttribute(element|ref, name)`
+### useAttribute
+
+`let [attr, setAttr] = useAttribute(element|ref, name)`
 
 Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` values remove attribute from element.
 
@@ -483,22 +486,37 @@ function MyButton() {
 }
 ```
 
+### useInput
+
+`let [value, setValue] = useInput(name|selector|element|ref)`
+
+Input element hook. Serializes value to input, creates input observer, handles edge-cases. `null`/`undefined` values remove attribute from element.
+
+```js
+function MyButton() {
+  let ref = useRef()
+  let [value, setValue] = useInput(ref)
+
+  return <input ref={ref} value={value}/>
+}
+```
+
 <!--
-### `let [data, setData] = useDataset(element, name)`
+### let [data, setData] = useDataset(element, name)
 
 `dataset`/`data-*` observer hook.
 
-### `let [cls, setClass] = useClassName(element, name)`
+### let [cls, setClass] = useClassName(element, name)
 
 `className` observer hook.
 
-### `let [values, setValues, isValid] = useForm(init, validation)`
+### let [values, setValues, isValid] = useForm(init, validation)
 
 Form values accessor hook.
 
-### `let [value, setValue, isValid] = useFormValue(name, init, validate)`
+### let [value, setValue, isValid] = useFormValue(name, init, validate)
 
-### `let [response, send, isPending] = useRemote(url, method|options?)`
+### let [response, send, isPending] = useRemote(url, method|options?)
 
 Remote source accessor, a generic AJAX calls hook.
 
@@ -509,39 +527,39 @@ useEffect(fetchUsers, [id])
 let [data, su]
 ```
 
-### `let [location, setLocation] = useLocation()`
-### `let [params, setRoute] = useRoute('user/:id')`
+### let [location, setLocation] = useLocation()
+### let [params, setRoute] = useRoute('user/:id')
 
-### `let [e, dispatch] = useEvent(target|selector?, event)`
+### let [e, dispatch] = useEvent(target|selector?, event)
 
 Events hook.
 
 
-### `let [ mutation, mutate ] = useMutations(selector|element)`
+### let [ mutation, mutate ] = useMutations(selector|element)
 
 Append, prepend, remove, update etc.
 
-### `let [element, render] = useSelector(selector|element)`
+### let [element, render] = useSelector(selector|element)
 
-### `let [css, setCss] = useCSS(selector|element?, rule)`
+### let [css, setCss] = useCSS(selector|element?, rule)
 
-### `let [] = useMediaQuery()`
+### let [] = useMediaQuery()
 
 ### useNetworkStatus()
 
-### `let [value] = useArguments()`
+### let [value] = useArguments()
 
-### `let [message, send] = useThread(pid)`
+### let [message, send] = useThread(pid)
 
-### `let [intersects] = useIntersection(elementA, elementB)`
+### let [intersects] = useIntersection(elementA, elementB)
 
-### `let [size, setSize] = useResize(element)`
+### let [size, setSize] = useResize(element)
 
-### `let [, startTransition, isPending] = useTransition()`
+### let [, startTransition, isPending] = useTransition()
 
-### `let [ result, call ] = useFunction(() => {})`
+### let [ result, call ] = useFunction(() => {})
 
-### `let [ result, call ] = useEffect(key?, () => {}, deps?)`
+### let [ result, call ] = useEffect(key?, () => {}, deps?)
 
 In some way, a gateway to other hooks, same as direct aspect `effect(() => {})`.
 But if we follow convention, that's going to become `let [prevResult, call] = useEffect( () => {} | id ); call()`.

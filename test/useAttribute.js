@@ -32,6 +32,18 @@ t('useAttribute: basics', async t => {
   t.end()
 })
 
-t.skip('useAttribute: run ref', async t => {
+t.skip('useAttribute: handle ref', async t => {
+  let log = []
+
+  let el = document.createElement('div')
+  el.setAttribute('foo', 'bar')
+  let f = enhook(() => {
+    let ref = useRef()
+    let [foo, setFoo] = useAttribute(ref, 'foo')
+
+    ref.current = el
+  })
+  f()
+
   t.end()
 })
