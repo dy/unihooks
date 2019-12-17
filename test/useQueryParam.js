@@ -218,6 +218,19 @@ t('useQueryParam: custom toString method')
   t.end()
 })
 
+!isNode && t('useQueryParam: default array', async t => {
+  let f = enhook(() => {
+    let [arr, setArr] = useQueryParam('arr', [])
+    t.deepEqual(arr, [])
+  })
+  f()
+
+  await frame(2)
+  f.unhook()
+  clearSearch()
+  t.end()
+})
+
 function clearSearch() {
   window.history.pushState(null, '', window.location.href.split('?')[0])
 }

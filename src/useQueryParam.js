@@ -5,7 +5,6 @@ import sorted from 'sorted-object'
 import { useEffect, } from './standard'
 
 const storage = {
-  is: (a, b) => stringifyParam(a) === stringifyParam(b),
   get: (name) => {
     let q = qs.parse(window.location.search.slice(1))
     let parsed = autoParse(q[name])
@@ -80,7 +79,6 @@ export default function useQueryParam(name, init) {
       window.removeEventListener('uhx:navigate', notify)
     }
   }, [])
-
   let [value, store] = useStorage(storage, name, init)
   return [value, store]
 }
@@ -133,9 +131,7 @@ document.addEventListener('click', function (e) {
     // only if in the same origin
     if (next.origin !== curr.origin) return
 
-    // queueMicrotask(() => {
-      var e = new Event('uhx:navigate');
-      window.dispatchEvent(e);
-    // })
+    var e = new Event('uhx:navigate');
+    window.dispatchEvent(e);
   }
 }, true);

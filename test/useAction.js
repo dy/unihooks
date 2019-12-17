@@ -1,6 +1,6 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { useAction, createAction, useStore, createStore, useEffect, useState } from '../src/index'
+import setHooks, { useAction, createAction, useStore, createStore, useEffect, useState } from '../src/index'
 import { INTERVAL, storage, PREFIX, channels } from '../src/useStore'
 import { tick, frame, time } from 'wait-please'
 import { clearNodeFolder } from 'broadcast-channel'
@@ -38,25 +38,77 @@ t('useAction: basic', async t => {
 })
 
 t.skip('atomico', async t => {
-  let { h, customElement, useEffect, useState, useMemo } = await import("atomico");
+  let { h, customElement, useState, useEffect, useMemo, createHookCollection } = await import("atomico");
   // let { component, useEffect, useState, useMemo } = await import("haunted");
-
-  let log = []
+  // setHooks('atomico')
 
   function X() {
     let [s, setS] = useState(0)
 
     // this effect is run only once
-    useEffect(() => console.log(s))
-    useEffect(() => setTimeout(() => setS(2)), [])
-    useEffect(() => setTimeout(() => setS(3)), [])
+    useMemo(() => console.log(s))
+    useMemo(() => setTimeout(() => setS(2), 100), [])
+    useMemo(() => setTimeout(() => setS(3), 200), [])
 
-    return null
+    return h('')
   }
 
   // customElements.define('x-x', component(X));
   customElement('x-x', X);
   document.body.appendChild(document.createElement("x-x"));
+
+
+
+  // function createComponent(component) {
+  //   let hooks = createHookCollection(render);
+  //   function render(props) {
+  //     hooks.load(component, props);
+  //     hooks.updated();
+  //   }
+  //   return render;
+  // }
+
+  // let renderComponent = createComponent(() => {
+  //   let [state, setState] = useState(0);
+
+  //   useEffect(() => console.log(state))
+  //   useEffect(() => setTimeout(() => setState(2), 10), [])
+  //   useEffect(() => setTimeout(() => setState(3), 20), [])
+  // });
+
+  // renderComponent();
+
+
+  // let enhook = (fn, options = {}) => {
+  //   let lastCtx, lastArgs, passive = options.passive, blocked, end, result
+  //   let hooks = createHookCollection(update)
+
+  //   function update() {
+  //     hooks.load(() => {
+  //       if (passive && blocked) return
+  //       if (passive) blocked = true
+  //       result = fn.call(lastCtx, ...lastArgs)
+  //     }, lastArgs)
+  //     Promise.resolve().then(() => {
+  //     hooks.updated()
+  //     })
+  //   }
+  //   function render(...args) {
+  //     if (end) throw Error('Function is unhooked')
+  //     blocked = false
+  //     lastCtx = this
+  //     lastArgs = args
+  //     update()
+  //     return result
+  //   }
+  //   render.unhook = () => {
+  //     end = true
+  //     hooks.unmount()
+  //     lastCtx = lastArgs = null
+  //   }
+
+  //   return render
+  // }
 })
 
 t('useAction: must not deadlock setStore', async t => {
