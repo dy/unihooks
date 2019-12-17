@@ -31,7 +31,10 @@ export default function useStorage(storage, key, init) {
     state.off = (e, fn) => state.subs[e].splice(state.subs[e].indexOf(fn) >>> 0, 1)
     state.emit = (e, arg) => state.subs[e] && state.subs[e].slice().map(fn => fn(arg))
 
-    state.get = () => state.value
+    state.get = (key) => {
+      if (state.plannedPersist) state.persist()
+      return storage.get(key)
+    }
     state.set = (newValue) => {
       if (typeof newValue === 'function') newValue = newValue(state.value)
 
@@ -87,8 +90,7 @@ export default function useStorage(storage, key, init) {
     // state.value can be unsynced from storage
     // eg. not all storages have `change` notifications: globalCache, cookies etc.
     // so we have to read `state.value` from store
-    if (state.plannedPersist) state.persist()
-    state.value = storage.get(key)
+    state.value = state.get(key)
 
     state.set(typeof init === 'function' || (state.value == null && init != state.value) ? init : state.value)
 

@@ -1,7 +1,7 @@
 import t from 'tape'
 import enhook from 'enhook'
-import { tick } from 'wait-please'
-import { useAttribute, useEffect } from '../src/index'
+import { tick, frame } from 'wait-please'
+import { useAttribute, useEffect, useRef } from '../src/index'
 
 t('useAttribute: basics', async t => {
   let log = []
@@ -32,18 +32,25 @@ t('useAttribute: basics', async t => {
   t.end()
 })
 
-t.skip('useAttribute: handle ref', async t => {
+t('useAttribute: handle ref', async t => {
   let log = []
 
   let el = document.createElement('div')
   el.setAttribute('foo', 'bar')
+
   let f = enhook(() => {
     let ref = useRef()
     let [foo, setFoo] = useAttribute(ref, 'foo')
-
+    log.push(foo)
     ref.current = el
   })
   f()
+
+  await frame(1)
+  t.deepEqual(log, [undefined])
+  f()
+  await frame(2)
+  t.deepEqual(log, [undefined, 'bar'])
 
   t.end()
 })

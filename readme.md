@@ -434,13 +434,14 @@ function MyComponent () {
 
 ### useStorage
 
-> **[value, setValue] = useStorage(storage, key, init?)**
+> **[value, setValue] = useStorage(storage, key)**
 
 Generic customizable storage hook with persistency.
-`storage` object provides data to some underlying data structure.
+`storage` object provides data to underlying data structure.
+Mostly usable for organizing high-level hooks.
 
 ```js
-useStorage({
+let [value, state] = useStorage({
   // read value from storage
   get: (key) => myStore.get(key),
 
@@ -452,6 +453,11 @@ useStorage({
 
   // scheduler for persistency
   plan(fn) { let id = setTimeout(fn); return () => clearTimeout(id) }
+}, 'foo')
+
+// same as useState(init)
+useInit(() => {
+  state.reset(initValue)
 })
 ```
 
@@ -511,9 +517,11 @@ function MyButton() {
 
 ### useElement
 
-> **[element, setElement] = useElement( selector | element | ref )**
+> **[element] = useElement( selector | element | ref )**
 
-Element state hook. Returns element, queried by `selector` or derived from `ref`. Updates whenever selected element or `ref.current` changes.
+Get element, either from `ref`, by `selector` or directly.
+
+<!-- Updates whenever selected element or `ref.current` changes. -->
 
 ```js
 function MyButton() {
@@ -529,7 +537,7 @@ function MyButton() {
 
 > **[value, setValue] = useInput( name | selector | element | ref )**
 
-Input element hook. Serializes value to input, creates input observer, handles edge-cases. `null`/`undefined` values remove attribute from element.
+Input element hook. Serializes value to input, creates input observer. `null`/`undefined` values remove attribute from element.
 
 ```js
 function MyButton() {
