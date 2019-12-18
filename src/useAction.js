@@ -2,7 +2,7 @@ import enhook from 'enhook'
 import { useMemo, useRef, useCallback } from './standard'
 import globalCache from 'global-cache'
 
-let cacheKey = Symbol.for('!uxh::useAction')
+let cacheKey = Symbol.for('!uhx:useAction')
 if (!globalCache.get(cacheKey)) globalCache.set(cacheKey, {})
 const cache = globalCache.get(cacheKey)
 

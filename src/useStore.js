@@ -5,7 +5,7 @@ import events from 'store/plugins/events'
 import { BroadcastChannel } from 'broadcast-channel'
 
 
-export const PREFIX = '!uhx::'
+export const PREFIX = '!uhx:'
 export const INTERVAL = 150
 
 store.addPlugin(events)
