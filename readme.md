@@ -61,7 +61,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 ## Hooks
 
-#### App / MVC
+<!-- #### App / MVC -->
 
 - [x] `useStore` + `createStore` − store (model) provider, persistable contextless `useState`.
 - [x] `useAction` + `createAction` − action (controller) provider, contextless `useEffect` with result.
@@ -136,8 +136,8 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- #### UI -->
 
-<!-- - [ ] `useElement` − generic element state hook -->
-- [ ] `useInput` − input field state
+- [x] `useElement` − generic element state
+- [x] `useInput` − input element state
 <!-- - [ ] `useForm` − form state hook -->
 <!-- - [ ] `useTable` − table state hook -->
 <!-- - [ ] `useDialog` − dialog builder helper -->
