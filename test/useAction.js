@@ -241,6 +241,9 @@ t('useAction: must return result', async t => {
   t.end()
 })
 
+t('useAction: must be global', async t => {
+  // FIXME: how to test this?
+})
 
 export async function teardown() {
   for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }

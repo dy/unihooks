@@ -1,7 +1,10 @@
 import enhook from 'enhook'
 import { useMemo, useRef, useCallback } from './standard'
+import globalCache from 'global-cache'
 
-const cache = {}
+let cacheKey = Symbol.for('!uxh::useAction')
+if (!globalCache.get(cacheKey)) globalCache.set(cacheKey, {})
+const cache = globalCache.get(cacheKey)
 
 export default function useAction (name, action) {
   let ref = useRef()
