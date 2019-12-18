@@ -20,6 +20,7 @@ t('useAttribute: basics', async t => {
   t.deepEqual(log, ['bar'])
   await tick(2)
   t.deepEqual(log, ['bar', 'baz'])
+  t.equal(el.getAttribute('foo'), 'baz')
 
   el.setAttribute('foo', 'qux')
   await tick(2)
@@ -43,6 +44,8 @@ t('useAttribute: handle ref', async t => {
     let [foo, setFoo] = useAttribute(ref, 'foo')
     log.push(foo)
     ref.current = el
+
+    useEffect(() => () => setFoo())
   })
   f()
 
@@ -51,6 +54,10 @@ t('useAttribute: handle ref', async t => {
   f()
   await frame(2)
   t.deepEqual(log, [undefined, 'bar'])
+
+  f.unhook()
+  await frame(2)
+  t.notOk(el.hasAttribute('foo'))
 
   t.end()
 })

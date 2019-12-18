@@ -1,9 +1,10 @@
 import useStorage from './useStorage'
 import useElement from './useElement'
 import useSyncEffect from './useSyncEffect'
-import { useRef } from './standard'
+import { useRef, useEffect } from './standard'
 
-const cache = new WeakMap
+
+const cache = new Map
 
 const useAttribute = (target, name, init) => {
   let [el] = useElement(target)
@@ -44,10 +45,15 @@ const useAttribute = (target, name, init) => {
   let storage = cache.get(target)
   let [, store] = useStorage(storage, name, init)
 
+  // FIXME: replace with useTimes(1) or alike
+  let initedRef = useRef()
+  useEffect(() => initedRef.current = true, [])
+
   useSyncEffect(() => {
     let observer
     if (el) {
-      store.set(store.get(name))
+      // storage is new at the moment - restore it from the source
+      if (initedRef.current) store.set(store.get(name))
       observer = new MutationObserver(records => {
         store.set(el.getAttribute(name))
       })

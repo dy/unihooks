@@ -503,15 +503,20 @@ const Demo = () => {
 
 ### useAttribute
 
-> **[attr, setAttr] = useAttribute(element|ref, name)**
+> **[attr, setAttr] = useAttribute( element | ref, name)**
 
-Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` values remove attribute from element.
+Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` value removes attribute from element.
 
 ```js
 function MyButton() {
   let [attr, setAttr] = useAttribute(el, 'loading')
 
   setAttr(true)
+
+  useEffect(() => {
+    // remove attribute
+    return () => setAttr()
+  }, [])
 }
 ```
 
