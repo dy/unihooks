@@ -3,7 +3,6 @@ import useElement from './useElement'
 import useSyncEffect from './useSyncEffect'
 import { useRef, useEffect } from './standard'
 
-
 const cache = new Map
 
 const useAttribute = (target, name, init) => {
@@ -19,9 +18,9 @@ const useAttribute = (target, name, init) => {
           return false
         },
         get(key) {
-          if (!el || !el.hasAttribute(key)) return undefined
+          if (!el || !el.hasAttribute(key)) return null
           let attr = el.getAttribute(key)
-          if (attr === 'true' || attr === 'on') return true
+          if (attr === 'true' || attr === 'on' || attr === '') return true
           return el.getAttribute(key)
         },
         set(key, value) {

@@ -1,5 +1,5 @@
-import t from 'tape'
-import enhook from 'enhook'
+import t from 'tst'
+import enhook from 'enhook/src/libs/preact'
 import { tick, frame } from 'wait-please'
 import { useAttribute, useEffect, useRef } from '../src/index'
 
@@ -50,14 +50,35 @@ t('useAttribute: handle ref', async t => {
   f()
 
   await frame(1)
-  t.deepEqual(log, [undefined])
+  t.deepEqual(log, [null])
   f()
   await frame(2)
-  t.deepEqual(log, [undefined, 'bar'])
+  t.deepEqual(log, [null, 'bar'])
 
   f.unhook()
   await frame(2)
   t.notOk(el.hasAttribute('foo'))
+
+  t.end()
+})
+
+t('useAttribute: properly read initial values', async t => {
+  let log = []
+
+  let el = document.createElement('div')
+  el.setAttribute('a', '')
+  el.setAttribute('c', 'xyz')
+  document.body.appendChild(el)
+
+  enhook(() => {
+    let [a] = useAttribute(el, 'a')
+    let [b] = useAttribute(el, 'b')
+    let [c] = useAttribute(el, 'c')
+    console.log(a)
+    t.equal(a, true)
+    t.equal(b, null)
+    t.equal(c, 'xyz')
+  })()
 
   t.end()
 })

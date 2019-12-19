@@ -22,7 +22,7 @@ const MyComponent = () => {
 
 _Unihooks_ work with any hooks-enabled library:
 
-[react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [neverland](https://ghub.io/neverland), [atomico](https://ghub.io/atomico), [augmentor](https://ghub.io/augmentor), [dom-augmentor](https://ghub.io/dom-augmentor), [spect](https://ghub.io/spect), [fuco](https://ghub.io/fuco), [tng-hooks](https://ghub.io/tng-hooks), [fn-with-hooks](https://ghub.io/fn-with-hooks), [unhook](https://ghub.io/unhook), ...
+[react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [spect](https://ghub.io/spect), [neverland](https://ghub.io/neverland), [atomico](https://ghub.io/atomico), [augmentor](https://ghub.io/augmentor), [dom-augmentor](https://ghub.io/dom-augmentor), [fuco](https://ghub.io/fuco), [tng-hooks](https://ghub.io/tng-hooks), [fn-with-hooks](https://ghub.io/fn-with-hooks), [unhook](https://ghub.io/unhook), ...
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -54,10 +54,12 @@ const MyComponent1 = () => { let ua = useUserAgent() } // ✘
 const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 ```
 
+<!--
 ## Who Uses Unihooks
 
 * [wishbox](https://wishbox.gift)
 * [mobeewave]()
+-->
 
 ## Hooks
 

@@ -1,4 +1,3 @@
-import queueMicrotask from 'queue-microtask'
 import { useState as useNativeState, useRef, useMemo, useEffect as useNativeEffect } from 'any-hooks'
 
 // standard
@@ -20,7 +19,7 @@ export function useEffect(fn, deps) {
 
   useMemo(() => {
     // guarantee microtask (unlike react/preact)
-    queueMicrotask(() => {
+    Promise.resolve().then(() => {
       if (ref.current && ref.current.call) ref.current()
       ref.current = fn()
     })
