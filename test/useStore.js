@@ -1,7 +1,7 @@
-import t from 'tape'
+import t from 'tst'
 import { useStore, useEffect, useState } from '../src/index'
 import { INTERVAL, storage, PREFIX, channels, createStore } from '../src/useStore'
-import enhook from 'enhook'
+import enhook from './enhook.js'
 import { tick, idle, frame, time } from 'wait-please'
 import { clearNodeFolder } from 'broadcast-channel'
 

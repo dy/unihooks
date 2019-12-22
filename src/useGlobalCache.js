@@ -1,5 +1,5 @@
 import globalCache from 'global-cache'
-import useStorage from './useStorage'
+import useStorage from './useSource'
 
 const useGlobalCache = (key, init) => {
   return useStorage(globalCache, key, init)

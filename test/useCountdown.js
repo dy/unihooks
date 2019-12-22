@@ -1,5 +1,5 @@
-import t from 'tape'
-import enhook from 'enhook'
+import t from 'tst'
+import enhook from './enhook.js'
 import { useCountdown } from '../src/index'
 import { time } from 'wait-please'
 

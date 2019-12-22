@@ -9,7 +9,7 @@ export { default as useAction, createAction } from './useAction'
 // data
 export { default as useLocalStorage } from './useLocalStorage'
 export { default as useProperty } from './useProperty'
-export { default as useStorage } from './useStorage'
+export { default as useStorage } from './useSource'
 export { default as useQueryParam } from './useQueryParam'
 export { default as useGlobalCache } from './useGlobalCache'
 export { default as useCookie } from './useCookie'

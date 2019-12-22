@@ -1,5 +1,5 @@
 import t from 'tst'
-import enhook from 'enhook/src/libs/preact'
+import enhook from './enhook.js'
 import { tick, frame } from 'wait-please'
 import { useAttribute, useEffect, useRef } from '../src/index'
 
@@ -74,7 +74,6 @@ t('useAttribute: properly read initial values', async t => {
     let [a] = useAttribute(el, 'a')
     let [b] = useAttribute(el, 'b')
     let [c] = useAttribute(el, 'c')
-    console.log(a)
     t.equal(a, true)
     t.equal(b, null)
     t.equal(c, 'xyz')

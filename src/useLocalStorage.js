@@ -1,4 +1,4 @@
-import useStorage from './useStorage'
+import useStorage from './useSource'
 import ls from 'local-storage'
 import useInit from './useInit'
 import { setMicrotask, clearMicrotask } from 'set-microtask'

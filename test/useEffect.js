@@ -1,5 +1,5 @@
-import t from 'tape'
-import enhook from 'enhook'
+import t from 'tst'
+import enhook from './enhook.js'
 import { useEffect } from '../src/index'
 import { tick, frame } from 'wait-please'
 

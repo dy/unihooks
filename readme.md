@@ -38,11 +38,12 @@ import * as hook from 'unihooks/preact'
 
 ### 2. Unified
 
-_Unihooks_ follow `useState` / `useEffect` API signature.
+_Unihooks_ follow `useState` API signature expansion:
 
 ```js
-let [ state, action ] = useData( key?, init? )
-let result = useCall( fn, deps? )
+let state = useSource( target, init? )
+let [ value, { set, error?, loading?, ...state } ] = useSource( target, init? )
+let [ value, setValue, { error?, loading?, ...state } ] = useSource( target, init? )
 ```
 
 ### 3. Essential
@@ -104,13 +105,14 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- #### Data -->
 
 - [x] `useProperty` − any object/target property observer.
-- [x] `useQueryParam` − `useState` with persistency to search string parameter.
-- [x] `useLocalStorage` − `useState` with persistency to local storage.
-- [x] `useSessionStorage` − `useState` with persistency to session storage.
-- [x] `useCookie` − `useState` with persistency to cookies.
+- [x] `useQueryParam` − provider for search string parameter.
+- [x] `useLocalStorage` − provider for local storage.
+- [x] `useSessionStorage` − provider for session storage.
+- [x] `useCookie` − provider for cookies.
 - [x] `useGlobalCache` − [global-cache](https://ghub.io/global-cache) storage.
-- [x] `useStorage` − generic storage hook with scheduling persistency.
-- [ ] `useChannel` − intercommunication between components.
+- [x] `useSource` − generic data source hook with scheduling persistency.
+- [ ] `useAsyncSource` − `useSource` for async data source.
+- [ ] `useChannel` − intercommunication/shared state between components.
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->
 <!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
 <!-- - [ ] `useFiles` -->
@@ -140,6 +142,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 - [x] `useElement` − generic element state
 - [x] `useInput` − input element state
+<!-- - [ ] `useFormField` − form state hook -->
 <!-- - [ ] `useForm` − form state hook -->
 <!-- - [ ] `useTable` − table state hook -->
 <!-- - [ ] `useDialog` − dialog builder helper -->
@@ -434,16 +437,16 @@ function MyComponent () {
 }
 ```
 
-### useStorage
+### useSource
 
-> _[value, setValue] = useStorage(storage, key)_
+> _[value, setValue] = useSource(storage, key)_
 
 Generic customizable storage hook with persistency.
 `storage` object provides data to underlying data structure.
 Mostly usable for organizing high-level hooks.
 
 ```js
-let [value, state] = useStorage({
+let [value, state] = useSource({
   // read value from storage
   get: (key) => myStore.get(key),
 

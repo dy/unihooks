@@ -1,7 +1,6 @@
-import t from 'tape'
+import t from 'tst'
 import { useQueryParam, useState, useEffect } from '../src/index'
-import enhook from 'enhook'
-// import { decode, qs.stringify } from 'qss'
+import enhook from './enhook.js'
 import qs from 'qs'
 import { tick, idle, frame, time } from 'wait-please'
 

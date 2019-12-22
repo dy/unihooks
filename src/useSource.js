@@ -82,7 +82,7 @@ export default function useStorage(storage, key, init) {
       state.plannedPersist = null
     }
     state.valueOf = () => state.value
-    state[Symbol.iterator] = function* () { yield state.value; yield state; }
+    state[Symbol.iterator] = function* () { yield state.value; yield state; yield state; return state; }
   }
 
 

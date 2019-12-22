@@ -1,6 +1,6 @@
-import t from 'tape'
+import t from 'tst'
 import { useInput, useEffect } from '../src/'
-import enhook from 'enhook'
+import enhook from './enhook.js'
 import { tick, idle, frame } from 'wait-please'
 
 

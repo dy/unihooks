@@ -1,4 +1,4 @@
-import useStorage from './useStorage'
+import useSource from './useSource'
 import useElement from './useElement'
 import useSyncEffect from './useSyncEffect'
 import { useRef, useEffect } from './standard'
@@ -42,7 +42,7 @@ const useAttribute = (target, name, init) => {
   }, [el])
 
   let storage = cache.get(target)
-  let [, store] = useStorage(storage, name, init)
+  let [, store] = useSource(storage, name, init)
 
   // FIXME: replace with useTimes(1) or alike
   let initedRef = useRef()

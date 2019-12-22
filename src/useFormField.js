@@ -1,4 +1,5 @@
-export default function useFormField (descriptor, init) {
+export default function useFormField (target, init) {
+  let [el] = useElement(target)
 
   const state = new String()
   state.value
@@ -23,3 +24,4 @@ export default function useFormField (descriptor, init) {
 
   return [state, actions]
 }
+

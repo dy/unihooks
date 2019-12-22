@@ -1,5 +1,5 @@
-import t from 'tape'
-import enhook from 'enhook'
+import t from 'tst'
+import enhook from './enhook.js'
 import { useState, useEffect, useCallback } from '../src/standard'
 import { tick, frame } from 'wait-please'
 

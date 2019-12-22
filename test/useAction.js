@@ -1,10 +1,9 @@
-import t from 'tape'
-import enhook from 'enhook'
+import t from 'tst'
+import enhook from './enhook.js'
 import setHooks, { useAction, createAction, useStore, createStore, useEffect, useState } from '../src/index'
 import { INTERVAL, storage, PREFIX, channels } from '../src/useStore'
 import { tick, frame, time } from 'wait-please'
 import { clearNodeFolder } from 'broadcast-channel'
-
 
 t('useAction: basic', async t => {
   await clearNodeFolder()
@@ -199,7 +198,6 @@ t('useAction: passes args', async t => {
 })
 
 t('useAction: unknow action throws error', t => {
-  t.plan(1)
   enhook(() => {
     t.throws(() => useAction('xxx'))
   })()
