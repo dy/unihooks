@@ -7,12 +7,12 @@ t.only('useChannel: initialize', t => {
   let log = []
 
   let a = enhook(() => {
-    let { value, loading } = useChannel('charlie')
+    let [ value, { loading }] = useChannel('charlie')
     log.push('a', value, loading)
   })
 
   let b = enhook(() => {
-    let { value, loading } = useChannel('charlie', 1)
+    let [ value, { loading }] = useChannel('charlie', 1)
     log.push('b', value, loading)
   })
 

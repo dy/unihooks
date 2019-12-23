@@ -66,8 +66,75 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- #### App / MVC -->
 
-- [x] `useStore` + `createStore` − store (model) provider, persistable contextless `useState`.
-- [x] `useAction` + `createAction` − action (controller) provider, contextless `useEffect` with result.
+<details>
+<summary><strong>useStore</strong> + `createStore` − store (model) provider, persistable contextless `useState`.</summary>
+
+> _[value, setValue] = useStore(key, init?)_
+
+Store provider with persistency and changes broadcasting. Can be used as robust application model layer.
+
+```js
+import { createStore, useStore } from 'unihooks'
+
+createStore('users', {
+  data: [],
+  loading: false,
+  current: null
+})
+
+function Component () {
+  let [users, setUsers] = useStore('users')
+
+  setUsers({ ...users, loading: true })
+
+  // or as reducer
+  setUsers(users => { ...users, loading: false })
+}
+```
+
+> _store = createStore(name, init)_
+
+Create store. Can be used outside of components or hookable scope.
+
+Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
+
+</details>
+
+<details>
+<summary><strong>useAction</strong> + `createAction` − action (controller) provider, contextless `useEffect` with result.</summary>
+
+
+> _[result, action] = useAction(name?, fn?)_
+
+App action provider. Can be used to organize application controllers. If `name` is omitted, function name is used as directly.
+Actions can use hooks, but they're not reactive: changing state does not cause self-recursion.
+
+```js
+createAction('load-collection', async (id) => {
+  // actions can use hooks internally
+  let [collection, setCollection] = useStore('collection')
+  setCollection({ ...collection, loading: true})
+  setCollection({ data: await load(`collection/${id}`), loading: false })
+
+  return collection
+})
+
+function MyComponent() {
+  let [collection, load] = useAction('load-collection')
+
+  useEffect(() => {
+    let data = await load(id)
+  }, [id])
+}
+```
+
+> _action = createAction(name?, fn)_
+
+Register new action, can be used independent of components/hooked scope.
+
+
+</details>
+
 <!-- - [ ] `useProps` − component props (view) provider. -->
 <!-- - [ ] `useRender` + `createRender` − render (view) provider, instead of direct result. -->
 <!-- - [ ] `useHistory` − -->
@@ -76,17 +143,36 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- #### State -->
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
-- [x] `usePrevious` − return the previous state or props.
-- [x] `useCountdown` − countdown state.
-<!-- - [x] `useThrottle` − throttle state value. -->
+<details>
+<summary><strong>usePrevious</strong> − return the previous state or props.</summary>
+</details>
+
+<details>
+<summary><strong>useCountdown</strong> − countdown state.</summary>
+</details>
+
+<!--
+<details>
+<summary><strong>useThrottle</strong> − throttle state value. --></summary>
+</details>
+
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
 <!-- #### Effects -->
 
-- [x] `useEffect` − normalized standard `useEffect` with async fn support.
-- [x] `useSyncEffect` − `useEffect` with synchronous invocation.
-- [x] `useInit` − `useSyncEffect`, called once.
+<details>
+<summary><strong>useEffect</strong> − normalized standard `useEffect` with async fn support.</summary>
+</details>
+
+<details>
+<summary><strong>useSyncEffect</strong> − `useEffect` with synchronous invocation.</summary>
+</details>
+
+<details>
+<summary><strong>useInit</strong> − `useSyncEffect`, called once.</summary>
+</details>
+
 <!-- - [ ] `useDestroy` -->
 <!-- - [ ] `useEffectDeep` -->
 <!-- - [ ] `useUpdate` -->
@@ -104,13 +190,34 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- #### Data -->
 
-- [x] `useProperty` − any object/target property observer.
-- [x] `useQueryParam` − provider for search string parameter.
-- [x] `useLocalStorage` − provider for local storage.
-- [x] `useSessionStorage` − provider for session storage.
-- [x] `useCookie` − provider for cookies.
-- [x] `useGlobalCache` − [global-cache](https://ghub.io/global-cache) storage.
-- [x] `useSource` − generic data source hook with scheduling persistency.
+<details>
+<summary><strong>useProperty</strong> − any object/target property observer.</summary>
+</details>
+
+<details>
+<summary><strong>useQueryParam</strong> − provider for search string parameter.</summary>
+</details>
+
+<details>
+<summary><strong>useLocalStorage</strong> − provider for local storage.</summary>
+</details>
+
+<details>
+<summary><strong>useSessionStorage</strong> − provider for session storage.</summary>
+</details>
+
+<details>
+<summary><strong>useCookie</strong> − provider for cookies.</summary>
+</details>
+
+<details>
+<summary><strong>useGlobalCache</strong> − [global-cache](https://ghub.io/global-cache) storage.</summary>
+</details>
+
+<details>
+<summary><strong>useSource</strong> − generic data source hook with scheduling persistency.</summary>
+</details>
+
 - [ ] `useAsyncSource` − `useSource` for async data source.
 - [ ] `useChannel` − intercommunication/shared state between components.
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->
@@ -125,7 +232,10 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- - [ ] `useEvent` − subscribe to events -->
 <!-- - [ ] `useElement` / `useElements` − query element or elements -->
-- [x] `useAttribute` − element attribute state
+<details>
+<summary><strong>useAttribute</strong> − element attribute state</summary>
+</details>
+
 <!-- - [ ] `useLocation` − browser location -->
 <!-- - [ ] `useData` − read / write element dataset -->
 <!-- - [ ] `useClass` − manipulate element `classList` -->
@@ -140,8 +250,14 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 <!-- #### UI -->
 
-- [x] `useElement` − generic element state
-- [x] `useInput` − input element state
+<details>
+<summary><strong>useElement</strong> − generic element state</summary>
+</details>
+
+<details>
+<summary><strong>useInput</strong> − input element state</summary>
+</details>
+
 <!-- - [ ] `useFormField` − form state hook -->
 <!-- - [ ] `useForm` − form state hook -->
 <!-- - [ ] `useTable` − table state hook -->
@@ -232,68 +348,6 @@ Ref: [use-store](https://ghub.io/use-store)
 -->
 
 ## API
-
-### useStore
-
-> _[value, setValue] = useStore(key, init?)_
-
-Store provider with persistency and changes broadcasting. Can be used as robust application model layer.
-
-```js
-import { createStore, useStore } from 'unihooks'
-
-createStore('users', {
-  data: [],
-  loading: false,
-  current: null
-})
-
-function Component () {
-  let [users, setUsers] = useStore('users')
-
-  setUsers({ ...users, loading: true })
-
-  // or as reducer
-  setUsers(users => { ...users, loading: false })
-}
-```
-
-> _store = createStore(name, init)_
-
-Create store. Can be used outside of components or hookable scope.
-
-Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
-
-
-### useAction
-
-> _[result, action] = useAction(name?, fn?)_
-
-App action provider. Can be used to organize application controllers. If `name` is omitted, function name is used as directly.
-Actions can use hooks, but they're not reactive: changing state does not cause self-recursion.
-
-```js
-createAction('load-collection', async (id) => {
-  // actions can use hooks internally
-  let [collection, setCollection] = useStore('collection')
-  setCollection({ ...collection, loading: true})
-  setCollection({ data: await load(`collection/${id}`), loading: false })
-
-  return collection
-})
-
-function MyComponent() {
-  let [collection, load] = useAction('load-collection')
-
-  useEffect(() => {
-    let data = await load(id)
-  }, [id])
-}
-```
-
-> _action = createAction(name?, fn)_
-
-Register new action, can be used independent of components/hooked scope.
 
 <!--
 ### [props, setProps] = useProps(target, defaults?)
