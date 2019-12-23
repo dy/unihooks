@@ -1,6 +1,6 @@
 import useStorage from './useStorage'
 import ls from 'local-storage'
-import useInit from './useInit'
+import useSyncEffect from './useSyncEffect'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
 
 ls.backend(sessionStorage)
@@ -19,12 +19,12 @@ export const storage = {
 }
 
 const useLocalStorage = (key, init) => {
-    useInit(() => {
+    useSyncEffect(() => {
         // it is possible instead to observe localStorage property
         const notify = value => store.update(value)
         ls.on(key, notify)
         return () => ls.off(key, notify)
-    })
+    }, [key])
 
     let [value, store] = useStorage(storage, key, init)
     return [value, store]

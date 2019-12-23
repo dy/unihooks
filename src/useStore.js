@@ -1,5 +1,5 @@
 import useStorage from './useSource'
-import useInit from './useInit'
+import useSyncEffect from './useSyncEffect'
 import store from 'store'
 import events from 'store/plugins/events'
 import { BroadcastChannel } from 'broadcast-channel'
@@ -35,7 +35,7 @@ export default (key, init) => {
 
   let [value, state] = useStorage(storage, key, init)
 
-  useInit(() => {
+  useSyncEffect(() => {
     const channel = channels[key] || (channels[key] = new BroadcastChannel(key))
     const notify = (value, ...args) => {
       return state.set(value)
@@ -48,7 +48,7 @@ export default (key, init) => {
       channel.removeEventListener('message', notify)
       channel.close()
     }
-  })
+  }, [key])
 
   return state
 }

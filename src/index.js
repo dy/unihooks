@@ -25,7 +25,6 @@ export { default as useCountdown } from './useCountdown'
 export { default as useThrottle } from './useThrottle'
 
 // effect
-export { default as useInit } from './useInit'
 export { default as useSyncEffect } from './useSyncEffect'
 export { default as useTimeout } from './useTimeout'
 export { default as useInterval } from './useInterval'

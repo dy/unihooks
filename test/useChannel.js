@@ -1,9 +1,9 @@
 import t from 'tst'
 import enhook from './enhook.js'
-import { useChannel } from '..'
+import { useChannel, useEffect } from '..'
 import { time } from 'wait-please'
 
-t.only('useChannel: initialize', t => {
+t.skip('useChannel: initialize', async t => {
   let log = []
 
   let a = enhook(() => {
@@ -16,16 +16,30 @@ t.only('useChannel: initialize', t => {
     log.push('b', value, loading)
   })
 
+  let c = enhook(() => {
+    let [ value, { loading }] = useChannel('charlie')
+    log.push('c', value, loading)
+    useEffect(() => {
+
+    }, [])
+  })
+
   a()
   t.deepEqual(log, ['a', undefined, true])
-  await tick()
-  t.deepEqual(log, ['a', undefined, true, 'a', undefined, false])
-
-  b()
-  t.deepEqual(log, ['a', undefined, true, 'a', undefined, false])
   await time(10)
-  t.deepEqual(log, ['a', undefined, true, 'a', undefined, false, 'b', undefined, true, 'b', 1, false, 'a', 1, false])
+  t.deepEqual(log, ['a', undefined, true, 'a', undefined, false])
 
+  log = []
+  b()
+  t.deepEqual(log, ['b', undefined, true])
+  await time(10)
+  t.deepEqual(log, ['b', undefined, true, 'b', 1, false, 'a', 1, false])
+
+  log = []
+  c()
+  t.deepEqual(log, ['c', undefined, true])
+  await time(10)
+  t.deepEqual(log, ['c', undefined, true, 'c', 1, ])
 
   t.end()
 })

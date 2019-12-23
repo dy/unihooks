@@ -202,10 +202,6 @@ const Demo = () => {
 <summary><strong>useSyncEffect</strong></summary>
 </details>
 
-<details>
-<summary><strong>useInit</strong></summary>
-</details>
-
 <!-- - [ ] `useDestroy` -->
 <!-- - [ ] `useEffectDeep` -->
 <!-- - [ ] `useUpdate` -->
@@ -366,12 +362,7 @@ let [value, state] = useSource({
 
   // scheduler for persistency
   plan(fn) { let id = setTimeout(fn); return () => clearTimeout(id) }
-}, 'foo')
-
-// same as useState(init)
-useInit(() => {
-  state.reset(initValue)
-})
+}, 'foo', initValue)
 ```
 
 </details>
