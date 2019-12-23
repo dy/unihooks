@@ -101,7 +101,7 @@ Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadca
 </details>
 
 <details>
-<summary><strong>useAction</strong> / <strong>createAction</strong>lt.</summary>
+<summary><strong>useAction</strong> / <strong>createAction</strong></summary>
 
 
 #### `[result, action] = useAction(name?, fn?)`
