@@ -1,9 +1,7 @@
 import setHooks from 'any-hooks'
-import enhook from 'enhook'
 
 export default (hooks) => {
   setHooks(hooks)
-  enhook.use(hooks)
 }
 
 export * from './standard'
