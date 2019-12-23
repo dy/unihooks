@@ -199,10 +199,6 @@ const Demo = () => {
 <!-- #### Effects -->
 
 <details>
-<summary><strong>useEffect</strong></summary>
-</details>
-
-<details>
 <summary><strong>useSyncEffect</strong></summary>
 </details>
 
