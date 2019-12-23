@@ -69,7 +69,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <details>
 <summary><strong>useStore</strong> / <strong>createStore</strong> − store (model) provider, persistable contextless useState.</summary>
 
-> _[value, setValue] = useStore(key, init?)_
+#### `[value, setValue] = useStore(key, init?)`
 
 Store provider with persistency and changes broadcasting. Can be used as robust application model layer.
 
@@ -92,7 +92,7 @@ function Component () {
 }
 ```
 
-> _store = createStore(name, init)_
+#### `store = createStore(name, init)`
 
 Create store. Can be used outside of components or hookable scope.
 
@@ -104,7 +104,7 @@ Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadca
 <summary><strong>useAction</strong> / <strong>createAction</strong> − action (controller) provider, contextless `useEffect` with result.</summary>
 
 
-> _[result, action] = useAction(name?, fn?)_
+#### `[result, action] = useAction(name?, fn?)`
 
 App action provider. Can be used to organize application controllers. If `name` is omitted, function name is used as directly.
 Actions can use hooks, but they're not reactive: changing state does not cause self-recursion.
@@ -128,7 +128,7 @@ function MyComponent() {
 }
 ```
 
-> _action = createAction(name?, fn)_
+#### `action = createAction(name?, fn)`
 
 Register new action, can be used independent of components/hooked scope.
 
@@ -146,7 +146,7 @@ Register new action, can be used independent of components/hooked scope.
 <details>
 <summary><strong>usePrevious</strong> − return the previous state or props.</summary>
 
-> _[prev] = usePrevious(value)_
+#### `[prev] = usePrevious(value)`
 
 Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
 
@@ -172,7 +172,7 @@ const Demo = () => {
 <details>
 <summary><strong>useCountdown</strong> − countdown state.</summary>
 
-> _[n, reset] = useCountdown(start, interval=1000)_
+#### `[n, reset] = useCountdown(start, interval=1000)`
 
 Countdown state from `start` down to `0` with indicated `interval`. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
 
@@ -230,7 +230,7 @@ const Demo = () => {
 <details>
 <summary><strong>useProperty</strong> − any object/target property observer.</summary>
 
-> _[value, setValue] = useProperty(target, path, init?)_
+#### `[value, setValue] = useProperty(target, path, init?)`
 
 Observe any target property. Defines transparent getter/setter on a target.
 
@@ -249,7 +249,7 @@ target.count++
 <details>
 <summary><strong>useQueryParam</strong> − provider for search string parameter.</summary>
 
-> _[value, setValue] = useQueryParam(name, init?)_
+#### `[value, setValue] = useQueryParam(name, init?)`
 
 `useState` with persistency to query string. Enables `pushstate`, `replacestate` observers, as well as links withing the same origin. Reflects updates back in search string.
 
@@ -266,7 +266,7 @@ It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/Wind
 <details>
 <summary><strong>useLocalStorage</strong> − provider for local storage.</summary>
 
-> _[value, setValue] = useLocalStorage(key, init?)_
+#### `[value, setValue] = useLocalStorage(key, init?)`
 
 `useState` with persistency to local storage by `key`. Unlike `useStore`, provides raw `localStorage` access.
 `init` can be a function or initial value. Provides
@@ -297,7 +297,7 @@ function MyComponent3 () {
 <details>
 <summary><strong>useSessionStorage</strong> − provider for session storage.</summary>
 
-> _[value, setValue] = useSessionStorage(key, init?)_
+#### `[value, setValue] = useSessionStorage(key, init?)`
 
 `useLocalStorage` with `sessionStorage` as backend.
 
@@ -315,7 +315,7 @@ function MyComponent () {
 <details>
 <summary><strong>useCookie</strong> − provider for cookies.</summary>
 
-> _[value, setValue] = useCookie(name, init?)_
+#### `[value, setValue] = useCookie(name, init?)`
 
 Cookies accessor hook.
 
@@ -336,7 +336,7 @@ Does not observe cookies (there's no implemented API for that).
 <details>
 <summary><strong>useGlobalCache</strong> − global-cache storage.</summary>
 
-> _[value, setValue] = useGlobalCache(key, init?)_
+#### `[value, setValue] = useGlobalCache(key, init?)`
 
 Get access to value stored in [globalCache](https://ghub.io/global-cache).
 
@@ -351,7 +351,7 @@ function MyComponent () {
 <details>
 <summary><strong>useSource</strong> − generic data source hook with scheduling persistency.</summary>
 
-> _[value, setValue] = useSource(storage, key)_
+#### `[value, setValue] = useSource(storage, key)`
 
 Generic customizable storage hook with persistency.
 `storage` object provides data to underlying data structure.
@@ -403,7 +403,7 @@ useInit(() => {
 <details>
 <summary><strong>useAttribute</strong> − element attribute state</summary>
 
-> _[attr, setAttr] = useAttribute( element | ref, name)_
+#### `[attr, setAttr] = useAttribute( element | ref, name)`
 
 Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` value removes attribute from element.
 
@@ -439,7 +439,7 @@ function MyButton() {
 <details>
 <summary><strong>useElement</strong> − generic element state</summary>
 
-> _[element] = useElement( selector | element | ref )_
+#### `[element] = useElement( selector | element | ref )`
 
 Get element, either from `ref`, by `selector` or directly.
 
@@ -459,7 +459,7 @@ function MyButton() {
 <details>
 <summary><strong>useInput</strong> − input element state</summary>
 
-> _[value, setValue] = useInput( name | selector | element | ref )_
+#### `[value, setValue] = useInput( name | selector | element | ref )`
 
 Input element hook. Serializes value to input, creates input observer. `null`/`undefined` values remove attribute from element.
 
