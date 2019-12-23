@@ -67,7 +67,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- #### App / MVC -->
 
 <details>
-<summary><strong>useStore</strong> + `createStore` − store (model) provider, persistable contextless `useState`.</summary>
+<summary><strong>useStore</strong> / <strong>createStore</strong> − store (model) provider, persistable contextless useState.</summary>
 
 > _[value, setValue] = useStore(key, init?)_
 
@@ -101,7 +101,7 @@ Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadca
 </details>
 
 <details>
-<summary><strong>useAction</strong> + `createAction` − action (controller) provider, contextless `useEffect` with result.</summary>
+<summary><strong>useAction</strong> / <strong>createAction</strong> − action (controller) provider, contextless `useEffect` with result.</summary>
 
 
 > _[result, action] = useAction(name?, fn?)_
@@ -145,10 +145,47 @@ Register new action, can be used independent of components/hooked scope.
 <!-- - [ ] `useState` − normalized standard `useState` -->
 <details>
 <summary><strong>usePrevious</strong> − return the previous state or props.</summary>
+
+> _[prev] = usePrevious(value)_
+
+Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
+
+```js
+import { usePrevious, useState, useRender } from 'unihooks';
+
+const Demo = () => {
+  const [count, setCount] = useState(0);
+  const prevCount = usePrevious(count);
+
+  return <p>
+    <button onClick={() => setCount(count + 1)}>+</button>
+    <button onClick={() => setCount(count - 1)}>-</button>
+    <p>
+      Now: {count}, before: {prevCount}
+    </p>
+  </p>
+};
+```
+
 </details>
 
 <details>
 <summary><strong>useCountdown</strong> − countdown state.</summary>
+
+> _[n, reset] = useCountdown(start, interval=1000)_
+
+Countdown state from `start` down to `0` with indicated `interval`. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
+
+```js
+import { useCountdown } from 'unihooks'
+
+const Demo = () => {
+  const [count, reset] = useCountdown(30);
+
+  return `Remains: ${count}s`
+};
+```
+
 </details>
 
 <!--
@@ -192,34 +229,165 @@ Register new action, can be used independent of components/hooked scope.
 
 <details>
 <summary><strong>useProperty</strong> − any object/target property observer.</summary>
+
+> _[value, setValue] = useProperty(target, path, init?)_
+
+Observe any target property. Defines transparent getter/setter on a target.
+
+```js
+let target = { count: 1 }
+function MyComponent () {
+  const [count, setCount] = useProperty(target, 'count', 1)
+}
+
+// trigger update
+target.count++
+```
+
 </details>
 
 <details>
 <summary><strong>useQueryParam</strong> − provider for search string parameter.</summary>
+
+> _[value, setValue] = useQueryParam(name, init?)_
+
+`useState` with persistency to query string. Enables `pushstate`, `replacestate` observers, as well as links withing the same origin. Reflects updates back in search string.
+
+```js
+function MyComponent () {
+  let [id, setId] = useQueryParam('id')
+}
+```
+
+It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate) and [`onpushstate`](https://ghub.io/onpushstate) events to trigger update.
+
 </details>
 
 <details>
 <summary><strong>useLocalStorage</strong> − provider for local storage.</summary>
+
+> _[value, setValue] = useLocalStorage(key, init?)_
+
+`useState` with persistency to local storage by `key`. Unlike `useStore`, provides raw `localStorage` access.
+`init` can be a function or initial value. Provides
+
+```js
+function MyComponent1 () {
+  const [count, setCount] = useLocalStorage('my-count', 1)
+}
+
+function MyComponent2 () {
+  const [count, setCount] = useLocalStorage('my-count')
+  // count === 1
+
+  // updates MyComponent1 as well
+  setCount(2)
+}
+
+function MyComponent3 () {
+  const [count, setCount] = useLocalStorage('another-count', (value) => {
+    // ...initialize value from store
+    return value
+  })
+}
+```
+
 </details>
 
 <details>
 <summary><strong>useSessionStorage</strong> − provider for session storage.</summary>
+
+> _[value, setValue] = useSessionStorage(key, init?)_
+
+`useLocalStorage` with `sessionStorage` as backend.
+
+```js
+function MyComponent () {
+  const [count, setCount] = useSessionStorage('count', (value) => {
+    // ...initialize value from store
+    return value
+  })
+}
+```
+
 </details>
 
 <details>
 <summary><strong>useCookie</strong> − provider for cookies.</summary>
+
+> _[value, setValue] = useCookie(name, init?)_
+
+Cookies accessor hook.
+
+```js
+function MyComponent () {
+  const [cookie, setCookie] = useCookie('foo')
+
+  useEffect(() => {
+    setCookie('baz')
+  })
+}
+```
+
+Does not observe cookies (there's no implemented API for that).
+
 </details>
 
 <details>
-<summary><strong>useGlobalCache</strong> − [global-cache](https://ghub.io/global-cache) storage.</summary>
+<summary><strong>useGlobalCache</strong> − global-cache storage.</summary>
+
+> _[value, setValue] = useGlobalCache(key, init?)_
+
+Get access to value stored in [globalCache](https://ghub.io/global-cache).
+
+```js
+function MyComponent () {
+  const [globalValue, setGlobalValue] = useGlobalCache('value')
+}
+```
+
 </details>
 
 <details>
 <summary><strong>useSource</strong> − generic data source hook with scheduling persistency.</summary>
+
+> _[value, setValue] = useSource(storage, key)_
+
+Generic customizable storage hook with persistency.
+`storage` object provides data to underlying data structure.
+Mostly usable for organizing high-level hooks.
+
+```js
+let [value, state] = useSource({
+  // read value from storage
+  get: (key) => myStore.get(key),
+
+  // write value from storage
+  set: (key, value) => myStore.set(key, value),
+
+  // compare if value must be written. By default Object.is.
+  is: (a, b) => a.toString() === b.toString(),
+
+  // scheduler for persistency
+  plan(fn) { let id = setTimeout(fn); return () => clearTimeout(id) }
+}, 'foo')
+
+// same as useState(init)
+useInit(() => {
+  state.reset(initValue)
+})
+```
+
 </details>
 
-- [ ] `useAsyncSource` − `useSource` for async data source.
-- [ ] `useChannel` − intercommunication/shared state between components.
+<details>
+<summary><strong>useAsyncSource</strong> − useSource for async data source.</summary>
+</details>
+
+<details>
+<summary><strong>useChannel</strong> − intercommunication/shared state between components.</summary>
+</details>
+
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->
 <!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
 <!-- - [ ] `useFiles` -->
@@ -234,6 +402,24 @@ Register new action, can be used independent of components/hooked scope.
 <!-- - [ ] `useElement` / `useElements` − query element or elements -->
 <details>
 <summary><strong>useAttribute</strong> − element attribute state</summary>
+
+> _[attr, setAttr] = useAttribute( element | ref, name)_
+
+Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` value removes attribute from element.
+
+```js
+function MyButton() {
+  let [attr, setAttr] = useAttribute(el, 'loading')
+
+  setAttr(true)
+
+  useEffect(() => {
+    // remove attribute
+    return () => setAttr()
+  }, [])
+}
+```
+
 </details>
 
 <!-- - [ ] `useLocation` − browser location -->
@@ -252,10 +438,40 @@ Register new action, can be used independent of components/hooked scope.
 
 <details>
 <summary><strong>useElement</strong> − generic element state</summary>
+
+> _[element] = useElement( selector | element | ref )_
+
+Get element, either from `ref`, by `selector` or directly.
+
+<!-- Updates whenever selected element or `ref.current` changes. -->
+
+```js
+function MyButton() {
+  let ref = useRef()
+  let [value, setValue] = useElement(ref)
+
+  return <input ref={ref} value={value}/>
+}
+```
+
 </details>
 
 <details>
 <summary><strong>useInput</strong> − input element state</summary>
+
+> _[value, setValue] = useInput( name | selector | element | ref )_
+
+Input element hook. Serializes value to input, creates input observer. `null`/`undefined` values remove attribute from element.
+
+```js
+function MyButton() {
+  let ref = useRef()
+  let [value, setValue] = useInput(ref)
+
+  return <input ref={ref} value={value}/>
+}
+```
+
 </details>
 
 <!-- - [ ] `useFormField` − form state hook -->
@@ -344,345 +560,6 @@ let [value, setValue] = useState(() => props.x, [props.x])
 ```
 
 Ref: [use-store](https://ghub.io/use-store)
-
--->
-
-## API
-
-<!--
-### [props, setProps] = useProps(target, defaults?)
-
-Provides target element/object props. Useful for organizing component API.
-Unlike `useAttribute`/`useProperty`, `useProps` handles both attributes/properties.
-
-```js
-function MyComponent () {
-  const [] = useProps(element)
-}
-```
--->
-
-
-### useLocalStorage
-
-> _[value, setValue] = useLocalStorage(key, init?)_
-
-`useState` with persistency to local storage by `key`. Unlike `useStore`, provides raw `localStorage` access.
-`init` can be a function or initial value. Provides
-
-```js
-function MyComponent1 () {
-  const [count, setCount] = useLocalStorage('my-count', 1)
-}
-
-function MyComponent2 () {
-  const [count, setCount] = useLocalStorage('my-count')
-  // count === 1
-
-  // updates MyComponent1 as well
-  setCount(2)
-}
-
-function MyComponent3 () {
-  const [count, setCount] = useLocalStorage('another-count', (value) => {
-    // ...initialize value from store
-    return value
-  })
-}
-```
-
-### useSessionStorage
-
-> _[value, setValue] = useSessionStorage(key, init?)_
-
-`useLocalStorage` with `sessionStorage` as backend.
-
-```js
-function MyComponent () {
-  const [count, setCount] = useSessionStorage('count', (value) => {
-    // ...initialize value from store
-    return value
-  })
-}
-```
-
-
-### useQueryParam
-
-> _[value, setValue] = useQueryParam(name, init?)_
-
-`useState` with persistency to query string. Enables `pushstate`, `replacestate` observers, as well as links withing the same origin. Reflects updates back in search string.
-
-```js
-function MyComponent () {
-  let [id, setId] = useQueryParam('id')
-}
-```
-
-It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate) and [`onpushstate`](https://ghub.io/onpushstate) events to trigger update.
-
-
-<!--
-
-### useHistory()
-
-```js
-let [state, { back, forward, go }] = useHistory()
-```
-
-### useHash()
-
-```js
-let [ref, setRef] = useHash()
-```
-
-### useLocation()
-
-```js
-let [location, setLocation] = useLocation()
-```
-
--->
-
-### useCookie
-
-> _[value, setValue] = useCookie(name, init?)_
-
-Cookies accessor hook.
-
-```js
-function MyComponent () {
-  const [cookie, setCookie] = useCookie('foo')
-
-  useEffect(() => {
-    setCookie('baz')
-  })
-}
-```
-
-Does not observe cookies (there's no implemented API for that).
-
-
-### useProperty
-
-> _[value, setValue] = useProperty(target, path, init?)_
-
-Observe any target property. Defines transparent getter/setter on a target.
-
-```js
-let target = { count: 1 }
-function MyComponent () {
-  const [count, setCount] = useProperty(target, 'count', 1)
-}
-
-// trigger update
-target.count++
-```
-
-### useGlobalCache
-
-> _[value, setValue] = useGlobalCache(key, init?)_
-
-Get access to value stored in [globalCache](https://ghub.io/global-cache).
-
-```js
-function MyComponent () {
-  const [globalValue, setGlobalValue] = useGlobalCache('value')
-}
-```
-
-### useSource
-
-> _[value, setValue] = useSource(storage, key)_
-
-Generic customizable storage hook with persistency.
-`storage` object provides data to underlying data structure.
-Mostly usable for organizing high-level hooks.
-
-```js
-let [value, state] = useSource({
-  // read value from storage
-  get: (key) => myStore.get(key),
-
-  // write value from storage
-  set: (key, value) => myStore.set(key, value),
-
-  // compare if value must be written. By default Object.is.
-  is: (a, b) => a.toString() === b.toString(),
-
-  // scheduler for persistency
-  plan(fn) { let id = setTimeout(fn); return () => clearTimeout(id) }
-}, 'foo')
-
-// same as useState(init)
-useInit(() => {
-  state.reset(initValue)
-})
-```
-
-### usePrevious
-
-> _[prev] = usePrevious(value)_
-
-Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
-
-```js
-import { usePrevious, useState, useRender } from 'unihooks';
-
-const Demo = () => {
-  const [count, setCount] = useState(0);
-  const prevCount = usePrevious(count);
-
-  return <p>
-    <button onClick={() => setCount(count + 1)}>+</button>
-    <button onClick={() => setCount(count - 1)}>-</button>
-    <p>
-      Now: {count}, before: {prevCount}
-    </p>
-  </p>
-};
-```
-
-### useCountdown
-
-> _[n, reset] = useCountdown(start, interval=1000)_
-
-Countdown state from `start` down to `0` with indicated `interval`. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
-
-```js
-import { useCountdown } from 'unihooks'
-
-const Demo = () => {
-  const [count, reset] = useCountdown(30);
-
-  return `Remains: ${count}s`
-};
-```
-
-
-### useAttribute
-
-> _[attr, setAttr] = useAttribute( element | ref, name)_
-
-Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` value removes attribute from element.
-
-```js
-function MyButton() {
-  let [attr, setAttr] = useAttribute(el, 'loading')
-
-  setAttr(true)
-
-  useEffect(() => {
-    // remove attribute
-    return () => setAttr()
-  }, [])
-}
-```
-
-### useElement
-
-> _[element] = useElement( selector | element | ref )_
-
-Get element, either from `ref`, by `selector` or directly.
-
-<!-- Updates whenever selected element or `ref.current` changes. -->
-
-```js
-function MyButton() {
-  let ref = useRef()
-  let [value, setValue] = useElement(ref)
-
-  return <input ref={ref} value={value}/>
-}
-```
-
-
-### useInput
-
-> _[value, setValue] = useInput( name | selector | element | ref )_
-
-Input element hook. Serializes value to input, creates input observer. `null`/`undefined` values remove attribute from element.
-
-```js
-function MyButton() {
-  let ref = useRef()
-  let [value, setValue] = useInput(ref)
-
-  return <input ref={ref} value={value}/>
-}
-```
-
-<!--
-### let [data, setData] = useDataset(element, name)
-
-`dataset`/`data-*` observer hook.
-
-### let [cls, setClass] = useClassName(element, name)
-
-`className` observer hook.
-
-### let [values, setValues, isValid] = useForm(init, validation)
-
-Form values accessor hook.
-
-### let [value, setValue, isValid] = useFormValue(name, init, validate)
-
-### let [response, send, isPending] = useRemote(url, method|options?)
-
-Remote source accessor, a generic AJAX calls hook.
-
-```js
-let [users, fetchUsers] = useRemote('/users', 'GET')
-useEffect(fetchUsers, [id])
-
-let [data, su]
-```
-
-### let [location, setLocation] = useLocation()
-### let [params, setRoute] = useRoute('user/:id')
-
-### let [e, dispatch] = useEvent(target|selector?, event)
-
-Events hook.
-
-
-### let [ mutation, mutate ] = useMutations(selector|element)
-
-Append, prepend, remove, update etc.
-
-### let [element, render] = useSelector(selector|element)
-
-### let [css, setCss] = useCSS(selector|element?, rule)
-
-### let [] = useMediaQuery()
-
-### useNetworkStatus()
-
-### let [value] = useArguments()
-
-### let [message, send] = useThread(pid)
-
-### let [intersects] = useIntersection(elementA, elementB)
-
-### let [size, setSize] = useResize(element)
-
-### let [, startTransition, isPending] = useTransition()
-
-### let [ result, call ] = useFunction(() => {})
-
-### let [ result, call ] = useEffect(key?, () => {}, deps?)
-
-In some way, a gateway to other hooks, same as direct aspect `effect(() => {})`.
-But if we follow convention, that's going to become `let [prevResult, call] = useEffect( () => {} | id ); call()`.
-If we keep initial `useEffect(fn, deps)` signature, we may extend it to other aspects as `let result = useAction(id|fn, deps)`.
-`useEffect` is an extension of the "current" flow, a branch.
-`useTransition` is fork.
-A possible trigger is - last `deps` argument. If passed - the `write` method is called instantly with the `deps` argument.
-
-```js
-useAction((...deps) => {}, deps)
-useState(() => {}, deps)
-```
 
 -->
 
