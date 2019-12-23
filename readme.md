@@ -67,7 +67,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- #### App / MVC -->
 
 <details>
-<summary><strong>useStore</strong> / <strong>createStore</strong> − store (model) provider, persistable contextless useState.</summary>
+<summary><strong>useStore</strong> / <strong>createStore</strong>
 
 #### `[value, setValue] = useStore(key, init?)`
 
@@ -101,7 +101,7 @@ Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadca
 </details>
 
 <details>
-<summary><strong>useAction</strong> / <strong>createAction</strong> − action (controller) provider, contextless `useEffect` with result.</summary>
+<summary><strong>useAction</strong> / <strong>createAction</strong>summary>
 
 
 #### `[result, action] = useAction(name?, fn?)`
@@ -144,7 +144,7 @@ Register new action, can be used independent of components/hooked scope.
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
 <details>
-<summary><strong>usePrevious</strong> − return the previous state or props.</summary>
+<summary><strong>usePrevious</strong>
 
 #### `[prev] = usePrevious(value)`
 
@@ -170,7 +170,7 @@ const Demo = () => {
 </details>
 
 <details>
-<summary><strong>useCountdown</strong> − countdown state.</summary>
+<summary><strong>useCountdown</strong>
 
 #### `[n, reset] = useCountdown(start, interval=1000)`
 
@@ -190,7 +190,7 @@ const Demo = () => {
 
 <!--
 <details>
-<summary><strong>useThrottle</strong> − throttle state value. --></summary>
+<summary><strong>useThrottle</strong>
 </details>
 
 <!-- - [ ] `useDefined` -->
@@ -199,15 +199,15 @@ const Demo = () => {
 <!-- #### Effects -->
 
 <details>
-<summary><strong>useEffect</strong> − normalized standard `useEffect` with async fn support.</summary>
+<summary><strong>useEffect</strong>
 </details>
 
 <details>
-<summary><strong>useSyncEffect</strong> − `useEffect` with synchronous invocation.</summary>
+<summary><strong>useSyncEffect</strong>
 </details>
 
 <details>
-<summary><strong>useInit</strong> − `useSyncEffect`, called once.</summary>
+<summary><strong>useInit</strong>
 </details>
 
 <!-- - [ ] `useDestroy` -->
@@ -228,7 +228,7 @@ const Demo = () => {
 <!-- #### Data -->
 
 <details>
-<summary><strong>useProperty</strong> − any object/target property observer.</summary>
+<summary><strong>useProperty</strong>
 
 #### `[value, setValue] = useProperty(target, path, init?)`
 
@@ -247,7 +247,7 @@ target.count++
 </details>
 
 <details>
-<summary><strong>useQueryParam</strong> − provider for search string parameter.</summary>
+<summary><strong>useQueryParam</strong>
 
 #### `[value, setValue] = useQueryParam(name, init?)`
 
@@ -264,7 +264,7 @@ It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/Wind
 </details>
 
 <details>
-<summary><strong>useLocalStorage</strong> − provider for local storage.</summary>
+<summary><strong>useLocalStorage</strong>
 
 #### `[value, setValue] = useLocalStorage(key, init?)`
 
@@ -295,7 +295,7 @@ function MyComponent3 () {
 </details>
 
 <details>
-<summary><strong>useSessionStorage</strong> − provider for session storage.</summary>
+<summary><strong>useSessionStorage</strong>
 
 #### `[value, setValue] = useSessionStorage(key, init?)`
 
@@ -313,7 +313,7 @@ function MyComponent () {
 </details>
 
 <details>
-<summary><strong>useCookie</strong> − provider for cookies.</summary>
+<summary><strong>useCookie</strong>
 
 #### `[value, setValue] = useCookie(name, init?)`
 
@@ -334,7 +334,7 @@ Does not observe cookies (there's no implemented API for that).
 </details>
 
 <details>
-<summary><strong>useGlobalCache</strong> − global-cache storage.</summary>
+<summary><strong>useGlobalCache</strong>
 
 #### `[value, setValue] = useGlobalCache(key, init?)`
 
@@ -349,7 +349,7 @@ function MyComponent () {
 </details>
 
 <details>
-<summary><strong>useSource</strong> − generic data source hook with scheduling persistency.</summary>
+<summary><strong>useSource</strong>
 
 #### `[value, setValue] = useSource(storage, key)`
 
@@ -381,11 +381,11 @@ useInit(() => {
 </details>
 
 <details>
-<summary><strong>useAsyncSource</strong> − useSource for async data source.</summary>
+<summary><strong>useAsyncSource</strong>
 </details>
 
 <details>
-<summary><strong>useChannel</strong> − intercommunication/shared state between components.</summary>
+<summary><strong>useChannel</strong>
 </details>
 
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->
@@ -401,7 +401,7 @@ useInit(() => {
 <!-- - [ ] `useEvent` − subscribe to events -->
 <!-- - [ ] `useElement` / `useElements` − query element or elements -->
 <details>
-<summary><strong>useAttribute</strong> − element attribute state</summary>
+<summary><strong>useAttribute</strong>
 
 #### `[attr, setAttr] = useAttribute( element | ref, name)`
 
@@ -437,7 +437,7 @@ function MyButton() {
 <!-- #### UI -->
 
 <details>
-<summary><strong>useElement</strong> − generic element state</summary>
+<summary><strong>useElement</strong>
 
 #### `[element] = useElement( selector | element | ref )`
 
@@ -457,7 +457,7 @@ function MyButton() {
 </details>
 
 <details>
-<summary><strong>useInput</strong> − input element state</summary>
+<summary><strong>useInput</strong>
 
 #### `[value, setValue] = useInput( name | selector | element | ref )`
 
