@@ -2,7 +2,7 @@ import { useStorage, useEffect } from '../src/index'
 import { cache } from '../src/useSource'
 import t from 'tst'
 import enhook from './enhook.js'
-import { tick } from 'wait-please'
+import { tick, frame } from 'wait-please'
 
 t('useStorage: functional set param', async t => {
   let myStorage = new Map([['x', 1]])
@@ -51,6 +51,25 @@ t('useStorage: fn init should be called per hook', async t => {
   log = []
   f()
   t.deepEqual(log, ['a', 2, 'b', 2, 'c', 2])
+
+  t.end()
+})
+
+t('useStorage: reinitialize storage is fine', async t => {
+  let log = []
+
+  let storage = new Map([['foo', 'bar'], ['foo2', 'baz']])
+
+  let f = enhook((key) => {
+    let [foo] = useStorage(storage, key)
+    log.push(foo)
+  })
+  f('foo')
+  await frame()
+  t.deepEqual(log, ['bar'])
+  f('foo2')
+  await frame()
+  t.deepEqual(log, ['bar', 'baz'])
 
   t.end()
 })

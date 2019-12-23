@@ -1,7 +1,7 @@
-import { useState, useEffect } from './standard'
+import { useState, useEffect, useRef } from './standard'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
 import tuple from 'immutable-tuple'
-import useInit from './useInit'
+import useSyncEffect from './useSyncEffect'
 
 export const cache = new Map
 
@@ -97,7 +97,14 @@ export default function useStorage(storage, key, init) {
     return state.value
   })
 
-  useInit(() => {
+  let initedRef = useRef()
+  useEffect(() => initedRef.current = true, [])
+  useSyncEffect(() => {
+    if (initedRef.current) {
+      // update value from store on reinitialize
+      // FIXME: not sure why we don't notify about the change
+      state.value = state.get(key)
+    }
     const notify = value => {
       setInstanceValue(value)
     }
@@ -105,7 +112,7 @@ export default function useStorage(storage, key, init) {
     return () => {
       state.off('change', notify)
     }
-  })
+  }, [state])
 
   return state
 }
