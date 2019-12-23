@@ -67,7 +67,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 <!-- #### App / MVC -->
 
 <details>
-<summary><strong>useStore</strong> / <strong>createStore</strong>
+<summary><strong>useStore</strong> / <strong>createStore</strong></summary>
 
 #### `[value, setValue] = useStore(key, init?)`
 
@@ -101,7 +101,7 @@ Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadca
 </details>
 
 <details>
-<summary><strong>useAction</strong> / <strong>createAction</strong>summary>
+<summary><strong>useAction</strong> / <strong>createAction</strong>lt.</summary>
 
 
 #### `[result, action] = useAction(name?, fn?)`
@@ -144,7 +144,7 @@ Register new action, can be used independent of components/hooked scope.
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
 <details>
-<summary><strong>usePrevious</strong>
+<summary><strong>usePrevious</strong></summary>
 
 #### `[prev] = usePrevious(value)`
 
@@ -170,7 +170,7 @@ const Demo = () => {
 </details>
 
 <details>
-<summary><strong>useCountdown</strong>
+<summary><strong>useCountdown</strong></summary>
 
 #### `[n, reset] = useCountdown(start, interval=1000)`
 
@@ -190,7 +190,7 @@ const Demo = () => {
 
 <!--
 <details>
-<summary><strong>useThrottle</strong>
+<summary><strong>useThrottle</strong></summary>
 </details>
 
 <!-- - [ ] `useDefined` -->
@@ -199,15 +199,15 @@ const Demo = () => {
 <!-- #### Effects -->
 
 <details>
-<summary><strong>useEffect</strong>
+<summary><strong>useEffect</strong></summary>
 </details>
 
 <details>
-<summary><strong>useSyncEffect</strong>
+<summary><strong>useSyncEffect</strong></summary>
 </details>
 
 <details>
-<summary><strong>useInit</strong>
+<summary><strong>useInit</strong></summary>
 </details>
 
 <!-- - [ ] `useDestroy` -->
@@ -228,7 +228,7 @@ const Demo = () => {
 <!-- #### Data -->
 
 <details>
-<summary><strong>useProperty</strong>
+<summary><strong>useProperty</strong></summary>
 
 #### `[value, setValue] = useProperty(target, path, init?)`
 
@@ -247,7 +247,7 @@ target.count++
 </details>
 
 <details>
-<summary><strong>useQueryParam</strong>
+<summary><strong>useQueryParam</strong></summary>
 
 #### `[value, setValue] = useQueryParam(name, init?)`
 
@@ -264,7 +264,7 @@ It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/Wind
 </details>
 
 <details>
-<summary><strong>useLocalStorage</strong>
+<summary><strong>useLocalStorage</strong></summary>
 
 #### `[value, setValue] = useLocalStorage(key, init?)`
 
@@ -295,7 +295,7 @@ function MyComponent3 () {
 </details>
 
 <details>
-<summary><strong>useSessionStorage</strong>
+<summary><strong>useSessionStorage</strong></summary>
 
 #### `[value, setValue] = useSessionStorage(key, init?)`
 
@@ -313,7 +313,7 @@ function MyComponent () {
 </details>
 
 <details>
-<summary><strong>useCookie</strong>
+<summary><strong>useCookie</strong></summary>
 
 #### `[value, setValue] = useCookie(name, init?)`
 
@@ -334,7 +334,7 @@ Does not observe cookies (there's no implemented API for that).
 </details>
 
 <details>
-<summary><strong>useGlobalCache</strong>
+<summary><strong>useGlobalCache</strong></summary>
 
 #### `[value, setValue] = useGlobalCache(key, init?)`
 
@@ -349,7 +349,7 @@ function MyComponent () {
 </details>
 
 <details>
-<summary><strong>useSource</strong>
+<summary><strong>useSource</strong></summary>
 
 #### `[value, setValue] = useSource(storage, key)`
 
@@ -381,11 +381,11 @@ useInit(() => {
 </details>
 
 <details>
-<summary><strong>useAsyncSource</strong>
+<summary><strong>useAsyncSource</strong></summary>
 </details>
 
 <details>
-<summary><strong>useChannel</strong>
+<summary><strong>useChannel</strong></summary>
 </details>
 
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->
@@ -401,7 +401,7 @@ useInit(() => {
 <!-- - [ ] `useEvent` − subscribe to events -->
 <!-- - [ ] `useElement` / `useElements` − query element or elements -->
 <details>
-<summary><strong>useAttribute</strong>
+<summary><strong>useAttribute</strong></summary>
 
 #### `[attr, setAttr] = useAttribute( element | ref, name)`
 
@@ -437,7 +437,7 @@ function MyButton() {
 <!-- #### UI -->
 
 <details>
-<summary><strong>useElement</strong>
+<summary><strong>useElement</strong></summary>
 
 #### `[element] = useElement( selector | element | ref )`
 
@@ -457,7 +457,7 @@ function MyButton() {
 </details>
 
 <details>
-<summary><strong>useInput</strong>
+<summary><strong>useInput</strong></summary>
 
 #### `[value, setValue] = useInput( name | selector | element | ref )`
 
