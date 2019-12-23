@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Essential unified multi-framework hooks.
+Universal poly-framework react hooks.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -18,9 +18,9 @@ const MyComponent = () => {
 
 ## Principles
 
-### 1. Multi-framework
+### 1. Universal
 
-_Unihooks_ work with any hooks-enabled library:
+_Unihooks_ work with any hooks-enabled library, not limited to react:
 
 [react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [spect](https://ghub.io/spect), [neverland](https://ghub.io/neverland), [atomico](https://ghub.io/atomico), [augmentor](https://ghub.io/augmentor), [dom-augmentor](https://ghub.io/dom-augmentor), [fuco](https://ghub.io/fuco), [tng-hooks](https://ghub.io/tng-hooks), [fn-with-hooks](https://ghub.io/fn-with-hooks), [unhook](https://ghub.io/unhook), ...
 
@@ -38,20 +38,18 @@ import * as hook from 'unihooks/preact'
 
 ### 2. Unified
 
-_Unihooks_ follow `useState` API signature expansion:
+_Unihooks_ follow extended `useState` API signature:
 
 ```js
-let state = useSource( target, init? )
-let [ value, { set, error?, loading?, ...state } ] = useSource( target, init? )
-let [ value, setValue, { error?, loading?, ...state } ] = useSource( target, init? )
+let [ value, setValue, state? ] = useSource( target, init? )
 ```
 
 ### 3. Essential
 
-_Unihooks_ provide extra value, related to reactivity. Static hooks, or hooks that can be replaced with native API are excluded.
+_Unihooks_ provide reactivity. Static hooks that can be replaced with native API are excluded.
 
 ```js
-const MyComponent1 = () => { let ua = useUserAgent() } // ✘
+const MyComponent1 = () => { let ua = useUserAgent() } // ✘ - user agent never changes
 const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 ```
 
