@@ -17,10 +17,10 @@ t.skip('useChannel: initialize', async t => {
   })
 
   let c = enhook(() => {
-    let [ value, { loading }] = useChannel('charlie')
+    let [ value, setValue, { loading }] = useChannel('charlie')
     log.push('c', value, loading)
     useEffect(() => {
-
+      setValue(2)
     }, [])
   })
 
@@ -38,8 +38,10 @@ t.skip('useChannel: initialize', async t => {
   log = []
   c()
   t.deepEqual(log, ['c', undefined, true])
-  await time(10)
-  t.deepEqual(log, ['c', undefined, true, 'c', 1, ])
+  await tick()
+  t.deepEqual(log, ['c', undefined, true, 'c', 1, false])
+  await frame()
+  t.deepEqual(log, ['c', undefined, true, 'c', 1, false, 'c', 2, false, 'a', 2, false, 'b', 2, false])
 
   t.end()
 })

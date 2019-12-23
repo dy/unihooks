@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Universal poly-framework react hooks.
+Universal indispensable hooks kit.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -69,7 +69,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 #### `[value, setValue] = useStore(key, init?)`
 
-Store provider with persistency and changes broadcasting. Can be used as robust application model layer.
+Store provider with persistency and changes broadcast. Can be used as robust application model layer.
 
 ```js
 import { createStore, useStore } from 'unihooks'
@@ -102,10 +102,10 @@ Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadca
 <summary><strong>useAction</strong> / <strong>createAction</strong></summary>
 
 
-#### `[result, action] = useAction(name?, fn?)`
+#### `[result, action] = useAction(name?, fn)`
 
-App action provider. Can be used to organize application controllers. If `name` is omitted, function name is used as directly.
-Actions can use hooks, but they're not reactive: changing state does not cause self-recursion.
+Actions provider − stores hooks-enabled functions in cache and fetches them on demand. Can be used to organize controllers layer.
+If `name` is omitted, function name is used as directly. Actions can use hooks, but they're not reactive: changing state does not trigger rendering.
 
 ```js
 createAction('load-collection', async (id) => {
@@ -128,8 +128,22 @@ function MyComponent() {
 
 #### `action = createAction(name?, fn)`
 
-Register new action, can be used independent of components/hooked scope.
+Register new action, can be used independent of main component scope.
 
+```js
+createAction('show-popup', () => {
+  myPopup.show()
+})
+
+function Component () {
+  let showPopup = useAction('show-popup')
+  // same as
+  // let [result, showPopup] = useAction('show-popup')
+
+  let button = useElement('.my-button')
+  button.onclick = showPopup
+}
+```
 
 </details>
 
@@ -153,7 +167,7 @@ import { usePrevious, useState, useRender } from 'unihooks';
 
 const Demo = () => {
   const [count, setCount] = useState(0);
-  const prevCount = usePrevious(count);
+  const [prevCount] = usePrevious(count);
 
   return <p>
     <button onClick={() => setCount(count + 1)}>+</button>
@@ -170,9 +184,9 @@ const Demo = () => {
 <details>
 <summary><strong>useCountdown</strong></summary>
 
-#### `[n, reset] = useCountdown(start, interval=1000)`
+#### `[n, reset] = useCountdown(startValue, interval=1000)`
 
-Countdown state from `start` down to `0` with indicated `interval`. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
+Countdown state from `startValue` down to `0` with indicated `interval` in ms. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
 
 ```js
 import { useCountdown } from 'unihooks'
@@ -262,19 +276,19 @@ It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/Wind
 `init` can be a function or initial value. Provides
 
 ```js
-function MyComponent1 () {
+function Component1 () {
   const [count, setCount] = useLocalStorage('my-count', 1)
 }
 
-function MyComponent2 () {
+function Component2 () {
   const [count, setCount] = useLocalStorage('my-count')
   // count === 1
 
-  // updates MyComponent1 as well
+  // updates Component1 as well
   setCount(2)
 }
 
-function MyComponent3 () {
+function Component3 () {
   const [count, setCount] = useLocalStorage('another-count', (value) => {
     // ...initialize value from store
     return value
@@ -341,7 +355,7 @@ function MyComponent () {
 <details>
 <summary><strong>useSource</strong></summary>
 
-#### `[value, setValue] = useSource(storage, key)`
+#### `[value, setValue] = useSource(storage, key, init?)`
 
 Generic customizable storage hook with persistency.
 `storage` object provides data to underlying data structure.
@@ -367,10 +381,26 @@ let [value, state] = useSource({
 
 <details>
 <summary><strong>useAsyncSource</strong></summary>
+
+#### `let [data, setData, state] = useAsyncSource(source, key, init?)`
+
+Provides access to generic async data source, like message channel, remote data, worker, worklet etc.
+
+```js
+function Component () {
+  let [data, setData, { loading, sync }] = useAsyncSource(source, '')
+}
+```
+
 </details>
 
 <details>
 <summary><strong>useChannel</strong></summary>
+
+#### `[value, setValue, state] = useChannel(key: string|symbol, init?: any )`
+
+Provides data channel for intercommunication between components. Can be used as a temporary shared state without persistency - instead of exposing props on elements or persisting storage.
+
 </details>
 
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->

@@ -97,10 +97,10 @@ export default function useStorage(storage, key, init) {
     return state.value
   })
 
-  let initedRef = useRef()
-  useEffect(() => initedRef.current = true, [])
+  let inited = true
+  useState(() => inited = false)
   useSyncEffect(() => {
-    if (initedRef.current) {
+    if (inited) {
       // update value from store on reinitialize
       // FIXME: not sure why we don't notify about the change
       state.value = state.get(key)

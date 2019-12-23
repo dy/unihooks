@@ -24,24 +24,6 @@ t('useEffect: microtask guaranteed', async t => {
   t.end()
 })
 
-t.skip('useEffect: no-deps runs once', async t => {
-  // HOLDING BACK FOR NOW
-  let log = []
-
-  let f = enhook((i) => {
-    useEffect(() => log.push(1))
-  })
-
-  f()
-  await tick(2)
-  t.deepEqual(log, [1])
-  f()
-  await tick(2)
-  t.deepEqual(log, [1])
-
-  t.end()
-})
-
 t('useEffect: async fn is fine', async t => {
   let log = []
 

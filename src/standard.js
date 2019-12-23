@@ -3,7 +3,7 @@ import { useState as useNativeState, useRef, useMemo, useEffect as useNativeEffe
 // standard
 export { useRef, useReducer, useLayoutEffect, useCallback, useContext, useMemo } from 'any-hooks'
 
-export function useState(init) {
+export function useState(init, deps=[]) {
   let [value, setValue] = useNativeState(init)
 
   // https://github.com/WebReflection/augmentor/issues/19 etc
@@ -11,22 +11,31 @@ export function useState(init) {
     value = init()
   }
 
+  let isFirst = false
+  useNativeState(() => isFirst = true)
+
+  // reset init value if deps change
+  useMemo(() => {
+    if (isFirst) return
+    value = typeof init === 'function' ? init(value) : init
+  }, deps)
+
   return [value, setValue]
 }
 
 export function useEffect(fn, deps) {
-  const ref = useRef()
+  const resultRef = useRef()
 
   useMemo(() => {
     // guarantee microtask (unlike react/preact)
     Promise.resolve().then(() => {
-      if (ref.current && ref.current.call) ref.current()
-      ref.current = fn()
+      if (resultRef.current && resultRef.current.call) resultRef.current()
+      resultRef.current = fn()
     })
   }, deps)
 
   // end effect
   useNativeEffect(() => () =>
-    ref.current && ref.current.call && ref.current()
+    resultRef.current && resultRef.current.call && resultRef.current()
     , [])
 }
