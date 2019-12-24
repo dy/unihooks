@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from './standard'
+import { useState, useEffect, useRef, useLayoutEffect } from './standard'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
 import tuple from 'immutable-tuple'
 import useSyncEffect from './useSyncEffect'
 
 export const cache = new Map
 
-export default function useStorage(storage, key, init) {
+export default function useSource(storage, key, init) {
   // state is cached per-key, since it is returned from hook
   let state, stateId = tuple(storage, key)
 
@@ -38,14 +38,16 @@ export default function useStorage(storage, key, init) {
     state.set = (newValue) => {
       if (typeof newValue === 'function') newValue = newValue(state.value)
 
-      if (state.is(newValue, state.value)) return
+      if (state.is(newValue, state.value)) return state.value
 
       state.value = newValue
       state.planPersist()
+      // NOTE: planNotify is smarter than useEffect: it resets update if state is changed to initial within a tick
       state.planNotify()
 
       return state.value
     }
+
 
     state.plannedNotify
     state.notifyValue
@@ -85,26 +87,16 @@ export default function useStorage(storage, key, init) {
     state[Symbol.iterator] = function* () { yield state.value; yield state; yield state; return state; }
   }
 
-
   const [value, setInstanceValue] = useState(() => {
     // state.value can be unsynced from storage
     // eg. not all storages have `change` notifications: globalCache, cookies etc.
     // so we have to read `state.value` from store
     state.value = state.get(key)
 
-    state.set(typeof init === 'function' || (state.value == null && init != state.value) ? init : state.value)
+    return state.set(typeof init === 'function' || (state.value == null && init != state.value) ? init : state.value)
+  }, [stateId])
 
-    return state.value
-  })
-
-  let inited = true
-  useState(() => inited = false)
   useSyncEffect(() => {
-    if (inited) {
-      // update value from store on reinitialize
-      // FIXME: not sure why we don't notify about the change
-      state.value = state.get(key)
-    }
     const notify = value => {
       setInstanceValue(value)
     }

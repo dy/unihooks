@@ -1,26 +1,29 @@
-import { useState as useNativeState, useRef, useMemo, useEffect as useNativeEffect } from 'any-hooks'
+import { useState as useNativeState, useRef, useCallback, useMemo, useEffect as useNativeEffect } from 'any-hooks'
+import { useSyncEffect } from '.'
 
 // standard
 export { useRef, useReducer, useLayoutEffect, useCallback, useContext, useMemo } from 'any-hooks'
 
 export function useState(init, deps=[]) {
-  let [value, setValue] = useNativeState(init)
+  let [value, setValue] = useNativeState()
 
-  // https://github.com/WebReflection/augmentor/issues/19 etc
-  if (init === value && typeof init === 'function') {
-    value = init()
-  }
-
-  let isFirst = false
-  useNativeState(() => isFirst = true)
+  let valueRef = useRef(value)
 
   // reset init value if deps change
   useMemo(() => {
-    if (isFirst) return
-    value = typeof init === 'function' ? init(value) : init
+    valueRef.current = typeof init === 'function' ? init(valueRef.current) : init
   }, deps)
 
-  return [value, setValue]
+  const set = useCallback(newValue => {
+    let value = typeof newValue === 'function' ? newValue(valueRef.current) : newValue
+    if (value !== valueRef.current) {
+      valueRef.current = value
+      setValue(value)
+    }
+  }, [])
+
+
+  return [valueRef.current, set]
 }
 
 export function useEffect(fn, deps) {

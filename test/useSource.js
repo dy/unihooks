@@ -1,16 +1,18 @@
-import { useStorage, useEffect } from '../src/index'
+import { useSource, useEffect, useState } from '../src/index'
 import { cache } from '../src/useSource'
 import t from 'tst'
 import enhook from './enhook.js'
-import { tick, frame } from 'wait-please'
+import { tick, frame, time } from 'wait-please'
 
-t('useStorage: functional set param', async t => {
+t('useSource: functional set param', async t => {
   let myStorage = new Map([['x', 1]])
 
   let log = []
 
   let f = enhook(() => {
-    let [value, setValue] = useStorage(myStorage, 'x', (value) => value + 1)
+    let [value, setValue] = useSource(myStorage, 'x', (value) => {
+      return value + 1
+    })
     log.push(value)
     useEffect(() => {
       setValue((value) => {
@@ -20,7 +22,7 @@ t('useStorage: functional set param', async t => {
     }, [])
   })
   f()
-  await tick(3)
+  await frame(3)
   t.deepEqual(log, [2, 2, 3])
 
   cache.delete(myStorage)
@@ -28,18 +30,39 @@ t('useStorage: functional set param', async t => {
   t.end()
 })
 
-t('useStorage: fn init should be called per hook', async t => {
+t('useSource: does not trigger unchanged updates', async t => {
+  let source = new Map([['count', 1]])
+
+  let log = []
+  let fn = enhook((i) => {
+    let [count, setCount] = useSource(source, 'count', i)
+
+    log.push(count)
+    useEffect(() => {
+      setCount(i + 1)
+      setCount(i)
+    }, [])
+  })
+  fn(1)
+  t.deepEqual(log, [1])
+  await time(10)
+  t.deepEqual(log, [1])
+
+  t.end()
+})
+
+t('useSource: fn init should be called per hook', async t => {
   let myStorage = new Map([['count', 0]])
   let log = []
   let f = enhook(() => {
-    let [a] = useStorage(myStorage, 'count', -1)
+    let [a] = useSource(myStorage, 'count', -1)
     log.push('a', a)
-    let [b] = useStorage(myStorage, 'count', (count) => {
+    let [b] = useSource(myStorage, 'count', (count) => {
       log.push('init b', count)
       return 1
     })
     log.push('b', b)
-    let [c] = useStorage(myStorage, 'count', (count) => {
+    let [c] = useSource(myStorage, 'count', (count) => {
       log.push('init c', count)
       return 2
     })
@@ -55,13 +78,34 @@ t('useStorage: fn init should be called per hook', async t => {
   t.end()
 })
 
-t('useStorage: reinitialize storage is fine', async t => {
+t('useSource: set/unset does not create two rerenders', async t => {
+  let log = []
+  let source = new Map([['count', 1]])
+
+  let fn = enhook((i) => {
+    let [count, setCount] = useSource(source, 'count', i)
+
+    log.push(count)
+    useEffect(() => {
+      setCount(i + 1)
+      setCount(i)
+    }, [])
+  })
+  fn(1)
+  await frame(3)
+  t.deepEqual(log, [1])
+
+  t.end()
+})
+
+
+t('useSource: reinitialize storage is fine', async t => {
   let log = []
 
   let storage = new Map([['foo', 'bar'], ['foo2', 'baz']])
 
   let f = enhook((key) => {
-    let [foo] = useStorage(storage, key)
+    let [foo] = useSource(storage, key)
     log.push(foo)
   })
   f('foo')
@@ -74,12 +118,12 @@ t('useStorage: reinitialize storage is fine', async t => {
   t.end()
 })
 
-t.skip('useStorage: async setter is fine', async t => {
+t.skip('useSource: async setter is fine', async t => {
   // FIXME: seems to be useless
   let log = []
 
   let f = enhook(() => {
-    let [foo] = useStorage({get(){return 'foo'}, set(){}}, 'xyz', async () => {
+    let [foo] = useSource({get(){return 'foo'}, set(){}}, 'xyz', async () => {
       await tick()
       return 'foo'
     })

@@ -13,7 +13,7 @@ export { default as useAction, createAction } from './useAction'
 // data
 export { default as useLocalStorage } from './useLocalStorage'
 export { default as useProperty } from './useProperty'
-export { default as useStorage } from './useSource'
+export { default as useSource } from './useSource'
 export { default as useQueryParam } from './useQueryParam'
 export { default as useGlobalCache } from './useGlobalCache'
 export { default as useCookie } from './useCookie'
@@ -23,6 +23,7 @@ export { default as useFormField } from './useFormField'
 export { default as usePrevious } from './usePrevious'
 export { default as useCountdown } from './useCountdown'
 export { default as useThrottle } from './useThrottle'
+export { default as useChannel } from './useChannel'
 
 // effect
 export { default as useSyncEffect } from './useSyncEffect'
