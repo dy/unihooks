@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Universal indispensable hooks kit.
+Universal unreacted hooks.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -18,7 +18,7 @@ const MyComponent = () => {
 
 ## Principles
 
-### 1. Universal
+### 1. Unreacted
 
 _Unihooks_ work with any hooks-enabled library, not limited to react:
 
