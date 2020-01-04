@@ -1,4 +1,4 @@
-import useStorage from './useSource'
+import useSource from './useSource'
 import qs from 'qs'
 import autoParse from 'auto-parse'
 import sorted from 'sorted-object'
@@ -79,7 +79,7 @@ export default function useQueryParam(name, init) {
       window.removeEventListener('uhx:navigate', notify)
     }
   }, [])
-  let [value, store] = useStorage(storage, name, init)
+  let [value, store] = useSource(storage, name, init)
   return [value, store]
 }
 

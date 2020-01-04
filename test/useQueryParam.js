@@ -4,9 +4,7 @@ import enhook from './enhook.js'
 import qs from 'qs'
 import { tick, idle, frame, time } from 'wait-please'
 
-let isNode = !!(typeof process !== 'undefined' && process.versions && process.versions.node)
-
-!isNode && t('useQueryParam: read values properly', async t => {
+t.browser('useQueryParam: read values properly', async t => {
   clearSearch()
   let log = []
 
@@ -72,7 +70,7 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
   t.end()
 })
 
-!isNode && t('useQueryParam: write values', async t => {
+t.browser('useQueryParam: write values', async t => {
   clearSearch()
 
   let f = enhook((params) => {
@@ -128,7 +126,7 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
   t.end()
 })
 
-!isNode && t('useQueryParam: defaults', async t => {
+t.browser('useQueryParam: defaults', async t => {
   let log = []
 
   clearSearch()
@@ -193,7 +191,7 @@ let isNode = !!(typeof process !== 'undefined' && process.versions && process.ve
 
 t('useQueryParam: custom toString method')
 
-!isNode && t('useQueryParam: observe updates', async t => {
+t.browser('useQueryParam: observe updates', async t => {
   clearSearch()
   let log = []
   let f = enhook(() => {
@@ -217,7 +215,7 @@ t('useQueryParam: custom toString method')
   t.end()
 })
 
-!isNode && t('useQueryParam: default array', async t => {
+t.browser('useQueryParam: default array', async t => {
   let f = enhook(() => {
     let [arr, setArr] = useQueryParam('arr', [])
     t.deepEqual(arr, [])
