@@ -1,9 +1,5 @@
-import { useRef, useMemo } from './standard'
+import { useRef, useMemo, useEffect } from './standard'
 
 export default function useSyncEffect(fn, deps) {
-  const ref = useRef()
-  useMemo(() => {
-    if (ref.current && ref.current.call) ref.current()
-    ref.current = fn()
-  }, deps)
+  return useEffect(fn, deps, fn => fn())
 }

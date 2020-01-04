@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useLayoutEffect } from './standard'
 import { setMicrotask, clearMicrotask } from 'set-microtask'
 import tuple from 'immutable-tuple'
-import useSyncEffect from './useSyncEffect'
 
 export const cache = new Map
 
@@ -96,7 +95,7 @@ export default function useSource(storage, key, init) {
     return state.set(typeof init === 'function' || (state.value == null && init != state.value) ? init : state.value)
   }, [stateId])
 
-  useSyncEffect(() => {
+  useEffect(() => {
     const notify = value => {
       setInstanceValue(value)
     }

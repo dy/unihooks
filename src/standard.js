@@ -25,21 +25,24 @@ export function useState(init, deps=[]) {
   return [valueRef.current, set]
 }
 
-export function useEffect(fn, deps) {
+const microtask = fn => Promise.resolve().then(fn)
+
+export function useEffect(fn, deps, plan = microtask) {
   const resultRef = useRef()
 
   useMemo(() => {
     // guarantee microtask (unlike react/preact)
-    Promise.resolve().then(() => {
+    plan(() => {
       if (resultRef.current && resultRef.current.call) resultRef.current()
       resultRef.current = fn()
     })
   }, deps)
 
   // end effect
-  useNativeEffect(() => () =>
+  useNativeEffect(() => () => {
     resultRef.current && resultRef.current.call && resultRef.current()
-    , [])
+    resultRef.current = null
+  }, [])
 }
 
 // https://github.com/atomicojs/atomico/issues/24 etc.
