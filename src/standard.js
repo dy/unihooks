@@ -1,8 +1,7 @@
-import { useState as useNativeState, useRef, useCallback, useMemo as useNativeMemo, useEffect as useNativeEffect } from 'any-hooks'
-import { useSyncEffect } from '.'
+import { useState as useNativeState, useRef, useCallback, useMemo as useNativeMemo, useEffect as useNativeEffect, useLayoutEffect as useNativeLayoutEffect } from 'any-hooks'
 
 // standard
-export { useRef, useReducer, useLayoutEffect, useCallback, useContext } from 'any-hooks'
+export { useRef, useReducer, useCallback, useContext } from 'any-hooks'
 
 export function useState(init, deps=[]) {
   let [value, setValue] = useNativeState()
@@ -59,6 +58,11 @@ export function useMemo(fn, deps) {
   }, [])
 
   return resultRef.current
+}
+
+// fallback useLayoutEffect to useEffect (eg. atomico)
+export function useLayoutEffect() {
+  return (useNativeLayoutEffect ? useNativeLayoutEffect : useEffect).apply(this, arguments)
 }
 
 
