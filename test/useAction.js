@@ -1,6 +1,6 @@
 import t from 'tst'
 import enhook from './enhook.js'
-import setHooks, { useAction, createAction, useStore, createStore, useEffect, useState } from '../src/index'
+import setHooks, { useAction, createAction, useStore, createStore, useEffect, useState, setStore } from '../src/index'
 import { INTERVAL, storage, PREFIX, channels } from '../src/useStore'
 import { tick, frame, time } from 'wait-please'
 import { clearNodeFolder } from 'broadcast-channel'
@@ -32,6 +32,7 @@ t('useAction: basic', async t => {
   t.deepEqual(log, [{ bar: 'baz'}, { bar: 'qux'}])
   await tick(2)
 
+  setStore('foo', null)
   teardown()
   t.end()
 })
@@ -49,7 +50,7 @@ t.skip('atomico', async t => {
     useMemo(() => setTimeout(() => setS(2), 100), [])
     useMemo(() => setTimeout(() => setS(3), 200), [])
 
-    return h('')
+    return h('host')
   }
 
   // customElements.define('x-x', component(X));
@@ -118,7 +119,6 @@ t('useAction: must not deadlock setStore', async t => {
   let store = createStore('items', [0])
 
   let action = createAction('push', async e => {
-    console.log('action')
     let [items, setItems] = useStore('items')
     log.push(items.length)
     await tick()
@@ -126,7 +126,6 @@ t('useAction: must not deadlock setStore', async t => {
   })
   let fn = enhook(() => {
     useEffect(() => {
-    console.log('effect')
       action()
     })
   })

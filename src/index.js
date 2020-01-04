@@ -7,7 +7,7 @@ export default (hooks) => {
 export * from './standard'
 
 // app
-export { default as useStore, createStore } from './useStore'
+export { default as useStore, createStore, setStore, getStore } from './useStore'
 export { default as useAction, createAction } from './useAction'
 
 // data

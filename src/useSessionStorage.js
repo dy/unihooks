@@ -11,11 +11,7 @@ export const storage = {
         let result = JSON.parse(str)
         return result
     },
-    set: ls.set,
-    plan: (fn) => {
-        let idx = setMicrotask(fn)
-        return () => clearMicrotask(idx)
-    }
+    set: ls.set
 }
 
 const useLocalStorage = (key, init) => {

@@ -170,6 +170,27 @@ t('useStore: createStore must not rewrite existing data', async t => {
   let s = createStore('xxx', {y: 2})
   t.deepEqual(s, {x: 1})
 
+  storage.set(PREFIX + 'xxx', null)
+  await teardown()
+  t.end()
+})
+
+t('useStore: persisting is fine', async t => {
+  await clearNodeFolder()
+
+  let log = []
+
+  let s = createStore('x', 1)
+  let f1 = enhook(() => {
+    let [x, setX] = useStore('x')
+    setX(2)
+  }, { passive: true })
+  f1()
+
+  await time(INTERVAL * 2)
+  t.deepEqual(storage.get(PREFIX + 'x'), 2)
+
+  storage.set(PREFIX + 'x', null)
   await teardown()
   t.end()
 })

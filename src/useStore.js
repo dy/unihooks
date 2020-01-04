@@ -23,8 +23,8 @@ export const storage = {
     if (channels[key]) channels[key].postMessage(value)
   },
   plan(fn) {
-    let id = setInterval(fn, INTERVAL);
-    return clearInterval(id)
+    let id = setTimeout(fn, INTERVAL);
+    return () => clearTimeout(id)
   }
 }
 
@@ -63,3 +63,17 @@ export const createStore = (key, init) => {
   return storage.get(key)
 }
 
+export const setStore = function (key, value) {
+  key = PREFIX + key
+
+  if (arguments.length > 1) {
+    storage.set(key, value)
+  }
+
+  return storage.get(key)
+}
+
+export const getStore = function (key) {
+  key = PREFIX + key
+  return storage.get(key)
+}
