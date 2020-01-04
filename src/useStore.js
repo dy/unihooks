@@ -3,7 +3,7 @@ import useSyncEffect from './useSyncEffect'
 import store from 'store'
 import events from 'store/plugins/events'
 import { BroadcastChannel } from 'broadcast-channel'
-
+import dequal from 'dequal'
 
 export const PREFIX = '!uhx:'
 export const INTERVAL = 150
@@ -25,7 +25,10 @@ export const storage = {
   plan(fn) {
     let id = setTimeout(fn, INTERVAL);
     return () => clearTimeout(id)
-  }
+  },
+
+  // deep equal is required for identifying across tabs
+  is: dequal
 }
 
 export const channels = {}

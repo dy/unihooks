@@ -36,7 +36,6 @@ export default function useSource(storage, key, init) {
     }
     state.set = (newValue) => {
       if (typeof newValue === 'function') newValue = newValue(state.value)
-
       if (state.is(newValue, state.value)) return state.value
 
       state.value = newValue

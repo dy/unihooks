@@ -175,7 +175,7 @@ t('useStore: createStore must not rewrite existing data', async t => {
   t.end()
 })
 
-t('useStore: persisting is fine', async t => {
+t('useStore: persistence serializes store', async t => {
   await clearNodeFolder()
 
   let log = []
@@ -194,6 +194,30 @@ t('useStore: persisting is fine', async t => {
   await teardown()
   t.end()
 })
+
+t('useStore: adjacent tabs do not cause recursion', async t => {
+  // FIXME: spawn a copy in a separate tab
+  await clearNodeFolder()
+
+  let log = []
+
+  let f1 = enhook(() => {
+    let [x, setX] = useStore('x')
+    useEffect(() => {
+      setX({x: [1]})
+    }, [])
+    log.push(x)
+  })
+  f1()
+
+  await time(INTERVAL * 6)
+  t.deepEqual(log.filter(Boolean), [{x: [1]}])
+
+  storage.set(PREFIX + 'x', null)
+  await teardown()
+  t.end()
+})
+
 
 export async function teardown() {
   storage.set(PREFIX + 'count', null)
