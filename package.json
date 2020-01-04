@@ -1,6 +1,6 @@
 {
   "name": "unihooks",
-  "version": "1.6.4",
+  "version": "1.7.0",
   "description": "Universal poly-framework react hooks",
   "main": "./src/index.js",
   "dependencies": {
