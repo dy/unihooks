@@ -37,10 +37,12 @@ t('useAction: basic', async t => {
   t.end()
 })
 
-t.skip('atomico', async t => {
-  let { h, customElement, useState, useEffect, useMemo, createHookCollection } = await import("atomico");
+t.skip('(atomico) useMemo: updates properly', async t => {
+  let atomico = await import("atomico");
+  let { h, customElement, createHookCollection } = atomico
   // let { component, useEffect, useState, useMemo } = await import("haunted");
-  // setHooks('atomico')
+
+  let { useMemo, useEffect, useState } = await import('../src/index.js')
 
   function X() {
     let [s, setS] = useState(0)
@@ -56,60 +58,8 @@ t.skip('atomico', async t => {
   // customElements.define('x-x', component(X));
   customElement('x-x', X);
   document.body.appendChild(document.createElement("x-x"));
-
-
-
-  // function createComponent(component) {
-  //   let hooks = createHookCollection(render);
-  //   function render(props) {
-  //     hooks.load(component, props);
-  //     hooks.updated();
-  //   }
-  //   return render;
-  // }
-
-  // let renderComponent = createComponent(() => {
-  //   let [state, setState] = useState(0);
-
-  //   useEffect(() => console.log(state))
-  //   useEffect(() => setTimeout(() => setState(2), 10), [])
-  //   useEffect(() => setTimeout(() => setState(3), 20), [])
-  // });
-
-  // renderComponent();
-
-
-  // let enhook = (fn, options = {}) => {
-  //   let lastCtx, lastArgs, passive = options.passive, blocked, end, result
-  //   let hooks = createHookCollection(update)
-
-  //   function update() {
-  //     hooks.load(() => {
-  //       if (passive && blocked) return
-  //       if (passive) blocked = true
-  //       result = fn.call(lastCtx, ...lastArgs)
-  //     }, lastArgs)
-  //     Promise.resolve().then(() => {
-  //     hooks.updated()
-  //     })
-  //   }
-  //   function render(...args) {
-  //     if (end) throw Error('Function is unhooked')
-  //     blocked = false
-  //     lastCtx = this
-  //     lastArgs = args
-  //     update()
-  //     return result
-  //   }
-  //   render.unhook = () => {
-  //     end = true
-  //     hooks.unmount()
-  //     lastCtx = lastArgs = null
-  //   }
-
-  //   return render
-  // }
 })
+
 
 t('useAction: must not deadlock setStore', async t => {
   await clearNodeFolder()

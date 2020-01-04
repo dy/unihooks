@@ -136,3 +136,23 @@ t.skip('useSource: async setter is fine', async t => {
 
   t.end()
 })
+
+
+t('useSource: useQueryParam atomico case (must not fail)', async t => {
+  let map = new Map
+
+  let f1 = enhook(() => {
+    let [a, set] = useSource(map, 'a')
+  })
+  f1()
+  f1.unhook()
+
+  let f2 = enhook((params) => {
+    let [a, set] = useSource(map, 'a')
+    set(1)
+  })
+  f2()
+  f2.unhook()
+
+  t.end()
+})
