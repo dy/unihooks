@@ -192,6 +192,29 @@ t('useAction: must be global', async t => {
   // FIXME: how to test this?
 })
 
+t('useAction: has no unintentional runs', async t => {
+  let log = []
+  createAction('f', async () => {
+    log.push(1)
+  })
+
+  let f1 = enhook(() => {
+    let call = useAction('f')
+  })
+  f1()
+  await frame(2)
+  f1.unhook()
+
+  // let f2 = enhook(() => {
+  //   let call = useAction('f2')
+  // })
+  await frame(2)
+
+  t.deepEqual(log, [], 'log is clean')
+
+  t.end()
+})
+
 export async function teardown() {
   for (let channel in channels) { (channels[channel].close(), delete channels[channel]) }
 }

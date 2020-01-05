@@ -55,7 +55,6 @@ export function useMemo(fn, deps) {
   }
 
   useNativeEffect(() => () => {
-    resultRef.current && resultRef.current.call && resultRef.current()
     resultRef.current = null
     depsRef.current = null
   }, [])
