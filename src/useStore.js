@@ -44,12 +44,17 @@ export default (key, init) => {
       return state.set(value)
     }
     channel.addEventListener('message', notify)
+    channel.listenersCount = (channel.listenersCount || 0) + 1
 
     const id = store.watch(key, notify)
     return () => {
       store.unwatch(id)
       channel.removeEventListener('message', notify)
-      channel.close()
+      channel.listenersCount--
+      if (!channel.listenersCount) {
+        delete channels[key]
+        channel.close()
+      }
     }
   }, [key])
 

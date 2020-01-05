@@ -28,20 +28,20 @@ export function useState(init, deps=[]) {
 const microtask = fn => Promise.resolve().then(fn)
 
 export function useEffect(fn, deps, plan = microtask) {
-  const resultRef = useRef()
+  const destructorRef = useRef()
 
   useMemo(() => {
     // guarantee microtask (unlike react/preact)
     plan(() => {
-      if (resultRef.current && resultRef.current.call) resultRef.current()
-      resultRef.current = fn()
+      if (destructorRef.current && destructorRef.current.call) destructorRef.current()
+      destructorRef.current = fn()
     })
   }, deps)
 
   // end effect
   useNativeEffect(() => () => {
-    resultRef.current && resultRef.current.call && resultRef.current()
-    resultRef.current = null
+    destructorRef.current && destructorRef.current.call && destructorRef.current()
+    destructorRef.current = null
   }, [])
 }
 

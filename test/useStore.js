@@ -218,6 +218,34 @@ t('useStore: adjacent tabs do not cause recursion', async t => {
   t.end()
 })
 
+t('useStore: removing components must not close channel', async t => {
+  await clearNodeFolder()
+
+  let log = []
+
+  let f1 = enhook(() => {
+    let [x, setX] = useStore('x')
+    useEffect(() => setX(1), [])
+  })
+  f1()
+  let f2 = enhook((v) => {
+    let [x, setX] = useStore('x')
+    useEffect(() => setX(v), [v])
+  })
+
+  await frame()
+  f1.unhook()
+  await frame()
+
+  f2(2)
+  await frame()
+  f2.unhook()
+  await frame()
+
+  await teardown()
+  t.end()
+})
+
 
 export async function teardown() {
   storage.set(PREFIX + 'count', null)
