@@ -379,6 +379,7 @@ let [value, state] = useSource({
 
 </details>
 
+<!--
 <details>
 <summary><strong>useAsyncSource</strong></summary>
 
@@ -391,9 +392,10 @@ function Component () {
   let [data, setData, { loading, sync }] = useAsyncSource(source, '')
 }
 ```
-
 </details>
+-->
 
+<!--
 <details>
 <summary><strong>useChannel</strong></summary>
 
@@ -402,7 +404,9 @@ function Component () {
 Provides data channel for intercommunication between components. Can be used as a temporary shared state without persistency - instead of exposing props on elements or persisting storage.
 
 </details>
+-->
 
+<!-- - [ ] `useResource` − async source with state -->
 <!-- - [ ] `useSharedState` − state, shared between browser tabs -->
 <!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
 <!-- - [ ] `useFiles` -->
@@ -437,7 +441,8 @@ function MyButton() {
 
 </details>
 
-<!-- - [ ] `useLocation` − browser location -->
+<!-- - [ ] `useLocation` − window.location state -->
+<!-- - [ ] `useRoute` − `useLocation` with param matching -->
 <!-- - [ ] `useData` − read / write element dataset -->
 <!-- - [ ] `useClass` − manipulate element `classList` -->
 <!-- - [ ] `useMount` − `onconnected` / `ondisconnected` events -->
