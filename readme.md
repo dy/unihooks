@@ -75,7 +75,9 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 * [mobeewave]()
 -->
 
-## Data Hooks
+# Hooks
+
+## Data
 
 <details>
 <summary><strong>useStore</strong> / <strong>createStore</strong></summary>
@@ -301,7 +303,7 @@ Provides data channel for intercommunication between components. Can be used as 
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
-## State Hooks
+## State
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
 <details>
@@ -357,7 +359,7 @@ const Demo = () => {
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
-## Effect Hooks
+## Effect
 
 <details>
 <summary><strong>useAction</strong> / <strong>createAction</strong></summary>
@@ -430,7 +432,7 @@ function Component () {
 <!-- - [ ] `useHooked` - run hooks-enabled effect -->
 
 
-## DOM Hooks
+## DOM
 
 <!-- - [ ] `useEvent` − subscribe to events -->
 <!-- - [ ] `useElement` / `useElements` − query element or elements -->
@@ -568,7 +570,7 @@ function MyButton() {
 <!-- - [ ] `usePromise` -->
 <!-- - [ ] `useEmitter` -->
 
-## Standard Hooks
+## Standard
 
 Normalized / extended standard hooks, that may come handy in place of lib-specific ones.
 
