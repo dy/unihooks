@@ -75,9 +75,7 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 * [mobeewave]()
 -->
 
-# Hooks
-
-## Data
+## Data source
 
 <details>
 <summary><strong>useStore</strong> / <strong>createStore</strong></summary>
