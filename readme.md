@@ -346,7 +346,6 @@ const Demo = () => {
   return `Remains: ${count}s`
 };
 ```
-
 </details>
 
 <!--
@@ -356,6 +355,16 @@ const Demo = () => {
 
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
+
+<details>
+<summary><strong>useState</strong></summary>
+
+#### `[value, setValue] = useState( init, deps=[] )`
+
+Standard `useState` with additional optional `deps` param, that reinitializes input when deps change.
+
+</details>
+
 
 ## Effect
 
@@ -411,6 +420,15 @@ function Component () {
 <summary><strong>useSyncEffect</strong></summary>
 
 `useEffect` that is run immediately, unlike `useLayoutEffect`. Can be used as deps-gate.
+
+</details>
+
+<details>
+<summary><strong>useEffect</strong></summary>
+
+#### `[value, setValue] = useEffect( init, deps?, schedule = fn => queueMicrotask(fn) )`
+
+Standard `useEffect` with optional scheduler. By default effect is run as microtask.
 
 </details>
 
@@ -567,61 +585,6 @@ function MyButton() {
 <!-- - [ ] `useGenerator` -->
 <!-- - [ ] `usePromise` -->
 <!-- - [ ] `useEmitter` -->
-
-## Standard
-
-Normalized / extended standard hooks, that may come handy in place of lib-specific ones.
-
-<details>
-<summary><strong>useState</strong></summary>
-
-#### `[value, setValue] = useState( init, deps=[] )`
-
-Standard `useState` with additional optional `deps` param, that reinitializes input when deps change.
-
-</details>
-
-<details>
-<summary><strong>useEffect</strong></summary>
-
-#### `[value, setValue] = useEffect( init, deps?, schedule=queueMicrotask )`
-
-Standard `useEffect` with optional scheduler function. By default makes sure effect is run as microtask.
-
-</details>
-
-<details>
-<summary><strong>useMemo</strong></summary>
-
-#### `[value, setValue] = useMemo( fn, deps? )`
-
-Standard `useMemo` with guaranteed deps triggering.
-
-</details>
-
-The rest of standard hooks is exported unchanged for complacency.
-
-<!--
-<details>
-<summary><strong>useCallback</strong></summary>
-</details>
-
-<details>
-<summary><strong>useContext</strong></summary>
-</details>
-
-<details>
-<summary><strong>useReducer</strong></summary>
-</details>
-
-<details>
-<summary><strong>useLayoutEffect</strong></summary>
-</details>
-
-<details>
-<summary><strong>useRef</strong></summary>
-</details>
--->
 
 
 ## See also
