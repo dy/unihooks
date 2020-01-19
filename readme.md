@@ -1,9 +1,10 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Unihooks provide a set of essential hooks for building reliable react[-ish] apps, that you'd anyways end up building yourself.
+Essential hooks for building robust react/analogous apps, that you'd anyways end up building yourself.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
+<!--
 ```js
 import { useMedia, useQueryParam, useLocalStorage } from 'unihooks'
 
@@ -15,6 +16,7 @@ const MyComponent = () => {
   // ...
 }
 ```
+-->
 
 ## Principles
 
@@ -22,7 +24,18 @@ const MyComponent = () => {
 
 _Unihooks_ are not bound to react and work with any hooks-enabled library:
 
-[react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [spect](https://ghub.io/spect), [neverland](https://ghub.io/neverland), [atomico](https://ghub.io/atomico), [augmentor](https://ghub.io/augmentor), [dom-augmentor](https://ghub.io/dom-augmentor), [fuco](https://ghub.io/fuco), [tng-hooks](https://ghub.io/tng-hooks), [fn-with-hooks](https://ghub.io/fn-with-hooks), [unhook](https://ghub.io/unhook), ...
+* [react](https://ghub.io/react)
+* [preact](https://ghub.io/preact)
+* [haunted](https://ghub.io/haunted)
+* [spect](https://ghub.io/spect)
+* [neverland](https://ghub.io/neverland)
+* [atomico](https://ghub.io/atomico)
+* [augmentor](https://ghub.io/augmentor)
+* [dom-augmentor](https://ghub.io/dom-augmentor)
+* [fuco](https://ghub.io/fuco)
+* [tng-hooks](https://ghub.io/tng-hooks)
+* [fn-with-hooks](https://ghub.io/fn-with-hooks)
+* [unhook](https://ghub.io/unhook), ...
 
 See [any-hooks](https://ghub.io/any-hooks).
 
@@ -64,7 +77,8 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 
 ## Hooks
 
-### App
+
+### Data
 
 <details>
 <summary><strong>useStore</strong> / <strong>createStore</strong></summary>
@@ -99,141 +113,6 @@ Create store. Can be used outside of components or hookable scope.
 Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
 
 </details>
-
-<details>
-<summary><strong>useAction</strong> / <strong>createAction</strong></summary>
-
-
-#### `[result, action] = useAction(name?, fn)`
-
-Actions provider − stores hooks-enabled functions in cache and fetches them on demand. Can be used to organize controllers layer.
-If `name` is omitted, function name is used as directly. Actions can use hooks, but they're not reactive: changing state does not trigger rendering.
-
-```js
-createAction('load-collection', async (id) => {
-  // actions can use hooks internally
-  let [collection, setCollection] = useStore('collection')
-  setCollection({ ...collection, loading: true})
-  setCollection({ data: await load(`collection/${id}`), loading: false })
-
-  return collection
-})
-
-function MyComponent() {
-  let [collection, load] = useAction('load-collection')
-
-  useEffect(() => {
-    let data = await load(id)
-  }, [id])
-}
-```
-
-#### `action = createAction(name?, fn)`
-
-Register new action, can be used independent of main component scope.
-
-```js
-createAction('show-popup', () => {
-  myPopup.show()
-})
-
-function Component () {
-  let showPopup = useAction('show-popup')
-  // same as
-  // let [result, showPopup] = useAction('show-popup')
-
-  let button = useElement('.my-button')
-  button.onclick = showPopup
-}
-```
-
-Ref: [use-store](https://ghub.io/use-store)
-
-</details>
-
-<!-- - [ ] `useProps` − component props (view) provider. -->
-<!-- - [ ] `useRender` + `createRender` − render (view) provider, instead of direct result. -->
-<!-- - [ ] `useHistory` − -->
-<!-- - [ ] `useHotkey` -->
-
-### State
-
-<!-- - [ ] `useState` − normalized standard `useState` -->
-<details>
-<summary><strong>usePrevious</strong></summary>
-
-#### `[prev] = usePrevious(value)`
-
-Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
-
-```js
-import { usePrevious, useState, useRender } from 'unihooks';
-
-const Demo = () => {
-  const [count, setCount] = useState(0);
-  const [prevCount] = usePrevious(count);
-
-  return <p>
-    <button onClick={() => setCount(count + 1)}>+</button>
-    <button onClick={() => setCount(count - 1)}>-</button>
-    <p>
-      Now: {count}, before: {prevCount}
-    </p>
-  </p>
-};
-```
-
-</details>
-
-<details>
-<summary><strong>useCountdown</strong></summary>
-
-#### `[n, reset] = useCountdown(startValue, interval=1000)`
-
-Countdown state from `startValue` down to `0` with indicated `interval` in ms. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
-
-```js
-import { useCountdown } from 'unihooks'
-
-const Demo = () => {
-  const [count, reset] = useCountdown(30);
-
-  return `Remains: ${count}s`
-};
-```
-
-</details>
-
-<!--
-<details>
-<summary><strong>useThrottle</strong></summary>
-</details>
-
-<!-- - [ ] `useDefined` -->
-<!-- - [ ] `useCounter` − track state of a number -->
-
-#### Effects
-
-<details>
-<summary><strong>useSyncEffect</strong></summary>
-</details>
-
-<!-- - [ ] `useDestroy` -->
-<!-- - [ ] `useEffectDeep` -->
-<!-- - [ ] `useUpdate` -->
-<!-- - [ ] `useTween` -->
-<!-- - [ ] `useTimeout` -->
-<!-- - [ ] `useInterval` -->
-<!-- - [ ] `useIdle` -->
-<!-- - [ ] `useImmediate` -->
-<!-- - [ ] `useRaf` -->
-<!-- - [ ] `useToggle` -->
-<!-- - [ ] `usePing` -->
-<!-- - [ ] `useFSM` -->
-<!-- - [ ] `useAsync` -->
-<!-- - [ ] `useHooked` - run hooks-enabled effect -->
-
-### Data
 
 <details>
 <summary><strong>useProperty</strong></summary>
@@ -418,6 +297,138 @@ Provides data channel for intercommunication between components. Can be used as 
 <!-- - [ ] `useClipboard` -->
 <!-- - [ ] `useFavicon` -->
 <!-- - [ ] `useRemote` -->
+
+
+<!-- - [ ] `useProps` − component props (view) provider. -->
+<!-- - [ ] `useRender` + `createRender` − render (view) provider, instead of direct result. -->
+<!-- - [ ] `useHistory` − -->
+<!-- - [ ] `useHotkey` -->
+
+### State
+
+<!-- - [ ] `useState` − normalized standard `useState` -->
+<details>
+<summary><strong>usePrevious</strong></summary>
+
+#### `[prev] = usePrevious(value)`
+
+Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
+
+```js
+import { usePrevious, useState, useRender } from 'unihooks';
+
+const Demo = () => {
+  const [count, setCount] = useState(0);
+  const [prevCount] = usePrevious(count);
+
+  return <p>
+    <button onClick={() => setCount(count + 1)}>+</button>
+    <button onClick={() => setCount(count - 1)}>-</button>
+    <p>
+      Now: {count}, before: {prevCount}
+    </p>
+  </p>
+};
+```
+
+</details>
+
+<details>
+<summary><strong>useCountdown</strong></summary>
+
+#### `[n, reset] = useCountdown(startValue, interval=1000)`
+
+Countdown state from `startValue` down to `0` with indicated `interval` in ms. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
+
+```js
+import { useCountdown } from 'unihooks'
+
+const Demo = () => {
+  const [count, reset] = useCountdown(30);
+
+  return `Remains: ${count}s`
+};
+```
+
+</details>
+
+<!--
+<details>
+<summary><strong>useThrottle</strong></summary>
+</details>
+
+<!-- - [ ] `useDefined` -->
+<!-- - [ ] `useCounter` − track state of a number -->
+
+### Effects
+
+<details>
+<summary><strong>useAction</strong> / <strong>createAction</strong></summary>
+
+
+#### `[result, action] = useAction(name?, fn)`
+
+Actions provider − stores hooks-enabled functions in cache and fetches them on demand. Can be used to organize controllers layer.
+If `name` is omitted, function name is used as directly. Actions can use hooks, but they're not reactive: changing state does not trigger rendering.
+
+```js
+createAction('load-collection', async (id) => {
+  // actions can use hooks internally
+  let [collection, setCollection] = useStore('collection')
+  setCollection({ ...collection, loading: true})
+  setCollection({ data: await load(`collection/${id}`), loading: false })
+
+  return collection
+})
+
+function MyComponent() {
+  let [collection, load] = useAction('load-collection')
+
+  useEffect(() => {
+    let data = await load(id)
+  }, [id])
+}
+```
+
+#### `action = createAction(name?, fn)`
+
+Register new action, can be used independent of main component scope.
+
+```js
+createAction('show-popup', () => {
+  myPopup.show()
+})
+
+function Component () {
+  let showPopup = useAction('show-popup')
+  // same as
+  // let [result, showPopup] = useAction('show-popup')
+
+  let button = useElement('.my-button')
+  button.onclick = showPopup
+}
+```
+</details>
+
+<details>
+<summary><strong>useSyncEffect</strong></summary>
+</details>
+
+<!-- - [ ] `useDestroy` -->
+<!-- - [ ] `useEffectDeep` -->
+<!-- - [ ] `useUpdate` -->
+<!-- - [ ] `useTween` -->
+<!-- - [ ] `useTimeout` -->
+<!-- - [ ] `useInterval` -->
+<!-- - [ ] `useIdle` -->
+<!-- - [ ] `useImmediate` -->
+<!-- - [ ] `useRaf` -->
+<!-- - [ ] `useToggle` -->
+<!-- - [ ] `usePing` -->
+<!-- - [ ] `useFSM` -->
+<!-- - [ ] `useAsync` -->
+<!-- - [ ] `useHooked` - run hooks-enabled effect -->
+
 
 ### DOM
 
