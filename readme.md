@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Universal unreacted hooks.
+Unihooks provide a set of essential hooks for building reliable react[-ish] apps, that you'd anyways end up building yourself.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -18,11 +18,13 @@ const MyComponent = () => {
 
 ## Principles
 
-### 1. Unreacted
+### 1. Multi-framework
 
-_Unihooks_ work with any hooks-enabled library, not limited to react:
+_Unihooks_ are not bound to react and work with any hooks-enabled library:
 
 [react](https://ghub.io/react), [preact](https://ghub.io/preact), [haunted](https://ghub.io/haunted), [spect](https://ghub.io/spect), [neverland](https://ghub.io/neverland), [atomico](https://ghub.io/atomico), [augmentor](https://ghub.io/augmentor), [dom-augmentor](https://ghub.io/dom-augmentor), [fuco](https://ghub.io/fuco), [tng-hooks](https://ghub.io/tng-hooks), [fn-with-hooks](https://ghub.io/fn-with-hooks), [unhook](https://ghub.io/unhook), ...
+
+See [any-hooks](https://ghub.io/any-hooks).
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -44,13 +46,13 @@ _Unihooks_ follow extended `useState` API signature:
 let [ value, setValue, state? ] = useSource( target, init? )
 ```
 
-### 3. Essential
+### 3. Reactive
 
-_Unihooks_ provide reactivity. Static hooks that can be replaced with native API are excluded.
+_Unihooks_ tend to provide live binding to data source − they trigger rerender whenever underlying data changes. Static hooks that can be replaced with native API are avoided.
 
 ```js
-const MyComponent1 = () => { let ua = useUserAgent() } // ✘ - user agent never changes
-const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
+const MyComponent = () => { let ua = useUserAgent() } // ✘ − user agent never changes
+const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API must be used instead
 ```
 
 <!--
@@ -62,7 +64,7 @@ const MyComponent2 = () => { let ua = navigator.userAgent } // ✔
 
 ## Hooks
 
-<!-- #### App / MVC -->
+### App
 
 <details>
 <summary><strong>useStore</strong> / <strong>createStore</strong></summary>
@@ -145,6 +147,8 @@ function Component () {
 }
 ```
 
+Ref: [use-store](https://ghub.io/use-store)
+
 </details>
 
 <!-- - [ ] `useProps` − component props (view) provider. -->
@@ -152,7 +156,7 @@ function Component () {
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
-<!-- #### State -->
+### State
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
 <details>
@@ -208,7 +212,7 @@ const Demo = () => {
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
-<!-- #### Effects -->
+#### Effects
 
 <details>
 <summary><strong>useSyncEffect</strong></summary>
@@ -229,7 +233,7 @@ const Demo = () => {
 <!-- - [ ] `useAsync` -->
 <!-- - [ ] `useHooked` - run hooks-enabled effect -->
 
-<!-- #### Data -->
+### Data
 
 <details>
 <summary><strong>useProperty</strong></summary>
@@ -415,7 +419,7 @@ Provides data channel for intercommunication between components. Can be used as 
 <!-- - [ ] `useFavicon` -->
 <!-- - [ ] `useRemote` -->
 
-<!-- #### DOM -->
+### DOM
 
 <!-- - [ ] `useEvent` − subscribe to events -->
 <!-- - [ ] `useElement` / `useElements` − query element or elements -->
@@ -454,8 +458,6 @@ function MyButton() {
 <!-- - [ ] `useMutation` − -->
 <!-- - [ ] `useHost` −  -->
 
-<!-- #### UI -->
-
 <details>
 <summary><strong>useElement</strong></summary>
 
@@ -481,7 +483,7 @@ function MyButton() {
 
 #### `[value, setValue] = useInput( name | selector | element | ref )`
 
-Input element hook. Serializes value to input, creates input observer. `null`/`undefined` values remove attribute from element.
+Input element serves as data source. `null`/`undefined` values remove attribute from element.
 
 ```js
 function MyButton() {
@@ -555,33 +557,56 @@ function MyButton() {
 <!-- - [ ] `usePromise` -->
 <!-- - [ ] `useEmitter` -->
 
-<!-- #### Standard -->
+### Standard
 
-<!-- - [ ] `useState` -->
-<!-- - [ ] `useEffect` -->
-<!-- - [ ] `useMemo` -->
-<!-- - [ ] `useCallback` -->
-<!-- - [ ] `useContext` -->
-<!-- - [ ] `useReducer` -->
-<!-- - [ ] `useLayoutEffect` -->
-<!-- - [ ] `useRef` -->
+Normalized / extended standard hooks, that may come handy in place of lib-specific ones.
 
-<!--
+<details>
+<summary><strong>useState</strong></summary>
 
-### let [state, setState] = useState(target|key?, init, deps?)
+#### `[value, setValue] = useState( init, deps=[] )`
 
-`useState` extension with `target` or `key` first argument and `deps` the last argument. State can be identified, read and reinitialized that way.
+Standard `useState` with additional optional `deps` param, that reinitializes input when deps change.
 
-```js
-let [x, setX] = useState(element, null, [])
+</details>
 
-// depending on component props - reinit the state
-let [value, setValue] = useState(() => props.x, [props.x])
-```
+<details>
+<summary><strong>useEffect</strong></summary>
 
-Ref: [use-store](https://ghub.io/use-store)
+#### `[value, setValue] = useEffect( init, deps?, schedule=queueMicrotask )`
 
--->
+Standard `useEffect` with optional scheduler function. By default makes sure effect is run as microtask.
+
+</details>
+
+<details>
+<summary><strong>useMemo</strong></summary>
+
+#### `[value, setValue] = useMemo( fn, deps? )`
+
+Standard `useMemo` with guaranteed deps triggering.
+
+</details>
+
+<details>
+<summary><strong>useCallback</strong></summary>
+</details>
+
+<details>
+<summary><strong>useContext</strong></summary>
+</details>
+
+<details>
+<summary><strong>useReducer</strong></summary>
+</details>
+
+<details>
+<summary><strong>useLayoutEffect</strong></summary>
+</details>
+
+<details>
+<summary><strong>useRef</strong></summary>
+</details>
 
 
 ## See also
