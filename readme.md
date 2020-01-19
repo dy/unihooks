@@ -53,7 +53,7 @@ import * as hook from 'unihooks/preact'
 
 ### 2. Unified
 
-_Unihooks_ follow extended `useState` API signature:
+_Unihooks_ follow extended `useState` API signature for intuitivity:
 
 ```js
 let [ value, setValue, state? ] = useSource( target, init? )
@@ -61,7 +61,7 @@ let [ value, setValue, state? ] = useSource( target, init? )
 
 ### 3. Reactive
 
-_Unihooks_ tend to provide live binding to data source − they trigger rerender whenever underlying data changes. Static hooks that can be replaced with native API are avoided.
+_Unihooks_ provide live binding to data source (if possible) − component is rerendered whenever underlying data changes. Static hooks that can be replaced with native API are avoided.
 
 ```js
 const MyComponent = () => { let ua = useUserAgent() } // ✘ − user agent never changes
@@ -75,10 +75,7 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 * [mobeewave]()
 -->
 
-## Hooks
-
-
-### Data
+## Data Hooks
 
 <details>
 <summary><strong>useStore</strong> / <strong>createStore</strong></summary>
@@ -304,7 +301,7 @@ Provides data channel for intercommunication between components. Can be used as 
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
-### State
+## State Hooks
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
 <details>
@@ -360,7 +357,7 @@ const Demo = () => {
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
-### Effects
+## Effect Hooks
 
 <details>
 <summary><strong>useAction</strong> / <strong>createAction</strong></summary>
@@ -412,6 +409,9 @@ function Component () {
 
 <details>
 <summary><strong>useSyncEffect</strong></summary>
+
+`useEffect` that is run immediately, unlike `useLayoutEffect`. Can be used as deps-gate.
+
 </details>
 
 <!-- - [ ] `useDestroy` -->
@@ -430,7 +430,7 @@ function Component () {
 <!-- - [ ] `useHooked` - run hooks-enabled effect -->
 
 
-### DOM
+## DOM Hooks
 
 <!-- - [ ] `useEvent` − subscribe to events -->
 <!-- - [ ] `useElement` / `useElements` − query element or elements -->
@@ -568,7 +568,7 @@ function MyButton() {
 <!-- - [ ] `usePromise` -->
 <!-- - [ ] `useEmitter` -->
 
-### Standard
+## Standard Hooks
 
 Normalized / extended standard hooks, that may come handy in place of lib-specific ones.
 
@@ -599,6 +599,9 @@ Standard `useMemo` with guaranteed deps triggering.
 
 </details>
 
+The rest of standard hooks is exported unchanged for complacency.
+
+<!--
 <details>
 <summary><strong>useCallback</strong></summary>
 </details>
@@ -618,6 +621,7 @@ Standard `useMemo` with guaranteed deps triggering.
 <details>
 <summary><strong>useRef</strong></summary>
 </details>
+-->
 
 
 ## See also
