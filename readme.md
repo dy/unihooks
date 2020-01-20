@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Essential hooks for building robust react/analogous apps, that you'd anyways end up building yourself.
+Essential hooks toolkit that you would anyways build yourself for your react (or analogous framework) app.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -20,7 +20,7 @@ const MyComponent = () => {
 
 ## Principles
 
-### 1. Multi-framework
+### 1. Any framework
 
 _Unihooks_ are not bound to react and work with any hooks-enabled library:
 
@@ -35,7 +35,8 @@ _Unihooks_ are not bound to react and work with any hooks-enabled library:
 * [fuco](https://ghub.io/fuco)
 * [tng-hooks](https://ghub.io/tng-hooks)
 * [fn-with-hooks](https://ghub.io/fn-with-hooks)
-* [unhook](https://ghub.io/unhook), ...
+* [unhook](https://ghub.io/unhook)
+* ...
 
 See [any-hooks](https://ghub.io/any-hooks).
 
@@ -75,7 +76,7 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 * [mobeewave]()
 -->
 
-## Data source
+## Store
 
 <details>
 <summary><strong>useStore</strong> / <strong>createStore</strong></summary>
@@ -378,6 +379,9 @@ Provides data channel for intercommunication between components. Can be used as 
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
+
+
+
 ## State
 
 <!-- - [ ] `useState` − normalized standard `useState` -->
@@ -494,7 +498,10 @@ Triggers state update only if new value differs from the prev value.
 -->
 
 
-## Effect
+
+
+
+## Action
 
 <details>
 <summary><strong>useAction</strong> / <strong>createAction</strong></summary>
