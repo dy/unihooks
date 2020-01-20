@@ -15,4 +15,6 @@ import('./useThrottle').then()
 import('./useAttribute').then()
 import('./useInput').then()
 import('./useChannel').then()
+import('./useValidate').then()
+
 

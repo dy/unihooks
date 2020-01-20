@@ -1,5 +1,3 @@
-import { useMemo } from './standard'
-
 export default function useElement(target) {
   if (typeof target === 'function') {
     return [target()]

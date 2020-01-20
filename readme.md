@@ -259,6 +259,83 @@ let [value, state] = useSource({
 
 </details>
 
+
+<!-- - [ ] `useEvent` − subscribe to events -->
+<!-- - [ ] `useElement` / `useElements` − query element or elements -->
+<details>
+<summary><strong>useAttribute</strong></summary>
+
+#### `[attr, setAttr] = useAttribute( element | ref, name)`
+
+Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` value removes attribute from element.
+
+```js
+function MyButton() {
+  let [attr, setAttr] = useAttribute(el, 'loading')
+
+  setAttr(true)
+
+  useEffect(() => {
+    // remove attribute
+    return () => setAttr()
+  }, [])
+}
+```
+
+</details>
+
+<!-- - [ ] `useLocation` − window.location state -->
+<!-- - [ ] `useRoute` − `useLocation` with param matching -->
+<!-- - [ ] `useData` − read / write element dataset -->
+<!-- - [ ] `useClass` − manipulate element `classList` -->
+<!-- - [ ] `useMount` − `onconnected` / `ondisconnected` events -->
+<!-- - [ ] `useStyle` − set element style -->
+<!-- - [ ] `usePermission` -->
+<!-- - [ ] `useTitle` -->
+<!-- - [ ] `useMeta` -->
+<!-- - [ ] `useRoute` -->
+<!-- - [ ] `useMutation` − -->
+<!-- - [ ] `useHost` −  -->
+
+<details>
+<summary><strong>useElement</strong></summary>
+
+#### `[element] = useElement( selector | element | ref )`
+
+Get element, either from `ref`, by `selector` or directly.
+
+<!-- Updates whenever selected element or `ref.current` changes. -->
+
+```js
+function MyButton() {
+  let ref = useRef()
+  let [value, setValue] = useElement(ref)
+
+  return <input ref={ref} value={value}/>
+}
+```
+
+</details>
+
+<details>
+<summary><strong>useInput</strong></summary>
+
+#### `[value, setValue] = useInput( name | selector | element | ref )`
+
+Input element serves as data source. `null`/`undefined` values remove attribute from element.
+Useful for organizing light input controllers, when input element is governed by other components.
+To create UI, see [useFormField](#useFormField).
+
+```js
+function MyButton() {
+  let ref = useRef()
+  let [value, setValue] = useInput(ref)
+
+  return <input ref={ref} value={value}/>
+}
+```
+</details>
+
 <!--
 <details>
 <summary><strong>useAsyncSource</strong></summary>
@@ -356,6 +433,43 @@ const Demo = () => {
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
+
+<details>
+<summary><strong>useValidate</strong></summary>
+
+#### `[errorMessage, validate] = useValidate(validator: Function | Array)`
+
+Validator hook. Useful as replacement for heavy form hooks.
+`validator` is a function or an array of functions.
+A validator function takes value argument and returns `true` / `undefined`, if validation passes.
+Any other returned result is considered validation error.
+
+Example 1: input validator
+
+```js
+function MyComponent () {
+  let [usernameError, validateUsername] = useValidate([
+    value => !value ? 'Username is required' : true,
+    value => value.length < 2 ? 'Username must be at least 2 chars long' : true
+  ])
+
+  return <input onChange={e => validateUsername(e.target.value) && handleInputChange(e) } {...inputProps}/>
+}
+```
+
+Example 2: aspect with `useInput`
+
+```js
+function MyAspect () {
+  let [value, setValue] = useInput('username')
+  let [error, validate] = useValidate(value => !!value)
+
+  useEffect(() => validate(value), [value])
+  useEffect(() => if (error) console.log('Invalid:', error), [error])
+}
+```
+</details>
+
 <details>
 <summary><strong>useState</strong></summary>
 
@@ -364,6 +478,20 @@ const Demo = () => {
 Standard `useState` with additional optional `deps` param, that reinitializes input when deps change.
 
 </details>
+
+<!--
+
+* useLiveState
+
+Provides live binding hook - the value is updated automatically if `setValue` is called.
+Limited by the number of available bindings.
+
+
+* useDiffState
+
+Triggers state update only if new value differs from the prev value.
+
+-->
 
 
 ## Effect
@@ -432,6 +560,7 @@ Standard `useEffect` with optional scheduler. By default effect is run as microt
 
 </details>
 
+
 <!-- - [ ] `useDestroy` -->
 <!-- - [ ] `useEffectDeep` -->
 <!-- - [ ] `useUpdate` -->
@@ -447,85 +576,26 @@ Standard `useEffect` with optional scheduler. By default effect is run as microt
 <!-- - [ ] `useAsync` -->
 <!-- - [ ] `useHooked` - run hooks-enabled effect -->
 
-
-## DOM
-
-<!-- - [ ] `useEvent` − subscribe to events -->
-<!-- - [ ] `useElement` / `useElements` − query element or elements -->
-<details>
-<summary><strong>useAttribute</strong></summary>
-
-#### `[attr, setAttr] = useAttribute( element | ref, name)`
-
-Element attribute hook. Serializes value to attribute, creates attribute observer, handles edge-cases. `null`/`undefined` value removes attribute from element.
-
-```js
-function MyButton() {
-  let [attr, setAttr] = useAttribute(el, 'loading')
-
-  setAttr(true)
-
-  useEffect(() => {
-    // remove attribute
-    return () => setAttr()
-  }, [])
-}
-```
-
-</details>
-
-<!-- - [ ] `useLocation` − window.location state -->
-<!-- - [ ] `useRoute` − `useLocation` with param matching -->
-<!-- - [ ] `useData` − read / write element dataset -->
-<!-- - [ ] `useClass` − manipulate element `classList` -->
-<!-- - [ ] `useMount` − `onconnected` / `ondisconnected` events -->
-<!-- - [ ] `useStyle` − set element style -->
-<!-- - [ ] `usePermission` -->
-<!-- - [ ] `useTitle` -->
-<!-- - [ ] `useMeta` -->
-<!-- - [ ] `useRoute` -->
-<!-- - [ ] `useMutation` − -->
-<!-- - [ ] `useHost` −  -->
+<!--
+## UI
 
 <details>
-<summary><strong>useElement</strong></summary>
+<summary><strong>useFormField</strong></summary>
 
-#### `[element] = useElement( selector | element | ref )`
+#### `[ state, actions ] = useFormField({ name, type, validate=(value)=>{}, required, disabled, value, ...inputProps })`
+#### `{ value, error, touched, ...inputProps } = state`
+#### `{ set, validate, reset, clear } = actions`
 
-Get element, either from `ref`, by `selector` or directly.
-
-<!-- Updates whenever selected element or `ref.current` changes. -->
-
-```js
-function MyButton() {
-  let ref = useRef()
-  let [value, setValue] = useElement(ref)
-
-  return <input ref={ref} value={value}/>
-}
-```
-
-</details>
-
-<details>
-<summary><strong>useInput</strong></summary>
-
-#### `[value, setValue] = useInput( name | selector | element | ref )`
-
-Input element serves as data source. `null`/`undefined` values remove attribute from element.
+Form element state/actions. Useful for building forms UI.
 
 ```js
-function MyButton() {
-  let ref = useRef()
-  let [value, setValue] = useInput(ref)
+let [ passwordProps, { validate } ] = useFormField({ name: 'password', type: 'password' })
 
-  return <input ref={ref} value={value}/>
-}
+return <input {...passwordProps} />
 ```
-
 </details>
+-->
 
-<!-- - [ ] `useFormField` − form state hook -->
 <!-- - [ ] `useForm` − form state hook -->
 <!-- - [ ] `useTable` − table state hook -->
 <!-- - [ ] `useDialog` − dialog builder helper -->
