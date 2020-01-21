@@ -38,7 +38,7 @@ _Unihooks_ are not bound to react and work with any hooks-enabled library:
 * [unhook](https://ghub.io/unhook)
 * ...
 
-See [any-hooks](https://ghub.io/any-hooks).
+<sub>See [any-hooks](https://ghub.io/any-hooks).</sub>
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -54,15 +54,17 @@ import * as hook from 'unihooks/preact'
 
 ### 2. Unified
 
-_Unihooks_ follow extended `useState` API signature for intuitivity:
+_Unihooks_ take `useState` signature for intuitivity:
 
 ```js
-let [ value, setValue, state? ] = useSource( target, init? )
+let [ state, actions ] = useSource( target?, init | update? )
 ```
+
+<sub>The signature resembles [upsert](https://github.com/tc39/proposal-upsert), combining _insert_ and _update_ into a single function.</sub>
 
 ### 3. Reactive
 
-_Unihooks_ provide live binding to data source (if possible) − component is rerendered whenever underlying data changes. Static hooks that can be replaced with native API are avoided.
+_Unihooks_ provide live binding to a data source − component is rerendered whenever underlying data changes. Static hooks are avoided.
 
 ```js
 const MyComponent = () => { let ua = useUserAgent() } // ✘ − user agent never changes
@@ -318,6 +320,7 @@ function MyButton() {
 
 </details>
 
+<!--
 <details>
 <summary><strong>useInput</strong></summary>
 
@@ -336,6 +339,7 @@ function MyButton() {
 }
 ```
 </details>
+-->
 
 <!--
 <details>
@@ -437,7 +441,7 @@ const Demo = () => {
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
-
+<!--
 <details>
 <summary><strong>useValidate</strong></summary>
 
@@ -473,6 +477,7 @@ function MyAspect () {
 }
 ```
 </details>
+-->
 
 <details>
 <summary><strong>useState</strong></summary>

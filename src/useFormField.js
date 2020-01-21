@@ -1,6 +1,6 @@
 import { useRef } from './standard'
 
-export default function useFormField (props) {
+export default function useFormField (target, props) {
   let stateRef = useRef()
 
   if (stateRef.current) return stateRef.current
