@@ -36,9 +36,8 @@ _Unihooks_ are not bound to react and work with any hooks-enabled library:
 * [tng-hooks](https://ghub.io/tng-hooks)
 * [fn-with-hooks](https://ghub.io/fn-with-hooks)
 * [unhook](https://ghub.io/unhook)
-* ...
+* ... see [any-hooks](https://ghub.io/any-hooks) for full list
 
-<sub>See [any-hooks](https://ghub.io/any-hooks).</sub>
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -54,7 +53,7 @@ import * as hook from 'unihooks/preact'
 
 ### 2. Unified
 
-_Unihooks_ take `useState` signature for intuitivity:
+_Unihooks_ extend `useState` signature for intuitivity.
 
 ```js
 let [ state, actions ] = useSource( target?, init | update? )
@@ -78,10 +77,10 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 * [mobeewave]()
 -->
 
-## Store
+## Hooks
 
 <details>
-<summary><strong>useStore</strong> / <strong>createStore</strong></summary>
+<summary><strong>useStore</strong></summary>
 
 #### `[value, setValue] = useStore(key, init?)`
 
@@ -386,9 +385,8 @@ Provides data channel for intercommunication between components. Can be used as 
 
 
 
-## State
+<!-- ## State -->
 
-<!-- - [ ] `useState` − normalized standard `useState` -->
 <details>
 <summary><strong>usePrevious</strong></summary>
 
@@ -480,7 +478,7 @@ function MyAspect () {
 -->
 
 <details>
-<summary><strong>useState</strong></summary>
+<summary><strong>useState</strong> <kbd>standard</kbd></summary>
 
 #### `[value, setValue] = useState( init, deps=[] )`
 
@@ -506,10 +504,10 @@ Triggers state update only if new value differs from the prev value.
 
 
 
-## Action
+<!-- ## Action -->
 
 <details>
-<summary><strong>useAction</strong> / <strong>createAction</strong></summary>
+<summary><strong>useAction</strong></summary>
 
 
 #### `[result, action] = useAction(name?, fn)`
@@ -564,7 +562,7 @@ function Component () {
 </details>
 
 <details>
-<summary><strong>useEffect</strong></summary>
+<summary><strong>useEffect</strong> <kbd>standard</kbd></summary>
 
 #### `[value, setValue] = useEffect( init, deps?, schedule = fn => queueMicrotask(fn) )`
 
