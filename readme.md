@@ -59,7 +59,9 @@ _Unihooks_ extend `useState` signature for intuitivity.
 let [ state, actions ] = useSource( target?, init | update? )
 ```
 
-<sub>The signature resembles [upsert](https://github.com/tc39/proposal-upsert), combining _insert_ and _update_ into a single function.</sub>
+<!--
+<sub>Inspired by [upsert](https://github.com/tc39/proposal-upsert), combining _insert_ and _update_ into a single function.</sub>
+-->
 
 ### 3. Reactive
 
@@ -130,6 +132,55 @@ function MyComponent () {
 target.count++
 ```
 
+</details>
+
+
+<details>
+<summary><strong>useAction</strong></summary>
+
+
+#### `action = useAction(name?, fn)`
+
+Actions provider − stores hooks-enabled functions in cache and fetches them on demand. Can be used to organize controllers layer.
+If `name` is omitted, function name is used as directly. Actions can use hooks, but they're not reactive: changing state does not trigger rendering.
+
+```js
+createAction('load-collection', async (id) => {
+  // actions can use hooks internally
+  let [collection, setCollection] = useStore('collection')
+  setCollection({ ...collection, loading: true})
+  setCollection({ data: await load(`collection/${id}`), loading: false })
+
+  return collection
+})
+
+function MyComponent() {
+  let [collection, load] = useAction('load-collection')
+
+  useEffect(() => {
+    let data = await load(id)
+  }, [id])
+}
+```
+
+#### `action = createAction(name?, fn)`
+
+Register new action, can be used independent of main component scope.
+
+```js
+createAction('show-popup', () => {
+  myPopup.show()
+})
+
+function Component () {
+  let showPopup = useAction('show-popup')
+  // same as
+  // let [result, showPopup] = useAction('show-popup')
+
+  let button = useElement('.my-button')
+  button.onclick = showPopup
+}
+```
 </details>
 
 <details>
@@ -500,59 +551,6 @@ Triggers state update only if new value differs from the prev value.
 
 -->
 
-
-
-
-
-<!-- ## Action -->
-
-<details>
-<summary><strong>useAction</strong></summary>
-
-
-#### `[result, action] = useAction(name?, fn)`
-
-Actions provider − stores hooks-enabled functions in cache and fetches them on demand. Can be used to organize controllers layer.
-If `name` is omitted, function name is used as directly. Actions can use hooks, but they're not reactive: changing state does not trigger rendering.
-
-```js
-createAction('load-collection', async (id) => {
-  // actions can use hooks internally
-  let [collection, setCollection] = useStore('collection')
-  setCollection({ ...collection, loading: true})
-  setCollection({ data: await load(`collection/${id}`), loading: false })
-
-  return collection
-})
-
-function MyComponent() {
-  let [collection, load] = useAction('load-collection')
-
-  useEffect(() => {
-    let data = await load(id)
-  }, [id])
-}
-```
-
-#### `action = createAction(name?, fn)`
-
-Register new action, can be used independent of main component scope.
-
-```js
-createAction('show-popup', () => {
-  myPopup.show()
-})
-
-function Component () {
-  let showPopup = useAction('show-popup')
-  // same as
-  // let [result, showPopup] = useAction('show-popup')
-
-  let button = useElement('.my-button')
-  button.onclick = showPopup
-}
-```
-</details>
 
 <details>
 <summary><strong>useSyncEffect</strong></summary>
