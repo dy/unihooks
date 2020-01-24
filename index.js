@@ -189,5 +189,5 @@ export function useCountdown(n, interval = 1000) {
 }
 
 export function useFormField(key, init) {
-  let [value, setValue] = useValue('__uhx:formField', init)
+  let [value, setValue] = useValue('__uhx:formField-', init)
 }
