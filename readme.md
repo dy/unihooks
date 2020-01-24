@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Essential hooks toolkit that you would anyways build yourself for your react (or analogous framework) app.
+Essential compact hooks toolkit for everyday react[-ish] project.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -20,9 +20,9 @@ const MyComponent = () => {
 
 ## Principles
 
-### 1. Any framework
+### 1. Framework agnostic
 
-_Unihooks_ are not bound to react and work with any hooks-enabled library:
+_Unihooks_ are not bound to react and work with any hooks-enabled framework:
 
 * [react](https://ghub.io/react)
 * [preact](https://ghub.io/preact)
@@ -36,7 +36,7 @@ _Unihooks_ are not bound to react and work with any hooks-enabled library:
 * [tng-hooks](https://ghub.io/tng-hooks)
 * [fn-with-hooks](https://ghub.io/fn-with-hooks)
 * [unhook](https://ghub.io/unhook)
-* ... see [any-hooks](https://ghub.io/any-hooks) for full list
+* ... see [any-hooks](https://ghub.io/any-hooks) for the full list
 
 
 <!--
@@ -82,7 +82,7 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 ## Hooks
 
 <details>
-<summary><strong>useStore</strong></summary>
+<summary><strong>useValue</strong></summary>
 
 #### `[value, setValue] = useStore(key, init?)`
 
@@ -107,16 +107,10 @@ function Component () {
 }
 ```
 
-#### `store = createStore(name, init)`
-
-Create store. Can be used outside of components or hookable scope.
-
-Ref: [store](https://ghub.io/store), [broadcast-channel](https://ghub.io/broadcast-channel), [use-store](https://ghub.io/use-store)
-
 </details>
 
 <details>
-<summary><strong>useProperty</strong></summary>
+<summary><strong>useStorage</strong></summary>
 
 #### `[value, setValue] = useProperty(target, path, init?)`
 
@@ -134,57 +128,8 @@ target.count++
 
 </details>
 
-
 <details>
-<summary><strong>useAction</strong></summary>
-
-
-#### `action = useAction(name?, fn)`
-
-Actions provider − stores hooks-enabled functions in cache and fetches them on demand. Can be used to organize controllers layer.
-If `name` is omitted, function name is used as directly. Actions can use hooks, but they're not reactive: changing state does not trigger rendering.
-
-```js
-createAction('load-collection', async (id) => {
-  // actions can use hooks internally
-  let [collection, setCollection] = useStore('collection')
-  setCollection({ ...collection, loading: true})
-  setCollection({ data: await load(`collection/${id}`), loading: false })
-
-  return collection
-})
-
-function MyComponent() {
-  let [collection, load] = useAction('load-collection')
-
-  useEffect(() => {
-    let data = await load(id)
-  }, [id])
-}
-```
-
-#### `action = createAction(name?, fn)`
-
-Register new action, can be used independent of main component scope.
-
-```js
-createAction('show-popup', () => {
-  myPopup.show()
-})
-
-function Component () {
-  let showPopup = useAction('show-popup')
-  // same as
-  // let [result, showPopup] = useAction('show-popup')
-
-  let button = useElement('.my-button')
-  button.onclick = showPopup
-}
-```
-</details>
-
-<details>
-<summary><strong>useQueryParam</strong></summary>
+<summary><strong>useURLSearchParam</strong></summary>
 
 #### `[value, setValue] = useQueryParam(name, init?)`
 
@@ -200,55 +145,7 @@ It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/Wind
 
 </details>
 
-<details>
-<summary><strong>useLocalStorage</strong></summary>
-
-#### `[value, setValue] = useLocalStorage(key, init?)`
-
-`useState` with persistency to local storage by `key`. Unlike `useStore`, provides raw `localStorage` access.
-`init` can be a function or initial value. Provides
-
-```js
-function Component1 () {
-  const [count, setCount] = useLocalStorage('my-count', 1)
-}
-
-function Component2 () {
-  const [count, setCount] = useLocalStorage('my-count')
-  // count === 1
-
-  // updates Component1 as well
-  setCount(2)
-}
-
-function Component3 () {
-  const [count, setCount] = useLocalStorage('another-count', (value) => {
-    // ...initialize value from store
-    return value
-  })
-}
-```
-
-</details>
-
-<details>
-<summary><strong>useSessionStorage</strong></summary>
-
-#### `[value, setValue] = useSessionStorage(key, init?)`
-
-`useLocalStorage` with `sessionStorage` as backend.
-
-```js
-function MyComponent () {
-  const [count, setCount] = useSessionStorage('count', (value) => {
-    // ...initialize value from store
-    return value
-  })
-}
-```
-
-</details>
-
+<!--
 <details>
 <summary><strong>useCookie</strong></summary>
 
@@ -269,52 +166,9 @@ function MyComponent () {
 Does not observe cookies (there's no implemented API for that).
 
 </details>
+-->
 
-<details>
-<summary><strong>useGlobalCache</strong></summary>
-
-#### `[value, setValue] = useGlobalCache(key, init?)`
-
-Get access to value stored in [globalCache](https://ghub.io/global-cache).
-
-```js
-function MyComponent () {
-  const [globalValue, setGlobalValue] = useGlobalCache('value')
-}
-```
-
-</details>
-
-<details>
-<summary><strong>useSource</strong></summary>
-
-#### `[value, setValue] = useSource(storage, key, init?)`
-
-Generic customizable storage hook with persistency.
-`storage` object provides data to underlying data structure.
-Mostly usable for organizing high-level hooks.
-
-```js
-let [value, state] = useSource({
-  // read value from storage
-  get: (key) => myStore.get(key),
-
-  // write value from storage
-  set: (key, value) => myStore.set(key, value),
-
-  // compare if value must be written. By default Object.is.
-  is: (a, b) => a.toString() === b.toString(),
-
-  // scheduler for persistency
-  plan(fn) { let id = setTimeout(fn); return () => clearTimeout(id) }
-}, 'foo', initValue)
-```
-
-</details>
-
-
-<!-- - [ ] `useEvent` − subscribe to events -->
-<!-- - [ ] `useElement` / `useElements` − query element or elements -->
+<!--
 <details>
 <summary><strong>useAttribute</strong></summary>
 
@@ -334,8 +188,8 @@ function MyButton() {
   }, [])
 }
 ```
-
 </details>
+-->
 
 <!-- - [ ] `useLocation` − window.location state -->
 <!-- - [ ] `useRoute` − `useLocation` with param matching -->
@@ -350,6 +204,7 @@ function MyButton() {
 <!-- - [ ] `useMutation` − -->
 <!-- - [ ] `useHost` −  -->
 
+<!--
 <details>
 <summary><strong>useElement</strong></summary>
 
@@ -357,7 +212,7 @@ function MyButton() {
 
 Get element, either from `ref`, by `selector` or directly.
 
-<!-- Updates whenever selected element or `ref.current` changes. -->
+Updates whenever selected element or `ref.current` changes.
 
 ```js
 function MyButton() {
@@ -369,6 +224,7 @@ function MyButton() {
 ```
 
 </details>
+-->
 
 <!--
 <details>
@@ -391,21 +247,6 @@ function MyButton() {
 </details>
 -->
 
-<!--
-<details>
-<summary><strong>useAsyncSource</strong></summary>
-
-#### `let [data, setData, state] = useAsyncSource(source, key, init?)`
-
-Provides access to generic async data source, like message channel, remote data, worker, worklet etc.
-
-```js
-function Component () {
-  let [data, setData, { loading, sync }] = useAsyncSource(source, '')
-}
-```
-</details>
--->
 
 <!--
 <details>
@@ -528,49 +369,7 @@ function MyAspect () {
 </details>
 -->
 
-<details>
-<summary><strong>useState</strong> <kbd>standard</kbd></summary>
-
-#### `[value, setValue] = useState( init, deps=[] )`
-
-Standard `useState` with additional optional `deps` param, that reinitializes input when deps change.
-
-</details>
-
-<!--
-
-* useLiveState
-
-Provides live binding hook - the value is updated automatically if `setValue` is called.
-Limited by the number of available bindings.
-
-
-* useDiffState
-
-Triggers state update only if new value differs from the prev value.
-
--->
-
-
-<details>
-<summary><strong>useSyncEffect</strong></summary>
-
-`useEffect` that is run immediately, unlike `useLayoutEffect`. Can be used as deps-gate.
-
-</details>
-
-<details>
-<summary><strong>useEffect</strong> <kbd>standard</kbd></summary>
-
-#### `[value, setValue] = useEffect( init, deps?, schedule = fn => queueMicrotask(fn) )`
-
-Standard `useEffect` with optional scheduler. By default effect is run as microtask.
-
-</details>
-
-
 <!-- - [ ] `useDestroy` -->
-<!-- - [ ] `useEffectDeep` -->
 <!-- - [ ] `useUpdate` -->
 <!-- - [ ] `useTween` -->
 <!-- - [ ] `useTimeout` -->
