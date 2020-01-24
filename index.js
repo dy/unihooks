@@ -31,7 +31,7 @@ export function useStorage(key, init, storage = window.localStorage) {
 
   useMemo(() => {
     if (init === undefined) return
-    if (storage.getItem(key) === undefined) storage.setItem(key, typeof init === 'function' ? init() : init)
+    if (storage.getItem(key) === undefined) storage.setItem(key, value)
   }, [key])
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export function useURLSearchParam(key, init) {
     if (init === undefined) return
     let params = new URLSearchParams(window.location.search)
     if (params.get(key) === undefined) {
-      params.set(key, typeof init === 'function' ? init() : init)
+      params.set(key, value)
       setURLSearchParams(params)
     }
   }, [key])
@@ -189,5 +189,5 @@ export function useCountdown(n, interval = 1000) {
 }
 
 export function useFormField(key, init) {
-
+  let [value, setValue] = useValue('__uhx:formField', init)
 }
