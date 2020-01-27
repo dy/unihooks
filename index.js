@@ -36,17 +36,23 @@ export function useValue(key, init) {
   }]
 }
 
-export function useStorage(key, init, storage = window.localStorage) {
-  let [value, setValue] = useValue('__uhx:storage-' + key, init)
+export function useStorage(key, init, o = { storage: window.localStorage, prefix: null }) {
+  if (o) o = Object.assign({ storage: window.localStorage, prefix: '__uhx:storage-'}, o)
+  let storeKey = o.prefix + key
+  let [value, setValue] = useValue(key, () => {
+    let storedStr = o.storage.getItem(storeKey), storedValue
+    if (storedStr !== undefined) storedValue = JSON.parse(storedStr)
+    return typeof init === 'function' ? init(storedValue) : init
+  })
 
   useMemo(() => {
     if (init === undefined) return
-    if (storage.getItem(key) === undefined) storage.setItem(key, value)
+    if (o.storage.getItem(storeKey) === undefined) o.storage.setItem(storeKey, JSON.stringify(value))
   }, [key])
 
   useEffect(() => {
     let update = e => {
-      if (e.key !== key) return
+      if (e.key !== storeKey) return
       setValue(e.newValue)
     }
     window.addEventListener('storage', update)
@@ -55,7 +61,7 @@ export function useStorage(key, init, storage = window.localStorage) {
 
   return [value, (value) => {
     setValue(value)
-    storage.setItem(key, value)
+    o.storage.setItem(storeKey, JSON.stringify(value))
   }]
 }
 

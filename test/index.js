@@ -1,5 +1,5 @@
 import('./useValue').then()
-// import('./useStorage').then()
+import('./useStorage').then()
 // import('./useStore').then()
 // import('./useAction').then()
 // import('./useGlobalCache').then()

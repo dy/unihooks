@@ -188,5 +188,7 @@ t('useValue: useQueryParam atomico case (must not fail)', async t => {
   f2()
   f2.unhook()
 
+  await frame(1)
+
   t.end()
 })
