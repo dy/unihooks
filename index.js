@@ -4,25 +4,35 @@ export default setHooks
 
 const listeners = globalThis.__uhxListeners || (globalThis.__uhxListeners = {}),
   values = globalThis.__uhxValues || (globalThis.__uhxValues = {})
+
 export function useValue(key, init) {
   let [, update] = useState()
 
   useMemo(() => {
-    if (init === undefined) return
-    if (!(key in values)) values[key] = typeof init === 'function' ? init() : init
-  }, [key])
-
-  useEffect(() => {
     (listeners[key] || (listeners[key] = [])).push(update)
-    return () => {
-      listeners[key].splice(listeners[key].indexOf(update) >>> 0, 1)
-      if (!listeners[key].length) delete values[key]
+
+    if (init === undefined) return
+    if (!(key in values)) {
+      if (typeof init === 'function') {
+        init = init()
+      }
+      values[key] = init
+      if (init && init.then) {
+        init.then(init => {
+          update(values[key] = init)
+        })
+      }
     }
   }, [key])
 
+  useEffect(() => () => {
+    listeners[key].splice(listeners[key].indexOf(update) >>> 0, 1)
+    if (!listeners[key].length) delete values[key]
+  }, [key])
+
   return [values[key], (value) => {
-    values[key] = value
-    listeners[key].map(update => update(value))
+    values[key] = typeof value === 'function' ? value(values[key]) : value
+    listeners[key].map((update) => update(value))
   }]
 }
 
