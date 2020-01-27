@@ -1,10 +1,9 @@
 import t from 'tst'
-import { useQueryParam, useState, useEffect } from '../src/index'
+import { useSearchParam, useState, useEffect } from '../'
 import enhook from './enhook.js'
-import qs from 'qs'
 import { tick, idle, frame, time } from 'wait-please'
 
-t.browser('useQueryParam: read values properly', async t => {
+t.only('useSearchParam: read values properly', async t => {
   clearSearch()
   let log = []
 
@@ -24,17 +23,17 @@ t.browser('useQueryParam: read values properly', async t => {
   window.history.pushState(null, '', '?' + str)
 
   let f = enhook(() => {
-    let [str, setStr] = useQueryParam('str')
-    let [num, setNum] = useQueryParam('num')
-    let [bool, setBool] = useQueryParam('bool')
-    let [nul, setNul] = useQueryParam('nul')
-    let [undef, setUndef] = useQueryParam('undefined')
-    let [arr1, setArr1] = useQueryParam('arr1')
-    let [arr2, setArr2] = useQueryParam('arr2')
-    let [arr3, setArr3] = useQueryParam('arr3')
-    let [arr4, setArr4] = useQueryParam('arr4')
-    let [obj, setObj] = useQueryParam('obj')
-    let [date, setDate] = useQueryParam('date')
+    let [str, setStr] = useSearchParam('str')
+    let [num, setNum] = useSearchParam('num')
+    let [bool, setBool] = useSearchParam('bool')
+    let [nul, setNul] = useSearchParam('nul')
+    let [undef, setUndef] = useSearchParam('undefined')
+    let [arr1, setArr1] = useSearchParam('arr1')
+    let [arr2, setArr2] = useSearchParam('arr2')
+    let [arr3, setArr3] = useSearchParam('arr3')
+    let [arr4, setArr4] = useSearchParam('arr4')
+    let [obj, setObj] = useSearchParam('obj')
+    let [date, setDate] = useSearchParam('date')
 
     log.push(str)
     log.push(num)
@@ -70,19 +69,19 @@ t.browser('useQueryParam: read values properly', async t => {
   t.end()
 })
 
-t.browser('useQueryParam: write values', async t => {
+t.browser('useSearchParam: write values', async t => {
   clearSearch()
 
   let f = enhook((params) => {
-    let [str, setStr] = useQueryParam('str')
-    let [num, setNum] = useQueryParam('num')
-    let [bool, setBool] = useQueryParam('bool')
-    let [arr1, setArr1] = useQueryParam('arr1')
-    let [arr2, setArr2] = useQueryParam('arr2')
-    let [arr3, setArr3] = useQueryParam('arr3')
-    let [arr4, setArr4] = useQueryParam('arr4')
-    let [obj, setObj] = useQueryParam('obj')
-    let [date, setDate] = useQueryParam('date')
+    let [str, setStr] = useSearchParam('str')
+    let [num, setNum] = useSearchParam('num')
+    let [bool, setBool] = useSearchParam('bool')
+    let [arr1, setArr1] = useSearchParam('arr1')
+    let [arr2, setArr2] = useSearchParam('arr2')
+    let [arr3, setArr3] = useSearchParam('arr3')
+    let [arr4, setArr4] = useSearchParam('arr4')
+    let [obj, setObj] = useSearchParam('obj')
+    let [date, setDate] = useSearchParam('date')
 
     setStr(params.str)
     setNum(params.num)
@@ -126,22 +125,22 @@ t.browser('useQueryParam: write values', async t => {
   t.end()
 })
 
-t.browser('useQueryParam: defaults', async t => {
+t.browser('useSearchParam: defaults', async t => {
   let log = []
 
   clearSearch()
   await time(10)
 
   let f = enhook(() => {
-    let [str, setStr] = useQueryParam('str', 'foo')
-    let [num, setNum] = useQueryParam('num', -123)
-    let [bool, setBool] = useQueryParam('bool', false)
-    let [arr1, setArr1] = useQueryParam('arr1', [1, 2, 3])
-    let [arr2, setArr2] = useQueryParam('arr2', ['a', 'b', 'c'])
-    let [arr3, setArr3] = useQueryParam('arr3', [['a', 1], ['b', 2], ['c', 3]])
-    let [arr4, setArr4] = useQueryParam('arr4', [{ a: 1 }, { b: 2 }, { c: 3 }])
-    let [obj, setObj] = useQueryParam('obj', { a: 1, b: 2, c: 3, foo: 'bar' })
-    let [date, setDate] = useQueryParam('date', new Date('2019-11-17'))
+    let [str, setStr] = useSearchParam('str', 'foo')
+    let [num, setNum] = useSearchParam('num', -123)
+    let [bool, setBool] = useSearchParam('bool', false)
+    let [arr1, setArr1] = useSearchParam('arr1', [1, 2, 3])
+    let [arr2, setArr2] = useSearchParam('arr2', ['a', 'b', 'c'])
+    let [arr3, setArr3] = useSearchParam('arr3', [['a', 1], ['b', 2], ['c', 3]])
+    let [arr4, setArr4] = useSearchParam('arr4', [{ a: 1 }, { b: 2 }, { c: 3 }])
+    let [obj, setObj] = useSearchParam('obj', { a: 1, b: 2, c: 3, foo: 'bar' })
+    let [date, setDate] = useSearchParam('date', new Date('2019-11-17'))
 
     log.push(str)
     log.push(num)
@@ -189,24 +188,24 @@ t.browser('useQueryParam: defaults', async t => {
   t.end()
 })
 
-t('useQueryParam: custom toString method')
+t('useSearchParam: custom toString method')
 
-t.browser('useQueryParam: observe updates', async t => {
+t.browser('useSearchParam: observe updates', async t => {
   clearSearch()
   let log = []
   let f = enhook(() => {
-    let [v, setV] = useQueryParam('x', 1)
+    let [v, setV] = useSearchParam('x', 1)
     log.push(v)
   })
   f()
   await frame(2)
   t.deepEqual(log, [1])
 
-  window.history.pushState(null, "useQueryParam", "?x=2");
+  window.history.pushState(null, "useSearchParam", "?x=2");
   await frame()
   t.deepEqual(log, [1, 2])
 
-  window.history.pushState(null, "useQueryParam", "?x=3");
+  window.history.pushState(null, "useSearchParam", "?x=3");
   await frame(3)
   t.deepEqual(log, [1, 2, 3])
 
@@ -215,9 +214,9 @@ t.browser('useQueryParam: observe updates', async t => {
   t.end()
 })
 
-t.browser('useQueryParam: default array', async t => {
+t.browser('useSearchParam: default array', async t => {
   let f = enhook(() => {
-    let [arr, setArr] = useQueryParam('arr', [])
+    let [arr, setArr] = useSearchParam('arr', [])
     t.deepEqual(arr, [])
   })
   f()

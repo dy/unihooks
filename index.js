@@ -66,8 +66,8 @@ export function useStorage(key, init, o = { storage: window.localStorage, prefix
 }
 
 let locationDeps = 0
-export function useURLSearchParam(key, init) {
-  let [value, setValue] = useValue('__uhx:URLSearchParam-' + key, init)
+export function useSearchParam(key, init) {
+  let [value, setValue] = useValue('__uhx:searchParam-' + key, init)
 
   useMemo(() => {
     if (init === undefined) return

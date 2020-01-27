@@ -84,21 +84,19 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 <details>
 <summary><strong>useValue</strong></summary>
 
-#### `[value, setValue] = useStore(key, init?)`
+#### `[value, setValue] = useValue(key, init?)`
 
-Store provider with persistency and changes broadcast. Can be used as robust application model layer.
+Global value provider. Can be used as global storage, eg. as application model layer.
 
 ```js
-import { createStore, useStore } from 'unihooks'
-
-createStore('users', {
-  data: [],
-  loading: false,
-  current: null
-})
+import { useValue } from 'unihooks'
 
 function Component () {
-  let [users, setUsers] = useStore('users')
+  let [users, setUsers] = useValue('users', {
+    data: [],
+    loading: false,
+    current: null
+  })
 
   setUsers({ ...users, loading: true })
 
@@ -106,42 +104,59 @@ function Component () {
   setUsers(users => { ...users, loading: false })
 }
 ```
-
 </details>
+
 
 <details>
 <summary><strong>useStorage</strong></summary>
 
-#### `[value, setValue] = useProperty(target, path, init?)`
+#### `[value, setValue] = useStorage(key, init?, options?)`
 
-Observe any target property. Defines transparent getter/setter on a target.
+`useValue` with persistency to local/session storage.
 
 ```js
-let target = { count: 1 }
-function MyComponent () {
-  const [count, setCount] = useProperty(target, 'count', 1)
+import { useStorage } from 'unihooks'
+
+function Component1 () {
+  const [count, setCount] = useStorage('my-count', 1)
 }
 
-// trigger update
-target.count++
+function Component2 () {
+  const [count, setCount] = useStorage('my-count')
+  // count === 1
+
+  setCount(2)
+  // (↑ updates Component1 too)
+}
+
+function Component3 () {
+  const [count, setCount] = useStorage('another-count', (value) => {
+    // ...initialize value from store
+    return value
+  })
+}
 ```
+
+#### `options`
+
+* `prefix` - prefix that's added to stored keys
+* `storage` - manually pass session/local/etc storage
+<!-- * `interval` - persistency interval -->
 
 </details>
 
 <details>
-<summary><strong>useURLSearchParam</strong></summary>
+<summary><strong>useSearchParam</strong></summary>
 
-#### `[value, setValue] = useQueryParam(name, init?)`
+#### `[value, setValue] = useSearchParam(name, init?)`
 
-`useState` with persistency to query string. Enables `pushstate`, `replacestate` observers, as well as links withing the same origin. Reflects updates back in search string.
+`useValue` that is reflected as query string in `location.search`. Turns on `history.pushstate` and `history.replacestate` events, as well as same-origin links listener.
 
 ```js
 function MyComponent () {
-  let [id, setId] = useQueryParam('id')
+  let [id, setId] = useSearchParam('id')
 }
 ```
-
-It observes [`onpopstate`](https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate) and [`onpushstate`](https://ghub.io/onpushstate) events to trigger update.
 
 </details>
 
