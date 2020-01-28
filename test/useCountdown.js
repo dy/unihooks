@@ -1,6 +1,6 @@
 import t from 'tst'
 import enhook from './enhook.js'
-import { useCountdown } from '../src/index'
+import { useCountdown } from '../'
 import { time } from 'wait-please'
 
 t('useCountdown: basics', async t => {

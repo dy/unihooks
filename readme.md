@@ -325,15 +325,19 @@ const Demo = () => {
 <details>
 <summary><strong>useCountdown</strong></summary>
 
-#### `[n, reset] = useCountdown(startValue, interval=1000)`
+#### `[n, reset] = useCountdown(startValue, interval=1000 | schedule)`
 
-Countdown state from `startValue` down to `0` with indicated `interval` in ms. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
+Countdown value from `startValue` down to `0` with indicated `interval` in ms. Alternatively, a scheduler function can be passed as `schedule` argument, that can be eg. [worker-timers](https://ghub.io/worker-timers)-based implementation.
 
 ```js
 import { useCountdown } from 'unihooks'
+import { setInterval, clearInterval } from 'worker-timers'
 
 const Demo = () => {
-  const [count, reset] = useCountdown(30);
+  const [count, reset] = useCountdown(30, fn => {
+    let id = setInterval(fn, 1000)
+    return () => clearInterval(id)
+  });
 
   return `Remains: ${count}s`
 };
@@ -480,6 +484,28 @@ return <input {...passwordProps} />
 <!-- - [ ] `usePromise` -->
 <!-- - [ ] `useEmitter` -->
 
+
+<details>
+<summary><strong>setHooks / native hooks</strong></summary>
+
+For convenience, unihooks export current framework hooks. To switch framework, use `setHooks` - the default export.
+
+```js
+import setHooks, { useState, useEffect } from 'unihooks'
+import * as hooks from 'preact/hooks'
+
+setHooks(hooks)
+
+function Timer() {
+  let [count, setCount] = useState(0)
+  useEffect(() => {
+    let id = setInterval(() => setCount(c => ++c))
+    return () => clearInterval(id)
+  }, [])
+}
+```
+
+</details>
 
 ## See also
 

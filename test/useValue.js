@@ -1,5 +1,4 @@
-import { useValue } from '../'
-import { useEffect, useState } from 'any-hooks'
+import { useValue, useEffect } from '../'
 import t from 'tst'
 import enhook from './enhook.js'
 import { tick, frame, time } from 'wait-please'

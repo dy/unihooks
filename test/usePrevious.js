@@ -1,13 +1,13 @@
 import t from 'tst'
 import enhook from './enhook.js'
-import { usePrevious, useState } from '../src/index'
+import { usePrevious, useState } from '../'
 import { tick } from 'wait-please'
 
 t('usePrevious: basics', async t => {
   let log = []
   let f = enhook(() => {
     let [foo, setFoo] = useState(1)
-    let [fooPrev] = usePrevious(foo)
+    let fooPrev = usePrevious(foo)
     log.push(foo, fooPrev)
   })
   f()

@@ -1,14 +1,15 @@
-import setHooks, { useEffect, useMemo, useState } from "any-hooks"
+import setHooks, * as hooks from "any-hooks"
 
+export * from 'any-hooks'
 export default setHooks
 
 const listeners = globalThis.__uhxListeners || (globalThis.__uhxListeners = {}),
   values = globalThis.__uhxValues || (globalThis.__uhxValues = {})
 
 export function useValue(key, init) {
-  let [, update] = useState()
+  let [, update] = hooks.useState()
 
-  useMemo(() => {
+  hooks.useMemo(() => {
     (listeners[key] || (listeners[key] = [])).push(update)
 
     if (init === undefined) return
@@ -25,7 +26,7 @@ export function useValue(key, init) {
     }
   }, [key])
 
-  useEffect(() => () => {
+  hooks.useEffect(() => () => {
     listeners[key].splice(listeners[key].indexOf(update) >>> 0, 1)
     if (!listeners[key].length) delete values[key]
   }, [key])
@@ -50,13 +51,13 @@ export function useStorage(key, init, o = { storage: window.localStorage, prefix
     return init
   })
 
-  useMemo(() => {
+  hooks.useMemo(() => {
     // persist initial value, if store is rewired
     if (init === undefined) return
     if (o.storage.getItem(storeKey) == null) o.storage.setItem(storeKey, JSON.stringify(value))
   }, [key])
 
-  useEffect(() => {
+  hooks.useEffect(() => {
     // notify listeners, subscribe to storage changes
     let update = e => {
       if (e.key !== storeKey) return
@@ -86,7 +87,7 @@ export function useSearchParam(key, init) {
     return init
   })
 
-  useMemo(() => {
+  hooks.useMemo(() => {
     if (init === undefined) return
     let params = new URLSearchParams(window.location.search)
     if (!params.has(key)) {
@@ -95,7 +96,7 @@ export function useSearchParam(key, init) {
     }
   }, [key])
 
-  useEffect(() => {
+  hooks.useEffect(() => {
     const update = (e) => {
       let params = new URLSearchParams(window.location.search)
       let newValue = params.get(key)
@@ -181,21 +182,21 @@ function enableNavigateEvent() {
 }
 
 export function useCountdown(n, interval = 1000) {
-  const [count, set] = useState(n)
+  const [count, set] = hooks.useState(n)
 
-  const reset = useCallback(() => set(n), [n])
+  const reset = hooks.useCallback(() => set(n), [n])
 
-  const schedule = useMemo(() => {
+  const schedule = hooks.useMemo(() => {
     return typeof interval === 'function' ? interval : fn => {
       let id = setInterval(fn, interval)
-      return clearInterval(id)
+      return () => clearInterval(id)
     }
   }, [interval])
 
-  useEffect(() => {
+  hooks.useEffect(() => {
     const unschedule = schedule(() => {
       set(count => {
-        if (count <= 0) return (clearInterval(timeoutId), 0)
+        if (count <= 0) return (unschedule(), 0)
         else return count - 1
       })
     })
@@ -204,6 +205,16 @@ export function useCountdown(n, interval = 1000) {
   }, [n, schedule])
 
   return [count, reset]
+}
+
+export function usePrevious(value) {
+  let ref = hooks.useRef()
+
+  hooks.useEffect(() => {
+    ref.current = value
+  }, [value])
+
+  return ref.current
 }
 
 export function useFormField(key, init) {
