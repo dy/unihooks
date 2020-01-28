@@ -72,7 +72,9 @@ export function useStorage(key, init, o = { storage: window.localStorage, prefix
   }]
 }
 
-let locationDeps = 0
+wrapHistory('push')
+wrapHistory('replace')
+enableNavigateEvent()
 export function useSearchParam(key, init) {
   let [value, setValue] = useValue('__uhx:searchParam-' + key, () => {
     let params = new URLSearchParams(window.location.search)
@@ -94,14 +96,6 @@ export function useSearchParam(key, init) {
   }, [key])
 
   useEffect(() => {
-    let unwrapPush, unwrapReplace, disableNavigateEvent
-    if (!locationDeps) {
-      unwrapPush = wrapHistory('push')
-      unwrapReplace = wrapHistory('replace')
-      disableNavigateEvent = enableNavigateEvent()
-    }
-    locationDeps++
-
     const update = (e) => {
       let params = new URLSearchParams(window.location.search)
       let newValue = params.get(key)
@@ -118,13 +112,6 @@ export function useSearchParam(key, init) {
       window.removeEventListener('pushstate', update)
       window.removeEventListener('replacestate', update)
       window.removeEventListener('navigate', update)
-
-      locationDeps--
-      if (!locationDeps) {
-        unwrapPush()
-        unwrapReplace()
-        disableNavigateEvent()
-      }
     }
   }, [key])
 
