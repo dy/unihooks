@@ -139,8 +139,8 @@ function Component3 () {
 
 #### `options`
 
-* `prefix` - prefix that's added to stored keys
-* `storage` - manually pass session/local/etc storage
+* `prefix` - prefix that's added to stored keys.
+* `storage` - manually pass session/local/etc storage.
 <!-- * `interval` - persistency interval -->
 
 </details>
@@ -325,7 +325,7 @@ const Demo = () => {
 <details>
 <summary><strong>useCountdown</strong></summary>
 
-#### `[n, reset] = useCountdown(startValue, interval=1000 | schedule)`
+#### `[n, reset] = useCountdown(startValue, interval=1000 | schedule?)`
 
 Countdown value from `startValue` down to `0` with indicated `interval` in ms. Alternatively, a scheduler function can be passed as `schedule` argument, that can be eg. [worker-timers](https://ghub.io/worker-timers)-based implementation.
 
@@ -404,25 +404,23 @@ function MyAspect () {
 <!-- - [ ] `useAsync` -->
 <!-- - [ ] `useHooked` - run hooks-enabled effect -->
 
-<!--
-## UI
 
 <details>
 <summary><strong>useFormField</strong></summary>
 
-#### `[ state, actions ] = useFormField({ name, type, validate=(value)=>{}, required, disabled, value, ...inputProps })`
-#### `{ value, error, touched, ...inputProps } = state`
-#### `{ set, validate, reset, clear } = actions`
+#### `[ state, actions ] = useFormField(name, init?, { persist=true, validate=(value)=>{}?, ...inputProps })`
+#### `{ value, error, touched, inputProps } = state`
+#### `{ set, reset, clear, validate } = actions`
 
-Form element state/actions. Useful for building forms UI.
+Controlled input state helper. Handles input state and validation.
 
 ```js
-let [ passwordProps, { validate } ] = useFormField({ name: 'password', type: 'password' })
+let [ { inputProps }, { validate } ] = useFormField('password', '', { type: 'password' })
 
-return <input {...passwordProps} />
+return <input {...inputProps} />
 ```
 </details>
--->
+
 
 <!-- - [ ] `useForm` − form state hook -->
 <!-- - [ ] `useTable` − table state hook -->

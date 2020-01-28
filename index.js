@@ -37,8 +37,8 @@ export function useValue(key, init) {
   }]
 }
 
-export function useStorage(key, init, o = { storage: window.localStorage, prefix: null }) {
-  if (o) o = Object.assign({ storage: window.localStorage, prefix: '__uhx:storage-'}, o)
+export function useStorage(key, init, o) {
+  o = { storage: window.localStorage, prefix: '__uhx:storage-', ...(o || {})}
   let storeKey = o.prefix + key
   let [value, setValue] = useValue(key, () => {
     // init from stored value, if any
@@ -69,6 +69,7 @@ export function useStorage(key, init, o = { storage: window.localStorage, prefix
 
   return [value, (value) => {
     setValue(value)
+    // side-effect write
     o.storage.setItem(storeKey, JSON.stringify(value))
   }]
 }
@@ -217,6 +218,76 @@ export function usePrevious(value) {
   return ref.current
 }
 
-export function useFormField(key, init) {
-  let [value, setValue] = useValue('__uhx:formField-', init)
+export function useFormField(key, value, props={}) {
+  let inputRef = hooks.useRef()
+
+  let [state, setState] = hooks.useState(() => {
+    let validate = (value, check) => {
+      try {
+        var valid = check(value)
+        if (valid === true || valid === undefined) {
+          state.error = null
+          setState(state)
+          return true
+        }
+        throw valid
+      } catch (error) {
+        state.error = error
+        setState(state)
+      }
+      return false
+    }
+    let actions = {
+      set: (value) => {
+        state.value = state.inputProps.value = value
+        setState(state)
+      },
+      reset: () => {
+        state.value = state.inputProps.value = value
+        state.touched = false
+        state.error = null
+        setState(state)
+      },
+      validate: () => {
+        if (Array.isArray(props.validate)) {
+          return props.validate.every(check => validate(state.value, check))
+        }
+        return validate(state.value)
+      },
+      clear: () => {
+        state.value = state.inputProps.value = null
+        setState(state)
+      },
+      valueOf() { return this.value },
+      [Symbol.toPrimitive]() { return this.value },
+      [Symbol.iterator]: function* () {
+        yield state
+        yield actions
+      }
+    }
+
+    let state = Object.create(actions)
+
+    state.value = value
+    state.error = null
+    state.touched = false
+    state.inputProps = {
+      name: key,
+      value: state.value,
+      ref: inputRef,
+      ...props
+    }
+    state.inputProps.onBlur = e => {
+      actions.validate()
+    }
+    state.inputProps.onChange =
+    state.inputProps.onInput = e => {
+      state.touched = true
+    }
+
+    return state
+  })
+
+  return state
 }
+

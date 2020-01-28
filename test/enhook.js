@@ -1,5 +1,5 @@
 import enhook from 'enhook'
-import setHooks from 'any-hooks'
+import setHooks from '../'
 
 import * as preact from 'preact'
 import * as hooks from 'preact/hooks'
