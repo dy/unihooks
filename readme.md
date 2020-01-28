@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Essential compact hooks toolkit for everyday react[-ish] project.
+Essential compact hooks toolkit for everyday react[-ish] projects.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -150,7 +150,9 @@ function Component3 () {
 
 #### `[value, setValue] = useSearchParam(name, init?)`
 
-`useValue` that is reflected as query string in `location.search`. Turns on `history.pushstate` and `history.replacestate` events, as well as same-origin links listener.
+Reflect value to `location.search`. `value` is turned to string via [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams).
+To serialize objects or arrays, provide `.toString` method or convert manually.
+Turns on `history.pushstate` and `history.replacestate` events, as well as same-origin links listener.
 
 ```js
 function MyComponent () {
