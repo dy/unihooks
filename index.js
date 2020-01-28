@@ -40,17 +40,24 @@ export function useStorage(key, init, o = { storage: window.localStorage, prefix
   if (o) o = Object.assign({ storage: window.localStorage, prefix: '__uhx:storage-'}, o)
   let storeKey = o.prefix + key
   let [value, setValue] = useValue(key, () => {
+    // init from stored value, if any
     let storedStr = o.storage.getItem(storeKey), storedValue
-    if (storedStr !== undefined) storedValue = JSON.parse(storedStr)
-    return typeof init === 'function' ? init(storedValue) : init
+    if (storedStr != null) {
+      storedValue = JSON.parse(storedStr)
+      if (typeof init === 'function') return init(storedValue)
+      return storedValue
+    }
+    return init
   })
 
   useMemo(() => {
+    // persist initial value, if store is rewired
     if (init === undefined) return
-    if (o.storage.getItem(storeKey) === undefined) o.storage.setItem(storeKey, JSON.stringify(value))
+    if (o.storage.getItem(storeKey) == null) o.storage.setItem(storeKey, JSON.stringify(value))
   }, [key])
 
   useEffect(() => {
+    // notify listeners, subscribe to storage changes
     let update = e => {
       if (e.key !== storeKey) return
       setValue(e.newValue)
@@ -67,12 +74,20 @@ export function useStorage(key, init, o = { storage: window.localStorage, prefix
 
 let locationDeps = 0
 export function useSearchParam(key, init) {
-  let [value, setValue] = useValue('__uhx:searchParam-' + key, init)
+  let [value, setValue] = useValue('__uhx:searchParam-' + key, () => {
+    let params = new URLSearchParams(window.location.search)
+    if (params.has(key)) {
+      let paramValue = params.get(key)
+      if (typeof init === 'function') return init(paramValue)
+      return paramValue
+    }
+    return init
+  })
 
   useMemo(() => {
     if (init === undefined) return
     let params = new URLSearchParams(window.location.search)
-    if (params.get(key) === undefined) {
+    if (!params.has(key)) {
       params.set(key, value)
       setURLSearchParams(params)
     }

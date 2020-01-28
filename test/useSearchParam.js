@@ -3,11 +3,11 @@ import { useSearchParam, useState, useEffect } from '../'
 import enhook from './enhook.js'
 import { tick, idle, frame, time } from 'wait-please'
 
-t.only('useSearchParam: read values properly', async t => {
+t.browser('useSearchParam: read values properly', async t => {
   clearSearch()
   let log = []
 
-  let str = qs.stringify({
+  let str = new URLSearchParams({
     str: 'foo',
     num: -123,
     bool: false,
@@ -16,10 +16,14 @@ t.only('useSearchParam: read values properly', async t => {
     arr1: [1, 2, 3],
     arr2: ['a', 'b', 'c'],
     arr3: [['a', 1], ['b', 2], ['c', 3]],
-    arr4: [{ a: 1 }, { b: 2 }, { c: 3 }],
-    obj: { a: 1, b: 2, c: 3, foo: 'bar' },
-    date: new Date('2019-11-17')
-  }, { encode: false })
+    arr4: [
+      { a: 1, toString() {return 'a:' + this.a} },
+      { b: 2, toString() { return 'b:' + this.b } },
+      { c: 3, toString() { return 'c:' + this.c } }
+    ],
+    obj: { a: 1, b: 2, c: 3, foo: 'bar', toString(){return JSON.stringify(this)} },
+    date: +new Date('2019-11-17')
+  }).toString()
   window.history.pushState(null, '', '?' + str)
 
   let f = enhook(() => {
@@ -45,27 +49,27 @@ t.only('useSearchParam: read values properly', async t => {
     log.push(arr3)
     log.push(arr4)
     log.push(obj)
-    log.push(+date)
+    log.push(date)
   })
 
   f()
   t.deepEqual(log, [
     'foo',
-    -123,
-    false,
+    '-123',
+    'false',
+    'null',
     undefined,
-    undefined,
-    [1, 2, 3],
-    ['a', 'b', 'c'],
-    [['a', 1], ['b', 2], ['c', 3]],
-    [{ a: 1 }, { b: 2 }, { c: 3 }],
-    { a: 1, b: 2, c: 3, foo: 'bar' },
-    +new Date('2019-11-17T00:00:00.000Z')
+    '1,2,3',
+    'a,b,c',
+    'a,1,b,2,c,3',
+    'a:1,b:2,c:3',
+    '{"a":1,"b":2,"c":3,"foo":"bar"}',
+    +new Date('2019-11-17T00:00:00.000Z') + ''
   ])
 
-  await frame(2)
   f.unhook()
   clearSearch()
+  await frame(2)
   t.end()
 })
 

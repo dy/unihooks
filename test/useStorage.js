@@ -20,9 +20,29 @@ t('useStorage: basic', async t => {
   await frame(4)
   t.deepEqual(log, [0, 1])
 
-  localStorage.removeItem('count')
+  await frame(4)
   f.unhook()
   await frame(4)
+  localStorage.removeItem('count')
+
+  t.end()
+})
+
+t('useStorage: should read stored value', async t => {
+  localStorage.setItem('count', 1)
+
+  let log = []
+  let f = enhook(() => {
+    let [count, setCount] = useStorage('count', null, { prefix: '' })
+    log.push(count)
+  })
+  f()
+  t.deepEqual(log, [1])
+  await frame(4)
+
+  f.unhook()
+  await frame(4)
+  localStorage.removeItem('count')
 
   t.end()
 })
@@ -54,8 +74,8 @@ t('useStorage: multiple components use same key', async t => {
 
   f1.unhook()
   f2.unhook()
-  localStorage.removeItem('count')
   await frame(4)
+  localStorage.removeItem('count')
 
   t.end()
 })
@@ -78,9 +98,9 @@ t('useStorage: does not trigger unchanged updates too many times', async t => {
   await frame(2)
   t.deepEqual(log, [1, 1])
 
-  localStorage.removeItem('count')
   f.unhook()
   await frame(4)
+  localStorage.removeItem('count')
 
   t.end()
 })
@@ -102,9 +122,9 @@ t('useStorage: fn init should be called with initial value', async t => {
   f()
   t.deepEqual(log, [0, 1, 1])
 
-  localStorage.removeItem('count')
   f.unhook()
   await frame(4)
+  localStorage.removeItem('count')
 
   t.end()
 })

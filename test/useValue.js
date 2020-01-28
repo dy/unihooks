@@ -169,10 +169,32 @@ t('useValue: functional setter', async t => {
   t.deepEqual(log, [0])
   await frame(2)
   t.deepEqual(log, [0, 1])
+  f.unhook()
 
   t.end()
 })
 
+t('useValue: init must be called once per key', async t => {
+  let log = []
+  let f = enhook(() => {
+    let [a, setA] = useValue('a', () => {
+      log.push(1)
+    })
+    let [a1, setA1] = useValue('a', () => {
+      log.push(2)
+    })
+  })
+  let f2 = enhook(() => {
+    let [a, setA] = useValue('a', () => {
+      log.push(3)
+    })
+  })
+  f()
+  f2()
+  t.deepEqual(log, [1])
+  f.unhook()
+  t.end()
+})
 
 t('useValue: useQueryParam atomico case (must not fail)', async t => {
   let f1 = enhook(() => {
@@ -188,7 +210,7 @@ t('useValue: useQueryParam atomico case (must not fail)', async t => {
   f2()
   f2.unhook()
 
-  await frame(1)
+  await frame(2)
 
   t.end()
 })
