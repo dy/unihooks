@@ -197,3 +197,32 @@ t('useFormField: focus must reflect focused state', async t => {
 
   t.deepEqual(log, [false, true, false])
 })
+
+t('useFormField: error must be validated on each input', async t => {
+  let el = document.createElement('div')
+  // document.body.appendChild(el)
+
+  let log = []
+  render(html`
+    <${function () {
+      let field = useFormField({validate(value) { return value ? 'Valid' : 'Invalid' }})
+      log.push(field.error)
+      return html`<input ...${field[0]} /> ${ field.error + '' }`
+    }}/>
+  `, el)
+
+  let input = el.querySelector('input')
+  input.value = 'a'
+  input.dispatchEvent(new InputEvent('input'))
+
+  await frame(2)
+  t.deepEqual(log, [null, 'Valid'])
+
+  input.value = ''
+  input.dispatchEvent(new InputEvent('input'))
+
+  await frame(2)
+  t.deepEqual(log, [null, 'Valid', 'Invalid'])
+
+  t.end()
+})

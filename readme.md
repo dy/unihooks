@@ -361,18 +361,17 @@ Force-update component, regardless of internal state. Useful for building higher
 <!-- - [ ] `useDefined` -->
 <!-- - [ ] `useCounter` − track state of a number -->
 
-<!--
+
 <details>
 <summary><strong>useValidate</strong></summary>
 
-#### `[errorMessage, validate] = useValidate(validator: Function | Array)`
+#### `[error, validate] = useValidate(validator: Function | Array)`
 
-Validator hook. Useful as replacement for heavy form hooks.
+Provides validation functionality.
 `validator` is a function or an array of functions.
 A validator function takes value argument and returns `true` / `undefined`, if validation passes.
 Any other returned result is considered validation error.
 
-Example 1: input validator
 
 ```js
 function MyComponent () {
@@ -384,20 +383,7 @@ function MyComponent () {
   return <input onChange={e => validateUsername(e.target.value) && handleInputChange(e) } {...inputProps}/>
 }
 ```
-
-Example 2: aspect with `useInput`
-
-```js
-function MyAspect () {
-  let [value, setValue] = useInput('username')
-  let [error, validate] = useValidate(value => !!value)
-
-  useEffect(() => validate(value), [value])
-  useEffect(() => if (error) console.log('Invalid:', error), [error])
-}
-```
 </details>
--->
 
 <!-- - [ ] `useDestroy` -->
 <!-- - [ ] `useUpdate` -->

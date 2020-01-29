@@ -224,31 +224,42 @@ export function useUpdate() {
   return update
 }
 
+export function useValidate(validate) {
+  let [error, setError] = hooks.useState(null)
+  let runValidate = hooks.useCallback((value, check) => {
+    try {
+      var valid = check(value)
+      if (valid === true || valid === undefined) {
+        setError(error = null)
+        return true
+      }
+      throw valid
+    } catch (e) {
+      setError(error = e)
+    }
+    return false
+  }, [])
+
+  return [error, (value = field.value) => {
+    if (!validate) return
+    if (Array.isArray(validate)) {
+      return validate.every(validate => runValidate(value, validate))
+    }
+    return runValidate(value, validate)
+  }]
+}
+
 export function useFormField(props={}) {
   const prefix = '__uhx:form-field'
 
-  let { value: init, validate, persist, ...inputProps } = props
+  let { value: init, validate: rules, persist, ...inputProps } = props
 
   let inputRef = hooks.useRef()
   let [, setValue] = hooks.useState()
-  let [, setError] = hooks.useState()
   let [, setFocus] = hooks.useState()
+  let [ error, validate ] = useValidate(rules)
 
   let field = hooks.useMemo(() => {
-    let runValidate = (value, check) => {
-      try {
-        var valid = check(value)
-        if (valid === true || valid === undefined) {
-          setError(field.error = null)
-          return true
-        }
-        throw valid
-      } catch (error) {
-        setError(field.error = error)
-      }
-      return false
-    }
-
     let field = Object.create({
       value: init,
       error: null,
@@ -256,20 +267,14 @@ export function useFormField(props={}) {
       focus: false,
       set: (value) => {
         setValue(field.value = value)
-        field.validate()
+        field.validate(field.value)
       },
       reset: () => {
         setValue(field.value = init)
-        setError(field.error = null)
+        field.error = null
         field.touched = false
       },
-      validate: (value = field.value) => {
-        if (!validate) return
-        if (Array.isArray(validate)) {
-          return validate.every(validate => runValidate(value, validate))
-        }
-        return runValidate(value, validate)
-      },
+      validate: (value=field.value) => validate(value),
       valueOf() { return this.value },
       [Symbol.toPrimitive]() { return this.value },
       [Symbol.iterator]: function* () {
@@ -318,6 +323,10 @@ export function useFormField(props={}) {
       window.sessionStorage.setItem(prefix + key, field.value)
     }
   }, [field.value])
+
+  hooks.useMemo(() => {
+    field.error = error
+  }, [error])
 
   return field
 }
