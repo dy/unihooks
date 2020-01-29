@@ -224,106 +224,101 @@ export function useUpdate() {
   return update
 }
 
-export function useFormField(key, value, props={}) {
+export function useFormField(props={}) {
   const prefix = '__uhx:form-field'
 
-  if (typeof key === 'object') {
-    props = key
-    value = props.value
-    key = props.name || props.key
-  }
-  if (typeof value === 'object') {
-    props = value
-    value = props.value
-  }
-
-  let { validate, persist, ...inputProps } = props
+  let { value: init, validate, persist, ...inputProps } = props
 
   let inputRef = hooks.useRef()
   let [, setValue] = hooks.useState()
   let [, setError] = hooks.useState()
+  let [, setFocus] = hooks.useState()
 
-  let state = hooks.useMemo(() => {
+  let field = hooks.useMemo(() => {
     let runValidate = (value, check) => {
       try {
         var valid = check(value)
         if (valid === true || valid === undefined) {
-          setError(state.error = null)
+          setError(field.error = null)
           return true
         }
         throw valid
       } catch (error) {
-        setError(state.error = error)
+        setError(field.error = error)
       }
       return false
     }
-    let actions = {
+
+    let field = Object.create({
+      value: init,
+      error: null,
+      touched: false,
+      focus: false,
       set: (value) => {
-        setValue(state.value = state.inputProps.value = value)
+        setValue(field.value = value)
+        field.validate()
       },
       reset: () => {
-        setValue(state.value = state.inputProps.value = value)
-        setError(state.error = null)
-        state.touched = false
+        setValue(field.value = init)
+        setError(field.error = null)
+        field.touched = false
       },
-      validate: () => {
+      validate: (value = field.value) => {
         if (!validate) return
         if (Array.isArray(validate)) {
-          return validate.every(validate => runValidate(state.value, validate))
+          return validate.every(validate => runValidate(value, validate))
         }
-        return runValidate(state.value, validate)
-      },
-      clear: () => {
-        setValue(state.value = state.inputProps.value = null)
+        return runValidate(value, validate)
       },
       valueOf() { return this.value },
       [Symbol.toPrimitive]() { return this.value },
       [Symbol.iterator]: function* () {
-        yield state
-        yield actions
-      }
-    }
+        yield field[0]
+        yield field
+      },
+      // inputProps
+      [0]: Object.assign(Object.create(null, {
+        value: { enumerable: true, get() { return field.value } }
+      }), {
+        onBlur: e => {
+          setFocus(field.focus = false)
+        },
+        onFocus: e => {
+          setFocus(field.focus = true)
+        },
+        onChange: e => {
+          field.touched = true
+          field.set(e.target.value)
+        },
+        onInput: e => {
+          field.touched = true
+          field.set(e.target.value)
+        },
+        ref: inputRef,
+        ...inputProps
+      })
+    }, {
+      [1]: { enumerable: false, get() { return field } }
+    })
 
-    let state = Object.create(actions)
-
-    state.value = value
-    state.error = null
-    state.touched = false
-    state.inputProps = {
-      name: key,
-      value: state.value,
-      ref: inputRef,
-      ...inputProps
-    }
-    state.inputProps.onBlur = e => {
-      actions.validate()
-    }
-    state.inputProps.onFocus = e => {
-      setError(state.error = null)
-    }
-    state.inputProps.onChange =
-    state.inputProps.onInput = e => {
-      state.set(e.target.value)
-      state.touched = true
-    }
-
-    return state
+    return field
   }, [])
 
+  let key = inputProps.name || inputProps.id || inputProps.key
   hooks.useEffect(() => {
-    if (persist && value == null) {
+    if (persist && init == null) {
       let storedValue = window.sessionStorage.getItem(prefix + key)
       if (storedValue !== undefined) {
-        setValue(state.value = state.inputProps.value = storedValue)
+        field.set(field.value = storedValue)
       }
     }
   }, [])
   hooks.useEffect(() => {
     if (persist) {
-      window.sessionStorage.setItem(prefix + key, state.value)
+      window.sessionStorage.setItem(prefix + key, field.value)
     }
-  }, [state.value])
+  }, [field.value])
 
-  return state
+  return field
 }
 

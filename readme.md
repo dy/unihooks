@@ -417,27 +417,38 @@ function MyAspect () {
 <details>
 <summary><strong>useFormField</strong></summary>
 
-#### `[ state, actions ] = useFormField(name | options, init?, options?)`
-#### `{ value, error, touched, inputProps } = state`
-#### `{ set, reset, clear, validate } = actions`
+#### `[ inputProps, field ] = useFormField(options)`
 
-Input state helper. Handles input state and validation.
-Useful for organizing controlled inputs or input-like form constructs.
+Form field state helper. Handles input state and validation.
+Useful for organizing controlled inputs or forms, a nice minimal replacement to form hooks.
 
 ```js
-let field = useFormField('password', '', {
+let field = useFormField({
+  name: 'password',
   type: 'password',
   validate: value => !!value
 })
 
-return <input {...field.inputProps} />
+return <input {...field[0]} />
 ```
+
+#### `field`
+
+* `value` - current input value.
+* `error` - current input value validation result.
+* `touched` - if anything was entered into input.
+* `focus` - if input has focus.
+* `set(value)` - set input value.
+* `reset()` - reset input to initial value, reset `touched` flag.
+* `validate(value=input.value)` - run validator against some value, returns boolean - if input is valid.
 
 #### `options`
 
+* `name` - input name.
+* `value` - initial input value.
 * `persist = false` - persist input state between sessions.
 * `validate` - custom validator for input, modifies `error` state. Can be a function or list of functions.
-* `...input props` - the rest of props is passed directly to input
+* `...props` - the rest of props is passed to input props `state.props`
 
 </details>
 

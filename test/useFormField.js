@@ -11,13 +11,13 @@ t('useFormField: should control existing input via actions', async t => {
   let log = []
 
   let Comp = () => {
-    let field = useFormField('x', 1)
+    let field = useFormField({name: 'x', value: 1})
     useEffect(() => {
       log.push(field.value, field.error, field.touched)
       field.set(2)
       setTimeout(() => {
         log.push(field.value, field.error, field.touched)
-        field.clear()
+        field.set(null)
       }, 10)
       setTimeout(() => {
         log.push(field.value, field.error, field.touched)
@@ -27,7 +27,7 @@ t('useFormField: should control existing input via actions', async t => {
         log.push(field.value, field.error, field.touched)
       }, 30);
     }, [])
-    return html`<input ...${ field.inputProps } />`
+    return html`<input ...${ field[0] } />`
   }
 
   render(html`<${Comp}/>`, el)
@@ -51,15 +51,17 @@ t('useFormField: state should reflect interactions', async t => {
 
   let log = []
   let Comp = () => {
-    let [field, actions] = useFormField('x')
+    let [props,field] = useFormField()
     log.push(field.value, field.touched)
-    return html`<input ...${field.inputProps}/>`
+    return html`<input ...${props}/>`
   }
   render(html`<${Comp}/>`, el)
 
+  await frame()
+
   let input = el.querySelector('input')
   input.value = 'a'
-  input.dispatchEvent(new Event('input', { data: 'a'}))
+  input.dispatchEvent(new InputEvent('input', { data: 'a'}))
 
   await frame(2)
   t.deepEqual(log, [undefined, false, 'a', true])
@@ -75,11 +77,11 @@ t('useFormField: should be able to set value', async t => {
 
   let log = []
   let Comp = () => {
-    let field = useFormField('x', 'foo')
+    let field = useFormField({value: 'foo'})
     useEffect(() => {
       field.set('bar')
     }, [])
-    return html`<input ...${field.inputProps}/>`
+    return html`<input ...${field[0]}/>`
   }
   render(html`<${Comp}/>`, el)
 
@@ -99,9 +101,9 @@ t('useFormField: should be able to validate value', async t => {
 
   let log = []
   let Comp = () => {
-    let field = useFormField({ name: 'x', validate: value => !!value })
+    let field = useFormField({ validate: value => !!value })
     log.push(field.error)
-    return html`<input ...${field.inputProps}/>`
+    return html`<input ...${field[0]}/>`
   }
   render(html`<${Comp}/>`, el)
 
@@ -132,9 +134,9 @@ t('useFormField: does not crash on null-validation', async t => {
 
   let log = []
   let Comp = () => {
-    let field = useFormField('x')
+    let field = useFormField()
     log.push(field.error)
-    return html`<input ...${field.inputProps}/>`
+    return html`<input ...${field[0]}/>`
   }
   render(html`<${Comp}/>`, el)
 
@@ -161,12 +163,12 @@ t('useFormField: does not crash on null-validation', async t => {
 
 t.skip('useFormField: persist test', async t => {
   let el = document.createElement('div')
-  document.body.appendChild(el)
+  // document.body.appendChild(el)
 
   let log = []
   let Comp = () => {
     let field = useFormField('y')
-    return html`<input ...${field.inputProps}/>`
+    return html`<input ...${field[0]}/>`
   }
   render(html`<${Comp}/>`, el)
 
@@ -177,3 +179,21 @@ t.skip('useFormField: persist test', async t => {
   t.end()
 })
 
+t('useFormField: focus must reflect focused state', async t => {
+  let el = document.createElement('div')
+
+  let log = []
+  render(html`<${function () {
+    let field = useFormField('')
+    log.push(field.focus)
+    return html`<input ...${field[0]}/>`
+  }}/>`, el)
+  let input = el.querySelector('input')
+  await frame(1)
+  input.dispatchEvent(new Event('focus'))
+  await frame(1)
+  input.dispatchEvent(new Event('blur'))
+  await frame(1)
+
+  t.deepEqual(log, [false, true, false])
+})
