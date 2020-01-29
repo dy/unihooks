@@ -417,7 +417,7 @@ function MyAspect () {
 <details>
 <summary><strong>useFormField</strong></summary>
 
-#### `[ state, actions ] = useFormField(name, init?, options?)
+#### `[ state, actions ] = useFormField(name, init?, options?)`
 #### `{ value, error, touched, inputProps } = state`
 #### `{ set, reset, clear, validate } = actions`
 
