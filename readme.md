@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Essential compact hooks toolkit for everyday react[-ish] projects.
+Essential hooks collection for everyday react(-ish) projects.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -18,8 +18,7 @@ const MyComponent = () => {
 ```
 -->
 
-## Principles
-
+<!--
 ### 1. Framework agnostic
 
 _Unihooks_ are not bound to react and work with any hooks-enabled framework:
@@ -38,6 +37,15 @@ _Unihooks_ are not bound to react and work with any hooks-enabled framework:
 * [unhook](https://ghub.io/unhook)
 * ... see [any-hooks](https://ghub.io/any-hooks) for the full list
 
+To switch hooks framework:
+
+```js
+import setHooks, { useState, useEffect } from 'unihooks'
+import * as preactHooks from 'preact/hooks'
+
+setHooks(preactHooks)
+```
+-->
 
 <!--
 If target framework is known in advance, the corresponding entry can be used:
@@ -51,18 +59,21 @@ import * as hook from 'unihooks/preact'
 ```
 -->
 
+<!--
 ### 2. Unified
 
 _Unihooks_ extend `useState` signature for intuitivity.
 
 ```js
-let [ state, actions ] = useSource( target?, init | update? )
+let [ state, actions ] = useValue( target?, init | update? )
 ```
+-->
 
 <!--
 <sub>Inspired by [upsert](https://github.com/tc39/proposal-upsert), combining _insert_ and _update_ into a single function.</sub>
 -->
 
+<!--
 ### 3. Reactive
 
 _Unihooks_ provide live binding to a data source − component is rerendered whenever underlying data changes. Static hooks are avoided.
@@ -71,6 +82,7 @@ _Unihooks_ provide live binding to a data source − component is rerendered whe
 const MyComponent = () => { let ua = useUserAgent() } // ✘ − user agent never changes
 const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API must be used instead
 ```
+-->
 
 <!--
 ## Who Uses Unihooks
@@ -489,11 +501,10 @@ return <input {...field[0]} />
 <!-- - [ ] `usePromise` -->
 <!-- - [ ] `useEmitter` -->
 
-
 <details>
-<summary><strong>setHooks / native hooks</strong></summary>
+<summary><strong>standard</strong></summary>
 
-For convenience, unihooks export current framework hooks. To switch framework, use `setHooks` - the default export.
+For convenience, unihooks export current framework hooks. To switch hooks, use `setHooks` - the default export. That is useful as a base for building custom cross-framework hooks.
 
 ```js
 import setHooks, { useState, useEffect } from 'unihooks'
