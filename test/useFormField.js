@@ -242,18 +242,18 @@ t('useFormField: `required` should turn initial valid state into false', async t
   await frame(2)
 
   let input = el.querySelector('input')
-  t.deepEqual(log, [false])
+  t.deepEqual(log, [true])
 
   input.value = 'a'
   input.dispatchEvent(new InputEvent('input'))
   await frame(2)
-  t.deepEqual(log, [false, true])
+  t.deepEqual(log, [true, true])
 
   input.value = ''
   input.dispatchEvent(new InputEvent('input'))
 
   await frame(2)
-  t.deepEqual(log, [false, true, false])
+  t.deepEqual(log, [true, true, false])
 
   t.end()
 })

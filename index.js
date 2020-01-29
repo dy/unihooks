@@ -257,25 +257,25 @@ export function useFormField(props = {}) {
   let inputRef = hooks.useRef()
   let [, setValue] = hooks.useState()
   let [, setFocus] = hooks.useState()
-  let [error, validate] = useValidate(rules || (inputProps.required ? v => !!v : null ))
+  let [error, validate] = useValidate(rules || (inputProps.required ? v => !!v : null))
 
   let field = hooks.useMemo(() => {
     let field = Object.create({
       value: init,
       error: null,
-      valid: !inputProps.required,
+      valid: true,
       touched: false,
       focus: false,
       set: (value) => {
         setValue(field.value = value)
-        field.valid = field.validate(field.value)
+        field.validate(field.value)
       },
       reset: () => {
         setValue(field.value = init)
         field.error = null
         field.touched = false
       },
-      validate: (value = field.value) => validate(value),
+      validate: (value = field.value || null) => field.valid = validate(value),
       valueOf() { return this.value },
       [Symbol.toPrimitive]() { return this.value },
       [Symbol.iterator]: function* () {
@@ -292,7 +292,7 @@ export function useFormField(props = {}) {
         onFocus: e => {
           field.touched = true
           setFocus(field.focus = true)
-          field.valid = field.validate(field.value || null)
+          field.validate(field.value)
         },
         onChange: e => {
           field.touched = true
