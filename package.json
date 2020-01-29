@@ -3,9 +3,10 @@
   "version": "2.0.0",
   "description": "Universal poly-framework react hooks",
   "main": "./index.js",
-  "dependencies": {},
+  "dependencies": {
+    "any-hooks": "^4.0.1"
+  },
   "devDependencies": {
-    "any-hooks": "^4.0.1",
     "atomico": "^0.16.1",
     "augmentor": "^2.1.4",
     "dom-augmentor": "^2.0.3",

@@ -308,7 +308,7 @@ export function useFormField(key, value, props={}) {
   }, [])
 
   hooks.useEffect(() => {
-    if (props.persist) {
+    if (props.persist && value == null) {
       let storedValue = window.sessionStorage.getItem(prefix + key)
       if (storedValue !== undefined) {
         setValue(state.value = state.inputProps.value = storedValue)
