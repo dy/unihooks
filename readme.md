@@ -91,8 +91,6 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 * [mobeewave]()
 -->
 
-## Hooks
-
 <details>
 <summary><strong>useValue</strong></summary>
 
@@ -502,9 +500,9 @@ return <input {...field[0]} />
 <!-- - [ ] `useEmitter` -->
 
 <details>
-<summary><strong>standard</strong></summary>
+<summary><strong>standard hooks</strong></summary>
 
-For convenience, unihooks export current framework hooks. To switch hooks, use `setHooks` - the default export. That is useful as a base for building custom cross-framework hooks.
+For convenience, unihooks export current framework hooks. To switch hooks, use `setHooks` - the default export.
 
 ```js
 import setHooks, { useState, useEffect } from 'unihooks'
@@ -525,9 +523,8 @@ function Timer() {
 
 ## See also
 
-* [enhook](https://ghub.io/enhook) - enable hooks in regular functions.
-* [any-hooks](https://ghub.io/any-hooks) - get available installed hooks.
-* [remorph](https://ghub.io/remorph) - react/preact-based DOM morphing.
+* [any-hooks](https://ghub.io/any-hooks) - cross-framework standard hooks provider.
+* [enhook](https://ghub.io/enhook) - run hooks in regular functions.
 
 ## License
 
