@@ -417,22 +417,26 @@ function MyAspect () {
 <details>
 <summary><strong>useFormField</strong></summary>
 
-#### `[ state, actions ] = useFormField(name, init?, options?)`
+#### `[ state, actions ] = useFormField(name | options, init?, options?)`
 #### `{ value, error, touched, inputProps } = state`
 #### `{ set, reset, clear, validate } = actions`
 
-Input state helper. Handles input state and validation. Useful for organizing controlled inputs or input-like form constructs.
+Input state helper. Handles input state and validation.
+Useful for organizing controlled inputs or input-like form constructs.
 
 ```js
-let [ { inputProps }, { validate } ] = useFormField('password', '', { type: 'password', validate: value => !!value })
+let field = useFormField('password', '', {
+  type: 'password',
+  validate: value => !!value
+})
 
-return <input {...inputProps} />
+return <input {...field.inputProps} />
 ```
 
 #### `options`
 
-* `persist = true` - persist input state between sessions
-* `validate` - custom validator for input, modifies `error` state. Can be a function or a list of functions.
+* `persist = false` - persist input state between sessions.
+* `validate` - custom validator for input, modifies `error` state. Can be a function or list of functions.
 * `...input props` - the rest of props is passed directly to input
 
 </details>

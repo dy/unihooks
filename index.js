@@ -225,6 +225,8 @@ export function useUpdate() {
 }
 
 export function useFormField(key, value, props={}) {
+  const prefix = '__uhx:form-field'
+
   if (typeof key === 'object') {
     props = key
     value = props.value
@@ -238,6 +240,7 @@ export function useFormField(key, value, props={}) {
   let inputRef = hooks.useRef()
   let [, setValue] = hooks.useState()
   let [, setError] = hooks.useState()
+
   let state = hooks.useMemo(() => {
     let validate = (value, check) => {
       try {
@@ -303,6 +306,20 @@ export function useFormField(key, value, props={}) {
 
     return state
   }, [])
+
+  hooks.useEffect(() => {
+    if (props.persist) {
+      let storedValue = window.sessionStorage.getItem(prefix + key)
+      if (storedValue !== undefined) {
+        setValue(state.value = state.inputProps.value = storedValue)
+      }
+    }
+  }, [])
+  hooks.useEffect(() => {
+    if (props.persist) {
+      window.sessionStorage.setItem(prefix + key, state.value)
+    }
+  }, [state.value])
 
   return state
 }

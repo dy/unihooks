@@ -125,3 +125,22 @@ t('useFormField: should be able to validate value', async t => {
 
   t.end()
 })
+
+
+t.skip('useFormField: persist test', async t => {
+  let el = document.createElement('div')
+  document.body.appendChild(el)
+
+  let log = []
+  let Comp = () => {
+    let field = useFormField('y')
+    return html`<input ...${field.inputProps}/>`
+  }
+  render(html`<${Comp}/>`, el)
+
+  await frame(2)
+
+  // document.body.removeChild(el)
+
+  t.end()
+})
