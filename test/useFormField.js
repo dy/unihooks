@@ -226,3 +226,34 @@ t('useFormField: error must be validated on each input', async t => {
 
   t.end()
 })
+
+t('useFormField: required should turn initial valid state into false', async t => {
+  let el = document.createElement('div')
+  // document.body.appendChild(el)
+
+  let log = []
+  render(html`
+    <${function () {
+      let field = useFormField({ required: true })
+      log.push(field.valid)
+      return html`<input ...${field[0]} /> ${field.error + ''}`
+    }}/>
+  `, el)
+  await frame(2)
+
+  let input = el.querySelector('input')
+  t.deepEqual(log, [false])
+
+  input.value = 'a'
+  input.dispatchEvent(new InputEvent('input'))
+  await frame(2)
+  t.deepEqual(log, [false, true])
+
+  input.value = ''
+  input.dispatchEvent(new InputEvent('input'))
+
+  await frame(2)
+  t.deepEqual(log, [false, true, false])
+
+  t.end()
+})

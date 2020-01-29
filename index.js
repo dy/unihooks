@@ -38,7 +38,7 @@ export function useValue(key, init) {
 }
 
 export function useStorage(key, init, o) {
-  o = { storage: window.localStorage, prefix: '__uhx:storage-', ...(o || {})}
+  o = { storage: window.localStorage, prefix: '__uhx:storage-', ...(o || {}) }
   let storeKey = o.prefix + key
   let [value, setValue] = useValue(key, () => {
     // init from stored value, if any
@@ -249,7 +249,7 @@ export function useValidate(validate) {
   }]
 }
 
-export function useFormField(props={}) {
+export function useFormField(props = {}) {
   const prefix = '__uhx:form-field'
 
   let { value: init, validate: rules, persist, ...inputProps } = props
@@ -257,26 +257,25 @@ export function useFormField(props={}) {
   let inputRef = hooks.useRef()
   let [, setValue] = hooks.useState()
   let [, setFocus] = hooks.useState()
-  let [ error, validate ] = useValidate(rules)
+  let [error, validate] = useValidate(rules)
 
   let field = hooks.useMemo(() => {
     let field = Object.create({
       value: init,
       error: null,
-      valid: true,
+      valid: !inputProps.required,
       touched: false,
       focus: false,
       set: (value) => {
         setValue(field.value = value)
-        let valid = field.validate(field.value)
-        field.valid = field.focus || valid
+        field.valid = field.validate(field.value)
       },
       reset: () => {
         setValue(field.value = init)
         field.error = null
         field.touched = false
       },
-      validate: (value=field.value) => validate(value),
+      validate: (value = field.value) => validate(value),
       valueOf() { return this.value },
       [Symbol.toPrimitive]() { return this.value },
       [Symbol.iterator]: function* () {
@@ -292,6 +291,8 @@ export function useFormField(props={}) {
         },
         onFocus: e => {
           setFocus(field.focus = true)
+          field.set(field.value)
+          field.touched = true
         },
         onChange: e => {
           field.touched = true
