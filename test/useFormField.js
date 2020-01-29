@@ -126,6 +126,40 @@ t('useFormField: should be able to validate value', async t => {
   t.end()
 })
 
+t('useFormField: does not crash on null-validation', async t => {
+  let el = document.createElement('div')
+  // document.body.appendChild(el)
+
+  let log = []
+  let Comp = () => {
+    let field = useFormField('x')
+    log.push(field.error)
+    return html`<input ...${field.inputProps}/>`
+  }
+  render(html`<${Comp}/>`, el)
+
+  let input = el.querySelector('input')
+  input.value = ''
+  input.dispatchEvent(new Event('input', { data: '' }))
+  input.dispatchEvent(new Event('blur'))
+
+  t.deepEqual(log, [null])
+  await frame(2)
+  t.deepEqual(log, [null, null])
+
+  input.value = 'foo'
+  input.dispatchEvent(new Event('input', { data: 'foo' }))
+  input.dispatchEvent(new Event('blur'))
+
+  await frame(2)
+  t.deepEqual(log, [null, null, null])
+
+  // document.body.removeChild(el)
+
+  t.end()
+})
+
+
 
 t.skip('useFormField: persist test', async t => {
   let el = document.createElement('div')

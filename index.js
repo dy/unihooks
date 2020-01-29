@@ -265,6 +265,7 @@ export function useFormField(key, value, props={}) {
         state.touched = false
       },
       validate: () => {
+        if (!props.validate) return
         if (Array.isArray(props.validate)) {
           return props.validate.every(check => validate(state.value, check))
         }
