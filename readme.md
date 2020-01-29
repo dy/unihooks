@@ -139,8 +139,8 @@ function Component3 () {
 
 #### `options`
 
-* `prefix` - prefix that's added to stored keys
-* `storage` - manually pass session/local/etc storage
+* `prefix` - prefix that's added to stored keys.
+* `storage` - manually pass session/local/etc storage.
 <!-- * `interval` - persistency interval -->
 
 </details>
@@ -325,19 +325,32 @@ const Demo = () => {
 <details>
 <summary><strong>useCountdown</strong></summary>
 
-#### `[n, reset] = useCountdown(startValue, interval=1000)`
+#### `[n, reset] = useCountdown(startValue, interval=1000 | schedule?)`
 
-Countdown state from `startValue` down to `0` with indicated `interval` in ms. Provides robust [worker-timers](https://ghub.io/worker-timers)-based implementation (leaving tab does not break timer).
+Countdown value from `startValue` down to `0` with indicated `interval` in ms. Alternatively, a scheduler function can be passed as `schedule` argument, that can be eg. [worker-timers](https://ghub.io/worker-timers)-based implementation.
 
 ```js
 import { useCountdown } from 'unihooks'
+import { setInterval, clearInterval } from 'worker-timers'
 
 const Demo = () => {
-  const [count, reset] = useCountdown(30);
+  const [count, reset] = useCountdown(30, fn => {
+    let id = setInterval(fn, 1000)
+    return () => clearInterval(id)
+  });
 
   return `Remains: ${count}s`
 };
 ```
+</details>
+
+<details>
+<summary><strong>useUpdate</strong></summary>
+
+#### `update = useUpdate()`
+
+Force-update component, regardless of internal state. Useful for building higher-order hooks.
+
 </details>
 
 <!--
@@ -400,25 +413,23 @@ function MyAspect () {
 <!-- - [ ] `useAsync` -->
 <!-- - [ ] `useHooked` - run hooks-enabled effect -->
 
-<!--
-## UI
 
 <details>
 <summary><strong>useFormField</strong></summary>
 
-#### `[ state, actions ] = useFormField({ name, type, validate=(value)=>{}, required, disabled, value, ...inputProps })`
-#### `{ value, error, touched, ...inputProps } = state`
-#### `{ set, validate, reset, clear } = actions`
+#### `[ state, actions ] = useFormField(name, init?, { persist=true, validate=(value)=>{}?, ...inputProps })`
+#### `{ value, error, touched, inputProps } = state`
+#### `{ set, reset, clear, validate } = actions`
 
-Form element state/actions. Useful for building forms UI.
+Controlled input state helper. Handles input state and validation.
 
 ```js
-let [ passwordProps, { validate } ] = useFormField({ name: 'password', type: 'password' })
+let [ { inputProps }, { validate } ] = useFormField('password', '', { type: 'password' })
 
-return <input {...passwordProps} />
+return <input {...inputProps} />
 ```
 </details>
--->
+
 
 <!-- - [ ] `useForm` − form state hook -->
 <!-- - [ ] `useTable` − table state hook -->
@@ -480,6 +491,28 @@ return <input {...passwordProps} />
 <!-- - [ ] `usePromise` -->
 <!-- - [ ] `useEmitter` -->
 
+
+<details>
+<summary><strong>setHooks / native hooks</strong></summary>
+
+For convenience, unihooks export current framework hooks. To switch framework, use `setHooks` - the default export.
+
+```js
+import setHooks, { useState, useEffect } from 'unihooks'
+import * as hooks from 'preact/hooks'
+
+setHooks(hooks)
+
+function Timer() {
+  let [count, setCount] = useState(0)
+  useEffect(() => {
+    let id = setInterval(() => setCount(c => ++c))
+    return () => clearInterval(id)
+  }, [])
+}
+```
+
+</details>
 
 ## See also
 

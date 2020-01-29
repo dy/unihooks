@@ -1,6 +1,5 @@
 import t from 'tst'
-import { useEffect } from 'any-hooks'
-import { useStorage } from '../'
+import { useStorage, useEffect } from '../'
 import enhook from './enhook.js'
 import { tick, idle, frame } from 'wait-please'
 

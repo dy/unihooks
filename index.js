@@ -1,15 +1,16 @@
-import setHooks, { useEffect, useMemo, useState } from "any-hooks"
+import setHooks, * as hooks from "any-hooks"
 
+export * from 'any-hooks'
 export default setHooks
 
 const listeners = globalThis.__uhxListeners || (globalThis.__uhxListeners = {}),
   values = globalThis.__uhxValues || (globalThis.__uhxValues = {})
 
 export function useValue(key, init) {
-  let [, update] = useState()
+  let [, setState] = hooks.useState()
 
-  useMemo(() => {
-    (listeners[key] || (listeners[key] = [])).push(update)
+  hooks.useMemo(() => {
+    (listeners[key] || (listeners[key] = [])).push(setState)
 
     if (init === undefined) return
     if (!(key in values)) {
@@ -19,25 +20,25 @@ export function useValue(key, init) {
       values[key] = init
       if (init && init.then) {
         init.then(init => {
-          update(values[key] = init)
+          setState(values[key] = init)
         })
       }
     }
   }, [key])
 
-  useEffect(() => () => {
-    listeners[key].splice(listeners[key].indexOf(update) >>> 0, 1)
+  hooks.useEffect(() => () => {
+    listeners[key].splice(listeners[key].indexOf(setState) >>> 0, 1)
     if (!listeners[key].length) delete values[key]
   }, [key])
 
   return [values[key], (value) => {
     values[key] = typeof value === 'function' ? value(values[key]) : value
-    listeners[key].map((update) => update(value))
+    listeners[key].map((setState) => setState(value))
   }]
 }
 
-export function useStorage(key, init, o = { storage: window.localStorage, prefix: null }) {
-  if (o) o = Object.assign({ storage: window.localStorage, prefix: '__uhx:storage-'}, o)
+export function useStorage(key, init, o) {
+  o = { storage: window.localStorage, prefix: '__uhx:storage-', ...(o || {})}
   let storeKey = o.prefix + key
   let [value, setValue] = useValue(key, () => {
     // init from stored value, if any
@@ -50,13 +51,13 @@ export function useStorage(key, init, o = { storage: window.localStorage, prefix
     return init
   })
 
-  useMemo(() => {
+  hooks.useMemo(() => {
     // persist initial value, if store is rewired
     if (init === undefined) return
     if (o.storage.getItem(storeKey) == null) o.storage.setItem(storeKey, JSON.stringify(value))
   }, [key])
 
-  useEffect(() => {
+  hooks.useEffect(() => {
     // notify listeners, subscribe to storage changes
     let update = e => {
       if (e.key !== storeKey) return
@@ -68,6 +69,7 @@ export function useStorage(key, init, o = { storage: window.localStorage, prefix
 
   return [value, (value) => {
     setValue(value)
+    // side-effect write
     o.storage.setItem(storeKey, JSON.stringify(value))
   }]
 }
@@ -86,7 +88,7 @@ export function useSearchParam(key, init) {
     return init
   })
 
-  useMemo(() => {
+  hooks.useMemo(() => {
     if (init === undefined) return
     let params = new URLSearchParams(window.location.search)
     if (!params.has(key)) {
@@ -95,7 +97,7 @@ export function useSearchParam(key, init) {
     }
   }, [key])
 
-  useEffect(() => {
+  hooks.useEffect(() => {
     const update = (e) => {
       let params = new URLSearchParams(window.location.search)
       let newValue = params.get(key)
@@ -181,21 +183,21 @@ function enableNavigateEvent() {
 }
 
 export function useCountdown(n, interval = 1000) {
-  const [count, set] = useState(n)
+  const [count, set] = hooks.useState(n)
 
-  const reset = useCallback(() => set(n), [n])
+  const reset = hooks.useCallback(() => set(n), [n])
 
-  const schedule = useMemo(() => {
+  const schedule = hooks.useMemo(() => {
     return typeof interval === 'function' ? interval : fn => {
       let id = setInterval(fn, interval)
-      return clearInterval(id)
+      return () => clearInterval(id)
     }
   }, [interval])
 
-  useEffect(() => {
+  hooks.useEffect(() => {
     const unschedule = schedule(() => {
       set(count => {
-        if (count <= 0) return (clearInterval(timeoutId), 0)
+        if (count <= 0) return (unschedule(), 0)
         else return count - 1
       })
     })
@@ -206,6 +208,102 @@ export function useCountdown(n, interval = 1000) {
   return [count, reset]
 }
 
-export function useFormField(key, init) {
-  let [value, setValue] = useValue('__uhx:formField-', init)
+export function usePrevious(value) {
+  let ref = hooks.useRef()
+
+  hooks.useEffect(() => {
+    ref.current = value
+  }, [value])
+
+  return ref.current
 }
+
+export function useUpdate() {
+  let [, set] = hooks.useState(0)
+  let update = hooks.useCallback(() => set(s => ~s), [])
+  return update
+}
+
+export function useFormField(key, value, props={}) {
+  if (typeof key === 'object') {
+    props = key
+    value = props.value
+    key = props.name || props.key
+  }
+  if (typeof value === 'object') {
+    props = value
+    value = props.value
+  }
+
+  let inputRef = hooks.useRef()
+  let [, setValue] = hooks.useState()
+  let [, setError] = hooks.useState()
+  let state = hooks.useMemo(() => {
+    let validate = (value, check) => {
+      try {
+        var valid = check(value)
+        if (valid === true || valid === undefined) {
+          setError(state.error = null)
+          return true
+        }
+        throw valid
+      } catch (error) {
+        setError(state.error = error)
+      }
+      return false
+    }
+    let actions = {
+      set: (value) => {
+        setValue(state.value = state.inputProps.value = value)
+      },
+      reset: () => {
+        setValue(state.value = state.inputProps.value = value)
+        setError(state.error = null)
+        state.touched = false
+      },
+      validate: () => {
+        if (Array.isArray(props.validate)) {
+          return props.validate.every(check => validate(state.value, check))
+        }
+        return validate(state.value, props.validate)
+      },
+      clear: () => {
+        setValue(state.value = state.inputProps.value = null)
+      },
+      valueOf() { return this.value },
+      [Symbol.toPrimitive]() { return this.value },
+      [Symbol.iterator]: function* () {
+        yield state
+        yield actions
+      }
+    }
+
+    let state = Object.create(actions)
+
+    state.value = value
+    state.error = null
+    state.touched = false
+    state.inputProps = {
+      name: key,
+      value: state.value,
+      ref: inputRef,
+      ...props
+    }
+    state.inputProps.onBlur = e => {
+      actions.validate()
+    }
+    state.inputProps.onFocus = e => {
+      setError(state.error = null)
+    }
+    state.inputProps.onChange =
+    state.inputProps.onInput = e => {
+      state.set(e.target.value)
+      state.touched = true
+    }
+
+    return state
+  }, [])
+
+  return state
+}
+

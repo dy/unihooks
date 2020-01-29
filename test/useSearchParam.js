@@ -1,5 +1,5 @@
 import t from 'tst'
-import { useSearchParam, useState, useEffect } from '../'
+import { useSearchParam } from '../'
 import enhook from './enhook.js'
 import { tick, idle, frame, time } from 'wait-please'
 
