@@ -403,7 +403,7 @@ function MyComponent () {
 <details>
 <summary><strong>useFormField</strong></summary>
 
-#### `[ inputProps, field ] = useFormField(options)`
+#### `[ inputProps, { value, error, touched, focus, set, reset } ] = useFormField(options)`
 
 Form field state helper. Handles input state and validation.
 Useful for organizing controlled inputs or forms, a nice minimal replacement to form hooks.
@@ -417,16 +417,6 @@ let field = useFormField({
 
 return <input {...field[0]} />
 ```
-
-#### `field`
-
-* `value` - current input value.
-* `error` - current input value validation result.
-* `touched` - if anything was entered into input.
-* `focus` - if input has focus.
-* `set(value)` - set input value.
-* `reset()` - reset input to initial value, reset `touched` flag.
-* `validate(value=input.value)` - run validator against some value, returns boolean - if input is valid.
 
 #### `options`
 
