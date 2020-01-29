@@ -6,13 +6,14 @@ const { window } = new JSDOM(`<!DOCTYPE html>`, {
   pretendToBeVisual: true,
   FetchExternalResources: false,
   ProcessExternalResources: false
-});
+})
 
-for (let prop in window) {
-  if (prop in global) continue
+let props = Object.getOwnPropertyNames(window)
+
+props.forEach(prop => {
+  if (prop in global) return
   Object.defineProperty(global, prop, {
     configurable: true,
     get: () => window[prop]
   })
-}
-
+})

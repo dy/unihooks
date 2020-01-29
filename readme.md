@@ -344,6 +344,15 @@ const Demo = () => {
 ```
 </details>
 
+<details>
+<summary><strong>useUpdate</strong></summary>
+
+#### `update = useUpdate()`
+
+Force-update component, regardless of internal state. Useful for building higher-order hooks.
+
+</details>
+
 <!--
 <details>
 <summary><strong>useThrottle</strong></summary>

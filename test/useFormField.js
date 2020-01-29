@@ -2,11 +2,11 @@ import t from 'tst'
 import { useFormField, useEffect } from '../'
 import { render } from 'preact'
 import { html } from 'htm/preact'
-import { tick, time } from 'wait-please'
+import { tick, time, frame } from 'wait-please'
 
-t.only('useFormField: should control existing input via actions', async t => {
+t('useFormField: should control existing input via actions', async t => {
   let el = document.createElement('div')
-  document.body.appendChild(el)
+  // document.body.appendChild(el)
 
   let log = []
 
@@ -40,21 +40,88 @@ t.only('useFormField: should control existing input via actions', async t => {
     1, null, false
   ])
 
+  // document.body.removeChild(el)
+
   t.end()
 })
 
-t('useFormField: state should reflect interactions', t => {
+t('useFormField: state should reflect interactions', async t => {
+  let el = document.createElement('div')
+  // document.body.appendChild(el)
+
+  let log = []
+  let Comp = () => {
+    let [field, actions] = useFormField('x')
+    log.push(field.value, field.touched)
+    return html`<input ...${field.inputProps}/>`
+  }
+  render(html`<${Comp}/>`, el)
+
+  let input = el.querySelector('input')
+  input.value = 'a'
+  input.dispatchEvent(new Event('input', { data: 'a'}))
+
+  await frame(2)
+  t.deepEqual(log, [undefined, false, 'a', true])
+
+  // document.body.removeChild(el)
+
   t.end()
 })
 
-t('useFormField: should be able to create new input', t => {
+t('useFormField: should be able to set value', async t => {
+  let el = document.createElement('div')
+  // document.body.appendChild(el)
+
+  let log = []
+  let Comp = () => {
+    let field = useFormField('x', 'foo')
+    useEffect(() => {
+      field.set('bar')
+    }, [])
+    return html`<input ...${field.inputProps}/>`
+  }
+  render(html`<${Comp}/>`, el)
+
+  let input = el.querySelector('input')
+  t.deepEqual(input.value, 'foo')
+  await frame(2)
+  t.deepEqual(input.value, 'bar')
+
+  // document.body.removeChild(el)
+
   t.end()
 })
 
-t('useFormField: should be able to set value', t => {
-  t.end()
-})
+t('useFormField: should be able to validate value', async t => {
+  let el = document.createElement('div')
+  // document.body.appendChild(el)
 
-t('useFormField: should be able to validate value', t => {
+  let log = []
+  let Comp = () => {
+    let field = useFormField({ name: 'x', validate: value => !!value })
+    log.push(field.error)
+    return html`<input ...${field.inputProps}/>`
+  }
+  render(html`<${Comp}/>`, el)
+
+  let input = el.querySelector('input')
+  input.value = ''
+  input.dispatchEvent(new Event('input', { data: '' }))
+  input.dispatchEvent(new Event('blur'))
+
+  t.deepEqual(log, [null])
+  await frame(2)
+  t.deepEqual(log, [null, false])
+
+  input.value = 'foo'
+  input.dispatchEvent(new Event('input', { data: 'foo' }))
+  input.dispatchEvent(new Event('blur'))
+
+  await frame(2)
+  t.deepEqual(log, [null, false, null])
+
+  // document.body.removeChild(el)
+
   t.end()
 })

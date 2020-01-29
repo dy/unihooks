@@ -7,10 +7,10 @@ const listeners = globalThis.__uhxListeners || (globalThis.__uhxListeners = {}),
   values = globalThis.__uhxValues || (globalThis.__uhxValues = {})
 
 export function useValue(key, init) {
-  let [, update] = hooks.useState()
+  let [, setState] = hooks.useState()
 
   hooks.useMemo(() => {
-    (listeners[key] || (listeners[key] = [])).push(update)
+    (listeners[key] || (listeners[key] = [])).push(setState)
 
     if (init === undefined) return
     if (!(key in values)) {
@@ -20,20 +20,20 @@ export function useValue(key, init) {
       values[key] = init
       if (init && init.then) {
         init.then(init => {
-          update(values[key] = init)
+          setState(values[key] = init)
         })
       }
     }
   }, [key])
 
   hooks.useEffect(() => () => {
-    listeners[key].splice(listeners[key].indexOf(update) >>> 0, 1)
+    listeners[key].splice(listeners[key].indexOf(setState) >>> 0, 1)
     if (!listeners[key].length) delete values[key]
   }, [key])
 
   return [values[key], (value) => {
     values[key] = typeof value === 'function' ? value(values[key]) : value
-    listeners[key].map((update) => update(value))
+    listeners[key].map((setState) => setState(value))
   }]
 }
 
@@ -218,45 +218,57 @@ export function usePrevious(value) {
   return ref.current
 }
 
-export function useFormField(key, value, props={}) {
-  let inputRef = hooks.useRef()
+export function useUpdate() {
+  let [, set] = hooks.useState(0)
+  let update = hooks.useCallback(() => set(s => ~s), [])
+  return update
+}
 
-  let [state, setState] = hooks.useState(() => {
+export function useFormField(key, value, props={}) {
+  if (typeof key === 'object') {
+    props = key
+    value = props.value
+    key = props.name || props.key
+  }
+  if (typeof value === 'object') {
+    props = value
+    value = props.value
+  }
+
+  let inputRef = hooks.useRef()
+  let [, setValue] = hooks.useState()
+  let [, setError] = hooks.useState()
+  let state = hooks.useMemo(() => {
     let validate = (value, check) => {
       try {
         var valid = check(value)
         if (valid === true || valid === undefined) {
-          state.error = null
-          setState(state)
+          setError(state.error = null)
           return true
         }
         throw valid
       } catch (error) {
-        state.error = error
-        setState(state)
+        setError(state.error = error)
       }
       return false
     }
     let actions = {
       set: (value) => {
-        state.value = state.inputProps.value = value
-        setState(state)
+        setValue(state.value = state.inputProps.value = value)
       },
       reset: () => {
-        state.value = state.inputProps.value = value
+        setValue(state.value = state.inputProps.value = value)
+        setError(state.error = null)
         state.touched = false
-        state.error = null
-        setState(state)
       },
       validate: () => {
         if (Array.isArray(props.validate)) {
           return props.validate.every(check => validate(state.value, check))
         }
-        return validate(state.value)
+        return validate(state.value, props.validate)
       },
       clear: () => {
-        state.value = state.inputProps.value = null
-        setState(state)
+        setValue(state.value = state.inputProps.value = null)
       },
       valueOf() { return this.value },
       [Symbol.toPrimitive]() { return this.value },
@@ -280,13 +292,17 @@ export function useFormField(key, value, props={}) {
     state.inputProps.onBlur = e => {
       actions.validate()
     }
+    state.inputProps.onFocus = e => {
+      setError(state.error = null)
+    }
     state.inputProps.onChange =
     state.inputProps.onInput = e => {
+      state.set(e.target.value)
       state.touched = true
     }
 
     return state
-  })
+  }, [])
 
   return state
 }
