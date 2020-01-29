@@ -257,7 +257,7 @@ export function useFormField(props = {}) {
   let inputRef = hooks.useRef()
   let [, setValue] = hooks.useState()
   let [, setFocus] = hooks.useState()
-  let [error, validate] = useValidate(rules)
+  let [error, validate] = useValidate(rules || (inputProps.required ? v => !!v : null ))
 
   let field = hooks.useMemo(() => {
     let field = Object.create({
@@ -290,9 +290,9 @@ export function useFormField(props = {}) {
           setFocus(field.focus = false)
         },
         onFocus: e => {
-          setFocus(field.focus = true)
-          field.set(field.value)
           field.touched = true
+          setFocus(field.focus = true)
+          field.valid = field.validate(field.value || null)
         },
         onChange: e => {
           field.touched = true

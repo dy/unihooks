@@ -227,7 +227,7 @@ t('useFormField: error must be validated on each input', async t => {
   t.end()
 })
 
-t('useFormField: required should turn initial valid state into false', async t => {
+t('useFormField: `required` should turn initial valid state into false', async t => {
   let el = document.createElement('div')
   // document.body.appendChild(el)
 
