@@ -102,7 +102,7 @@ t('useFormField: should be able to validate value', async t => {
   let log = []
   let Comp = () => {
     let field = useFormField({ validate: value => !!value })
-    log.push(field.error)
+    log.push(field.error, field.valid)
     return html`<input ...${field[0]}/>`
   }
   render(html`<${Comp}/>`, el)
@@ -112,16 +112,16 @@ t('useFormField: should be able to validate value', async t => {
   input.dispatchEvent(new Event('input', { data: '' }))
   input.dispatchEvent(new Event('blur'))
 
-  t.deepEqual(log, [null])
+  t.deepEqual(log, [null, true])
   await frame(2)
-  t.deepEqual(log, [null, false])
+  t.deepEqual(log, [null, true, false, false])
 
   input.value = 'foo'
   input.dispatchEvent(new Event('input', { data: 'foo' }))
   input.dispatchEvent(new Event('blur'))
 
   await frame(2)
-  t.deepEqual(log, [null, false, null])
+  t.deepEqual(log, [null, true, false, false, null, true])
 
   // document.body.removeChild(el)
 

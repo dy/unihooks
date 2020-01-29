@@ -229,7 +229,7 @@ export function useValidate(validate) {
   let runValidate = hooks.useCallback((value, check) => {
     try {
       var valid = check(value)
-      if (valid === true || valid === undefined) {
+      if (valid === true || valid == null) {
         setError(error = null)
         return true
       }
@@ -263,11 +263,13 @@ export function useFormField(props={}) {
     let field = Object.create({
       value: init,
       error: null,
+      valid: true,
       touched: false,
       focus: false,
       set: (value) => {
         setValue(field.value = value)
-        field.validate(field.value)
+        let valid = field.validate(field.value)
+        field.valid = field.focus || valid
       },
       reset: () => {
         setValue(field.value = init)
