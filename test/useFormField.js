@@ -159,8 +159,6 @@ t('useFormField: does not crash on null-validation', async t => {
   t.end()
 })
 
-
-
 t.skip('useFormField: persist test', async t => {
   let el = document.createElement('div')
   document.body.appendChild(el)
@@ -178,3 +176,4 @@ t.skip('useFormField: persist test', async t => {
 
   t.end()
 })
+

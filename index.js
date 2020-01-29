@@ -237,12 +237,14 @@ export function useFormField(key, value, props={}) {
     value = props.value
   }
 
+  let { validate, persist, ...inputProps } = props
+
   let inputRef = hooks.useRef()
   let [, setValue] = hooks.useState()
   let [, setError] = hooks.useState()
 
   let state = hooks.useMemo(() => {
-    let validate = (value, check) => {
+    let runValidate = (value, check) => {
       try {
         var valid = check(value)
         if (valid === true || valid === undefined) {
@@ -265,11 +267,11 @@ export function useFormField(key, value, props={}) {
         state.touched = false
       },
       validate: () => {
-        if (!props.validate) return
-        if (Array.isArray(props.validate)) {
-          return props.validate.every(check => validate(state.value, check))
+        if (!validate) return
+        if (Array.isArray(validate)) {
+          return validate.every(validate => runValidate(state.value, validate))
         }
-        return validate(state.value, props.validate)
+        return runValidate(state.value, validate)
       },
       clear: () => {
         setValue(state.value = state.inputProps.value = null)
@@ -291,7 +293,7 @@ export function useFormField(key, value, props={}) {
       name: key,
       value: state.value,
       ref: inputRef,
-      ...props
+      ...inputProps
     }
     state.inputProps.onBlur = e => {
       actions.validate()
@@ -309,7 +311,7 @@ export function useFormField(key, value, props={}) {
   }, [])
 
   hooks.useEffect(() => {
-    if (props.persist && value == null) {
+    if (persist && value == null) {
       let storedValue = window.sessionStorage.getItem(prefix + key)
       if (storedValue !== undefined) {
         setValue(state.value = state.inputProps.value = storedValue)
@@ -317,7 +319,7 @@ export function useFormField(key, value, props={}) {
     }
   }, [])
   hooks.useEffect(() => {
-    if (props.persist) {
+    if (persist) {
       window.sessionStorage.setItem(prefix + key, state.value)
     }
   }, [state.value])
