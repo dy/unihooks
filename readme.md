@@ -432,7 +432,8 @@ return <input {...field[0]} />
 
 * `value` - initial input value.
 * `persist = false` - persist input state between sessions.
-* `validate` - custom validator for input, modifies `error` state. Can be a function or list of functions.
+* `validate` - custom validator for input, modifies `error` state. See `useValidate`.
+* `required` - quick flag for required validator.
 * `...props` - the rest of props is passed to input `props`
 
 <!--
