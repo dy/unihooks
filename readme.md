@@ -332,13 +332,12 @@ const Demo = () => {
 <details>
 <summary><strong>useValidate</strong></summary>
 
-#### `[error, validate] = useValidate(validator: Function | Array)`
+#### `[error, validate] = useValidate(validator: Function | Array, init? )`
 
 Provides validation functionality.
-`validator` is a function or an array of functions.
-A validator function takes value argument and returns `true` / `undefined`, if validation passes.
-Any other returned result is considered validation error.
 
+* `validator` is a function or an array of functions `value => error | true ?`.
+* `init` is optional initial value to validate.
 
 ```js
 function MyComponent () {
@@ -347,7 +346,10 @@ function MyComponent () {
     value => value.length < 2 ? 'Username must be at least 2 chars long' : true
   ])
 
-  return <input onChange={e => validateUsername(e.target.value) && handleInputChange(e) } {...inputProps}/>
+  return <>
+    <input onChange={e => validateUsername(e.target.value) && handleInputChange(e) } {...inputProps}/>
+    { usernameError }
+  </>
 }
 ```
 </details>
@@ -356,40 +358,43 @@ function MyComponent () {
 <details>
 <summary><strong>useFormField</strong></summary>
 
-#### `[ props, {value, error, valid, focus, touched, set, reset} ] = useFormField(options)`
+#### `[inputProps, field] = useFormField(options)`
 
 Form field state helper. Handles input state and validation.
 Useful for organizing controlled inputs or forms, a nice minimal replacement to form hooks.
 
 ```js
-let field = useFormField({
+let [props, field] = useFormField({
   name: 'password',
   type: 'password',
   validate: value => !!value
 })
 
-return <input {...field[0]} />
+return <input {...props} />
+
+// spread can be used directly on field too
+// return <input {...field} />
 ```
 
 #### `options`
 
 * `value` - initial input value.
 * `persist = false` - persist input state between sessions.
-* `validate` - custom validator for input, modifies `error` state. See `useValidate`.
-* `required` - quick flag for required validator.
-* `...props` - the rest of props is passed to input `props`
+* `validate` - custom validator for input, modifies `field.error`. See `useValidate`.
+* `required` - if value must not be empty.
+* `...props` - the rest of props is passed to `props`
 
-<!--
 #### `field`
 
-* `value` - current input value
-* `error` - current validation error. Revalidated on every value change.
-* `valid` - validation state. Focused input is considered valid.
-* `focus` - if input is focused.
-* `touched` - if user interaction took place.
+* `value` - current input value.
+* `error` - current validation error. Revalidates on blur, `null` on focus.
+* `valid: bool` - is valid value, revalidates on blur.
+* `focus: bool` - if input is focused.
+* `touched: bool` - if input was focused.
 * `set(value)` - set input value.
-* `reset()` - reset input value to initial, clear state.
--->
+* `reset()` - reset form state to initial.
+* `validate(value)` - force-validate input.
+
 
 </details>
 

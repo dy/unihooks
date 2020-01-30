@@ -1,5 +1,5 @@
 import t from 'tst'
-import { useFormField, useEffect } from '../'
+import { useFormField, useEffect, useState } from '../'
 import { render } from 'preact'
 import { html } from 'htm/preact'
 import { tick, time, frame } from 'wait-please'
@@ -27,7 +27,7 @@ t('useFormField: should control existing input via actions', async t => {
         log.push(field.value, field.error, field.touched)
       }, 30);
     }, [])
-    return html`<input ...${ field[0] } />`
+    return html`<input ...${ field } />`
   }
 
   render(html`<${Comp}/>`, el)
@@ -83,7 +83,7 @@ t('useFormField: should be able to set value', async t => {
     useEffect(() => {
       field.set('bar')
     }, [])
-    return html`<input ...${field[0]}/>`
+    return html`<input ...${field}/>`
   }
   render(html`<${Comp}/>`, el)
 
@@ -106,7 +106,7 @@ t('useFormField: should be able to validate value', async t => {
   let Comp = () => {
     let field = useFormField({ validate: value => !!value })
     log.push(field.error, field.valid)
-    return html`<input ...${field[0]}/>`
+    return html`<input ...${field}/>`
   }
   render(html`<${Comp}/>`, el)
 
@@ -140,7 +140,7 @@ t('useFormField: does not crash on null-validation', async t => {
   let Comp = () => {
     let field = useFormField()
     log.push(field.error)
-    return html`<input ...${field[0]}/>`
+    return html`<input ...${field}/>`
   }
   render(html`<${Comp}/>`, el)
 
@@ -172,7 +172,7 @@ t.skip('useFormField: persist test', async t => {
 
   let Comp = () => {
     let field = useFormField({ persist: true })
-    return html`<input ...${field[0]}/>`
+    return html`<input ...${field}/>`
   }
   render(html`<${Comp}/>`, el)
 
@@ -191,7 +191,7 @@ t('useFormField: focus must reflect focused state', async t => {
   render(html`<${function () {
     let field = useFormField('')
     log.push(field.focus)
-    return html`<input ...${field[0]}/>`
+    return html`<input ...${field}/>`
   }}/>`, el)
   let input = el.querySelector('input')
   await frame(1)
@@ -215,7 +215,7 @@ t('useFormField: error must be validated on each input', async t => {
     <${function () {
       let field = useFormField({validate(value) { return value ? 'Valid' : 'Invalid' }})
       log.push(field.error)
-      return html`<input ...${field[0]} /> ${ field.error + '' }`
+      return html`<input ...${field} /> ${ field.error + '' }`
     }}/>
   `, el)
 
@@ -245,7 +245,7 @@ t('useFormField: `required` should turn initial valid state into false', async t
     <${function () {
       let field = useFormField({ required: true })
       log.push(field.valid)
-      return html`<input ...${field[0]} /> ${field.error + ''}`
+      return html`<input ...${field} /> ${field.error + ''}`
     }}/>
   `, el)
   await frame(2)
@@ -263,6 +263,27 @@ t('useFormField: `required` should turn initial valid state into false', async t
 
   await frame(2)
   t.deepEqual(log, [true, true, false])
+  render(null, el)
+
+  t.end()
+})
+
+t('useFormField: changed input props must be updated', async t => {
+  let el = document.createElement('div')
+  let log = []
+
+  render(html`<${function () {
+    let [x, setX] = useState([1])
+    let field = useFormField({ x })
+    log.push(field.x)
+    useEffect(() => setX([2]), [])
+
+    return null
+  }}/>`, el)
+
+  await frame(3)
+  t.deepEqual(log, [[1], [2]])
+
   render(null, el)
 
   t.end()

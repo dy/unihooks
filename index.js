@@ -224,96 +224,124 @@ export function useUpdate() {
   return update
 }
 
-export function useValidate(validate) {
-  let [error, setError] = hooks.useState(null)
-  let runValidate = hooks.useCallback((value, check) => {
-    try {
-      var valid = check(value)
-      if (valid === true || valid == null) {
-        setError(error = null)
-        return true
+export function useValidate(validator, init) {
+  let check = hooks.useCallback((value) => {
+    if (!validator) return null
+
+    let check = (value, validator) => {
+      try {
+        var valid = validator(value)
+        if (valid === true || valid == null) {
+          return null
+        }
+        throw valid
+      } catch (e) {
+        return e
       }
-      throw valid
-    } catch (e) {
-      setError(error = e)
     }
-    return false
+    if (Array.isArray(validator)) return validator.every(validator => check(value, validator))
+    return check(value, validator)
   }, [])
 
-  return [error, (value = field.value) => {
-    if (!validate) return
-    if (Array.isArray(validate)) {
-      return validate.every(validate => runValidate(value, validate))
-    }
-    return runValidate(value, validate)
-  }]
+
+  let [error, setError] = hooks.useState(init != null ? () => check(init) : null)
+
+  let validate = hooks.useCallback((value) => {
+    let error = check(value, validator)
+    setError(error)
+    return error == null
+  }, [])
+
+  return [error, validate]
 }
 
 export function useFormField(props = {}) {
   const prefix = '__uhx:form-field-'
 
-  let { value, validate: rules, persist, ...inputProps } = props
+  let { value, validate: rules, required, persist, ...inputProps } = props
   let key = inputProps.name || inputProps.id || inputProps.key
 
   let inputRef = hooks.useRef()
   let [init, setValue] = (persist ? useStorage : useValue)(key, value, { storage: window.sessionStorage, prefix })
   let [focus, setFocus] = hooks.useState(false)
-  let [error, validate] = useValidate(rules || (inputProps.required ? v => !!v : null))
+  let [error, validate] = useValidate(rules || (required ? v => !!v : null))
 
   let field = hooks.useMemo(() => {
     let getValue = () => field.value
-    let handleChange = e => {
-      field.touched = true
-      field.set(e.target.value)
-    }
-    let field = Object.create({
-      value: init,
-      error: null,
-      valid: true,
-      focus: false,
-      touched: false,
-      set: (value) => {
-        setValue(field.value = value)
-        field.validate()
-      },
-      reset: () => {
-        setValue(field.value = init)
-        field.error = null
-        field.touched = false
-      },
-      validate: (value = field.value || null) => field.valid = validate(value),
-      valueOf: getValue,
-      [Symbol.toPrimitive]: getValue,
-      [Symbol.iterator]: function* () {
-        yield field[0]
-        yield field
-      },
-      // inputProps
-      [0]: Object.assign(Object.create(null, {
-        value: { enumerable: true, get: getValue } }), {
-        onBlur: e => {
+
+    let field = Object.create(
+      // invisible, not enumerable (interface)
+      {
+        valueOf: getValue,
+        [Symbol.toPrimitive]: getValue,
+        [Symbol.iterator]: function* () {
+          yield { ...field } // leave only enumerables (input props)
+          yield field
+        }
+      }, {
+      // invisible, enumerable (input props)
+      // FIXME: there's no way to define invisible + enumerable for spread
+      onBlur: {
+        enumerable: true, value: e => {
           setFocus(field.focus = false)
-        },
-        onFocus: e => {
-          field.touched = true
-          setFocus(field.focus = true)
+          // revert error to the last value
           field.validate()
-        },
-        onChange: handleChange,
-        onInput: handleChange,
-        ref: inputRef,
-        ...inputProps
-      })
-    }, {
-      [1]: { enumerable: false, get() { return field } }
+        }
+      },
+      onFocus: {
+        enumerable: true, value: e => {
+          field.touched = true
+          field.error = null
+          field.valid = true
+          setFocus(field.focus = true)
+        }
+      },
+      onChange: { enumerable: true, value: e => field.set(e.target.value) },
+      onInput: { enumerable: true, value: e => field.set(e.target.value) },
+
+      // visible, not enumerable (field state)
+      error: { enumerable: false, writable: true, value: null },
+      valid: { enumerable: false, writable: true, value: true },
+      focus: { enumerable: false, writable: true, value: false },
+      touched: { enumerable: false, writable: true, value: false },
+      set: {
+        enumerable: false, value: (v) => {
+          setValue(field.value = v)
+          if (!field.focus) field.validate()
+        }
+      },
+      reset: {
+        enumerable: false, value: () => {
+          setValue(field.value = init)
+          field.error = null
+          field.valid = true
+          field.touched = false
+        }
+      },
+      validate: {
+        enumerable: false, value: (value = field.value) => field.valid = validate(value)
+      }
+    })
+
+    // visible, enumerable (field state + input props)
+    Object.assign(field, {
+      value: init,
+      required,
+      ref: inputRef,
     })
 
     return field
   }, [])
 
+  // sync error with useValidate, recover from focus as well
   hooks.useMemo(() => {
-    field.error = error
-  }, [error])
+    if (!field.focus) field.error = error
+  }, [error, field.focus])
+
+  // update input props whenever they change
+  hooks.useMemo(() => {
+    Object.assign(field, inputProps)
+  }, Object.keys(inputProps).map(key => inputProps[key]))
 
   return field
 }
