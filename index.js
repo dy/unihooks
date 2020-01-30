@@ -250,25 +250,31 @@ export function useValidate(validate) {
 }
 
 export function useFormField(props = {}) {
-  const prefix = '__uhx:form-field'
+  const prefix = '__uhx:form-field-'
 
-  let { value: init, validate: rules, persist, ...inputProps } = props
+  let { value, validate: rules, persist, ...inputProps } = props
+  let key = inputProps.name || inputProps.id || inputProps.key
 
   let inputRef = hooks.useRef()
-  let [, setValue] = hooks.useState()
-  let [, setFocus] = hooks.useState()
+  let [init, setValue] = (persist ? useStorage : useValue)(key, value, { storage: window.sessionStorage, prefix })
+  let [focus, setFocus] = hooks.useState(false)
   let [error, validate] = useValidate(rules || (inputProps.required ? v => !!v : null))
 
   let field = hooks.useMemo(() => {
+    let getValue = () => field.value
+    let handleChange = e => {
+      field.touched = true
+      field.set(e.target.value)
+    }
     let field = Object.create({
       value: init,
       error: null,
       valid: true,
-      touched: false,
       focus: false,
+      touched: false,
       set: (value) => {
         setValue(field.value = value)
-        field.validate(field.value)
+        field.validate()
       },
       reset: () => {
         setValue(field.value = init)
@@ -276,32 +282,25 @@ export function useFormField(props = {}) {
         field.touched = false
       },
       validate: (value = field.value || null) => field.valid = validate(value),
-      valueOf() { return this.value },
-      [Symbol.toPrimitive]() { return this.value },
+      valueOf: getValue,
+      [Symbol.toPrimitive]: getValue,
       [Symbol.iterator]: function* () {
         yield field[0]
         yield field
       },
       // inputProps
       [0]: Object.assign(Object.create(null, {
-        value: { enumerable: true, get() { return field.value } }
-      }), {
+        value: { enumerable: true, get: getValue } }), {
         onBlur: e => {
           setFocus(field.focus = false)
         },
         onFocus: e => {
           field.touched = true
           setFocus(field.focus = true)
-          field.validate(field.value)
+          field.validate()
         },
-        onChange: e => {
-          field.touched = true
-          field.set(e.target.value)
-        },
-        onInput: e => {
-          field.touched = true
-          field.set(e.target.value)
-        },
+        onChange: handleChange,
+        onInput: handleChange,
         ref: inputRef,
         ...inputProps
       })
@@ -311,21 +310,6 @@ export function useFormField(props = {}) {
 
     return field
   }, [])
-
-  let key = inputProps.name || inputProps.id || inputProps.key
-  hooks.useEffect(() => {
-    if (persist && init == null) {
-      let storedValue = window.sessionStorage.getItem(prefix + key)
-      if (storedValue !== undefined) {
-        field.set(field.value = storedValue)
-      }
-    }
-  }, [])
-  hooks.useEffect(() => {
-    if (persist) {
-      window.sessionStorage.setItem(prefix + key, field.value)
-    }
-  }, [field.value])
 
   hooks.useMemo(() => {
     field.error = error

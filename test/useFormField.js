@@ -41,6 +41,7 @@ t('useFormField: should control existing input via actions', async t => {
   ])
 
   // document.body.removeChild(el)
+  render(null, el)
 
   t.end()
 })
@@ -67,6 +68,7 @@ t('useFormField: state should reflect interactions', async t => {
   t.deepEqual(log, [undefined, false, 'a', true])
 
   // document.body.removeChild(el)
+  render(null, el)
 
   t.end()
 })
@@ -91,6 +93,7 @@ t('useFormField: should be able to set value', async t => {
   t.deepEqual(input.value, 'bar')
 
   // document.body.removeChild(el)
+  render(null, el)
 
   t.end()
 })
@@ -124,6 +127,7 @@ t('useFormField: should be able to validate value', async t => {
   t.deepEqual(log, [null, true, false, false, null, true])
 
   // document.body.removeChild(el)
+  render(null, el)
 
   t.end()
 })
@@ -157,17 +161,17 @@ t('useFormField: does not crash on null-validation', async t => {
   t.deepEqual(log, [null, null, null])
 
   // document.body.removeChild(el)
+  render(null, el)
 
   t.end()
 })
 
 t.skip('useFormField: persist test', async t => {
   let el = document.createElement('div')
-  // document.body.appendChild(el)
+  document.body.appendChild(el)
 
-  let log = []
   let Comp = () => {
-    let field = useFormField('y')
+    let field = useFormField({ persist: true })
     return html`<input ...${field[0]}/>`
   }
   render(html`<${Comp}/>`, el)
@@ -175,6 +179,7 @@ t.skip('useFormField: persist test', async t => {
   await frame(2)
 
   // document.body.removeChild(el)
+  // render(null, el)
 
   t.end()
 })
@@ -196,6 +201,9 @@ t('useFormField: focus must reflect focused state', async t => {
   await frame(1)
 
   t.deepEqual(log, [false, true, false])
+
+  render(null, el)
+  t.end()
 })
 
 t('useFormField: error must be validated on each input', async t => {
@@ -223,6 +231,7 @@ t('useFormField: error must be validated on each input', async t => {
 
   await frame(2)
   t.deepEqual(log, [null, 'Valid', 'Invalid'])
+  render(null, el)
 
   t.end()
 })
@@ -254,6 +263,7 @@ t('useFormField: `required` should turn initial valid state into false', async t
 
   await frame(2)
   t.deepEqual(log, [true, true, false])
+  render(null, el)
 
   t.end()
 })
