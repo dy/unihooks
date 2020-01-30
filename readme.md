@@ -479,6 +479,7 @@ return <input {...props} />
 
 <details>
 <summary><strong>standard</strong></summary>
+<br/>
 
 For convenience, unihooks export current framework hooks. To switch hooks, use `setHooks` - the default export.
 
@@ -501,6 +502,7 @@ function Timer() {
 
 <details>
 <summary><strong>utility</strong></summary>
+<br/>
 
 Utility hooks, useful for high-order-hooks.
 
