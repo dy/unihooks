@@ -502,7 +502,7 @@ function Timer() {
 </details>
 
 <details>
-<summary><strong>util</strong></summary>
+<summary><strong>utility</strong></summary>
 
 Utility hooks, useful for high-order-hooks.
 
