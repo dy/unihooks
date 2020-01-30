@@ -61,6 +61,7 @@ t('useFormField: state should reflect interactions', async t => {
   await frame()
 
   let input = el.querySelector('input')
+  input.dispatchEvent(new Event('focus'))
   input.value = 'a'
   input.dispatchEvent(new InputEvent('input', { data: 'a'}))
 
@@ -111,6 +112,7 @@ t('useFormField: should be able to validate value', async t => {
   render(html`<${Comp}/>`, el)
 
   let input = el.querySelector('input')
+  input.dispatchEvent(new Event('focus'))
   input.value = ''
   input.dispatchEvent(new Event('input', { data: '' }))
   input.dispatchEvent(new Event('blur'))
@@ -119,6 +121,7 @@ t('useFormField: should be able to validate value', async t => {
   await frame(2)
   t.deepEqual(log, [null, true, false, false])
 
+  input.dispatchEvent(new Event('focus'))
   input.value = 'foo'
   input.dispatchEvent(new Event('input', { data: 'foo' }))
   input.dispatchEvent(new Event('blur'))
@@ -145,6 +148,7 @@ t('useFormField: does not crash on null-validation', async t => {
   render(html`<${Comp}/>`, el)
 
   let input = el.querySelector('input')
+  input.dispatchEvent(new Event('focus'))
   input.value = ''
   input.dispatchEvent(new Event('input', { data: '' }))
   input.dispatchEvent(new Event('blur'))
@@ -153,6 +157,7 @@ t('useFormField: does not crash on null-validation', async t => {
   await frame(2)
   t.deepEqual(log, [null, null])
 
+  input.dispatchEvent(new Event('focus'))
   input.value = 'foo'
   input.dispatchEvent(new Event('input', { data: 'foo' }))
   input.dispatchEvent(new Event('blur'))
@@ -206,7 +211,7 @@ t('useFormField: focus must reflect focused state', async t => {
   t.end()
 })
 
-t('useFormField: error must be validated on each input', async t => {
+t('useFormField: should not be validated if focused', async t => {
   let el = document.createElement('div')
   // document.body.appendChild(el)
 
@@ -220,17 +225,24 @@ t('useFormField: error must be validated on each input', async t => {
   `, el)
 
   let input = el.querySelector('input')
+  input.dispatchEvent(new Event('focus'))
   input.value = 'a'
   input.dispatchEvent(new InputEvent('input'))
 
   await frame(2)
-  t.deepEqual(log, [null, 'Valid'])
+  // t.deepEqual(log, [null, 'Valid'])
+  t.deepEqual(log, [null, null])
 
   input.value = ''
   input.dispatchEvent(new InputEvent('input'))
 
   await frame(2)
-  t.deepEqual(log, [null, 'Valid', 'Invalid'])
+  t.deepEqual(log, [null, null, null])
+
+  input.dispatchEvent(new Event('blur'))
+  await frame(2)
+  t.deepEqual(log, [null, null, null, 'Invalid'])
+
   render(null, el)
 
   t.end()
@@ -253,6 +265,7 @@ t('useFormField: `required` should turn initial valid state into false', async t
   let input = el.querySelector('input')
   t.deepEqual(log, [true])
 
+  input.dispatchEvent(new Event('focus'))
   input.value = 'a'
   input.dispatchEvent(new InputEvent('input'))
   await frame(2)
@@ -260,6 +273,7 @@ t('useFormField: `required` should turn initial valid state into false', async t
 
   input.value = ''
   input.dispatchEvent(new InputEvent('input'))
+  input.dispatchEvent(new Event('blur'))
 
   await frame(2)
   t.deepEqual(log, [true, true, false])
