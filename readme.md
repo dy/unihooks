@@ -96,7 +96,7 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 
 #### `[value, setValue] = useValue(key, init?)`
 
-Global value provider. Can be used as global storage, eg. as application model layer.
+Global value provider, aka _useChannel_. Can be used as value slot, eg. as application model layer without persistency. Also can be used for intercomponent communication.
 
 ```js
 import { useValue } from 'unihooks'
@@ -307,32 +307,6 @@ Provides data channel for intercommunication between components. Can be used as 
 <!-- ## State -->
 
 <details>
-<summary><strong>usePrevious</strong></summary>
-
-#### `[prev] = usePrevious(value)`
-
-Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
-
-```js
-import { usePrevious, useState, useRender } from 'unihooks';
-
-const Demo = () => {
-  const [count, setCount] = useState(0);
-  const [prevCount] = usePrevious(count);
-
-  return <p>
-    <button onClick={() => setCount(count + 1)}>+</button>
-    <button onClick={() => setCount(count - 1)}>-</button>
-    <p>
-      Now: {count}, before: {prevCount}
-    </p>
-  </p>
-};
-```
-
-</details>
-
-<details>
 <summary><strong>useCountdown</strong></summary>
 
 #### `[n, reset] = useCountdown(startValue, interval=1000 | schedule?)`
@@ -353,23 +327,6 @@ const Demo = () => {
 };
 ```
 </details>
-
-<details>
-<summary><strong>useUpdate</strong></summary>
-
-#### `update = useUpdate()`
-
-Force-update component, regardless of internal state. Useful for building higher-order hooks.
-
-</details>
-
-<!--
-<details>
-<summary><strong>useThrottle</strong></summary>
-</details>
-
-<!-- - [ ] `useDefined` -->
-<!-- - [ ] `useCounter` − track state of a number -->
 
 
 <details>
@@ -394,20 +351,6 @@ function MyComponent () {
 }
 ```
 </details>
-
-<!-- - [ ] `useDestroy` -->
-<!-- - [ ] `useUpdate` -->
-<!-- - [ ] `useTween` -->
-<!-- - [ ] `useTimeout` -->
-<!-- - [ ] `useInterval` -->
-<!-- - [ ] `useIdle` -->
-<!-- - [ ] `useImmediate` -->
-<!-- - [ ] `useRaf` -->
-<!-- - [ ] `useToggle` -->
-<!-- - [ ] `usePing` -->
-<!-- - [ ] `useFSM` -->
-<!-- - [ ] `useAsync` -->
-<!-- - [ ] `useHooked` - run hooks-enabled effect -->
 
 
 <details>
@@ -511,8 +454,28 @@ return <input {...field[0]} />
 <!-- - [ ] `usePromise` -->
 <!-- - [ ] `useEmitter` -->
 
+<!--
 <details>
-<summary><strong>standard hooks</strong></summary>
+<summary><strong>useThrottle</strong></summary>
+</details>
+
+<!-- - [ ] `useDefined` -->
+<!-- - [ ] `useTween` -->
+<!-- - [ ] `useTimeout` -->
+<!-- - [ ] `useInterval` -->
+<!-- - [ ] `useIdle` -->
+<!-- - [ ] `useImmediate` -->
+<!-- - [ ] `useRaf` -->
+<!-- - [ ] `useToggle` -->
+<!-- - [ ] `usePing` -->
+<!-- - [ ] `useFSM` -->
+<!-- - [ ] `useAsync` -->
+<!-- - [ ] `useHooked` - run hooks-enabled effect -->
+<!-- - [ ] `useCounter` − track state of a number -->
+
+
+<details>
+<summary><strong>standard</strong></summary>
 
 For convenience, unihooks export current framework hooks. To switch hooks, use `setHooks` - the default export.
 
@@ -530,6 +493,26 @@ function Timer() {
   }, [])
 }
 ```
+
+</details>
+
+<details>
+<summary><strong>util</strong></summary>
+
+#### `update = useUpdate()`
+
+Force-update component, regardless of internal state. Useful for building higher-order hooks.
+
+#### `prev = usePrevious(value)`
+
+Returns the previous state as described in the [React hooks FAQ](https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state).
+
+<!--
+useSyncEffect
+useInit
+useDestroy
+useResetState
+-->
 
 </details>
 
