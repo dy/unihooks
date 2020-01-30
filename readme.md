@@ -20,7 +20,9 @@ const MyComponent = () => {
 
 ## Principles
 
-### 1. Framework agnostic
+<details>
+<summary><strong>1. Framework agnostic</strong></summary>
+<br/>
 
 _Unihooks_ are not bound to react and work with any hooks-enabled framework:
 
@@ -48,8 +50,11 @@ import * as preactHooks from 'preact/hooks'
 setHooks(preactHooks)
 ```
 -->
+</details>
 
-### 2. Unified
+<details>
+<summary><strong>2. Unified</strong></summary>
+<br/>
 
 _Unihooks_ follow `useState` signature for intuitivity.
 
@@ -60,10 +65,14 @@ let [ state, actions ] = useValue( target?, init | update? )
 <!--
 <sub>Inspired by [upsert](https://github.com/tc39/proposal-upsert), combining _insert_ and _update_ into a single function.</sub>
 -->
+</details>
 
-### 3. Essential
 
-_Unihooks_ provide meaningful piece of functionality in reactive context, not mere wrappers for native API. Static hooks are avoided.
+<details>
+<summary><strong>3. Essential</strong></summary>
+<br/>
+
+_Unihooks_ deliver value in reactive context, they're not mere wrappers for native API. Static hooks are avoided.
 
 ```js
 const MyComponent = () => { let ua = useUserAgent() } // ✘ − user agent never changes
@@ -76,6 +85,7 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 * [wishbox](https://wishbox.gift)
 * [mobeewave]()
 -->
+</details>
 
 ## Hooks
 
