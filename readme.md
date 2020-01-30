@@ -18,7 +18,8 @@ const MyComponent = () => {
 ```
 -->
 
-<!--
+## Principles
+
 ### 1. Framework agnostic
 
 _Unihooks_ are not bound to react and work with any hooks-enabled framework:
@@ -37,6 +38,7 @@ _Unihooks_ are not bound to react and work with any hooks-enabled framework:
 * [unhook](https://ghub.io/unhook)
 * ... see [any-hooks](https://ghub.io/any-hooks) for the full list
 
+<!--
 To switch hooks framework:
 
 ```js
@@ -47,42 +49,26 @@ setHooks(preactHooks)
 ```
 -->
 
-<!--
-If target framework is known in advance, the corresponding entry can be used:
-
-```js
-// framework is detected automatically
-import * as hook from 'unihooks'
-
-// preact hooks
-import * as hook from 'unihooks/preact'
-```
--->
-
-<!--
 ### 2. Unified
 
-_Unihooks_ extend `useState` signature for intuitivity.
+_Unihooks_ follow `useState` signature for intuitivity.
 
 ```js
 let [ state, actions ] = useValue( target?, init | update? )
 ```
--->
 
 <!--
 <sub>Inspired by [upsert](https://github.com/tc39/proposal-upsert), combining _insert_ and _update_ into a single function.</sub>
 -->
 
-<!--
-### 3. Reactive
+### 3. Essential
 
-_Unihooks_ provide live binding to a data source − component is rerendered whenever underlying data changes. Static hooks are avoided.
+_Unihooks_ provide meaningful piece of functionality in reactive context, not mere wrappers for native API. Static hooks are avoided.
 
 ```js
 const MyComponent = () => { let ua = useUserAgent() } // ✘ − user agent never changes
 const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API must be used instead
 ```
--->
 
 <!--
 ## Who Uses Unihooks
@@ -90,6 +76,8 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 * [wishbox](https://wishbox.gift)
 * [mobeewave]()
 -->
+
+## Hooks
 
 <details>
 <summary><strong>useValue</strong></summary>
