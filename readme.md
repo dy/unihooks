@@ -499,9 +499,11 @@ function Timer() {
 <details>
 <summary><strong>util</strong></summary>
 
+Utility hooks, useful for high-order-hooks.
+
 #### `update = useUpdate()`
 
-Force-update component, regardless of internal state. Useful for building higher-order hooks.
+Force-update component, regardless of internal state.
 
 #### `prev = usePrevious(value)`
 
