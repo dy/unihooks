@@ -283,23 +283,55 @@ function MyButton() {
 </details>
 -->
 
+<!--
+<details>
+<summary><strong>useRender</strong></summary>
+
+#### `[content, render] = useRender( element | ref )`
+
+Get or set element content.
+
+```js
+function MyButton() {
+  let ref = useRef()
+  let [content, render] = useRender(ref)
+
+  render(<input ref={ref} value={value}/>)
+}
+```
+</details>
+-->
+
 <!-- - [ ] `useResource` − async source with state -->
 <!-- - [ ] `useFiles` -->
 <!-- - [ ] `useDB` -->
 <!-- - [ ] `useClipboard` -->
 <!-- - [ ] `useFavicon` -->
 <!-- - [ ] `useRemote` -->
-
-
-<!-- - [ ] `useProps` − component props (view) provider. -->
-<!-- - [ ] `useRender` + `createRender` − render (view) provider, instead of direct result. -->
 <!-- - [ ] `useHistory` − -->
 <!-- - [ ] `useHotkey` -->
 
 
+<!--
+<details><summary><strong>useProps</strong></summary>
 
+#### `[props, setProps] = useProps(element | ref, init?)`
 
-<!-- ## State -->
+Element props hook. Observes element attributes and properties changes.
+
+Observable properties are detected as:
+
+1. Standard prototype properties.
+2. Non-standard properties, set on element at the init moment.
+3. Properties defined in `init`.
+
+Primitive values are serialized as element attributes, objects and arrays as properties.
+
+```js
+```
+</details>
+-->
+
 
 <details>
 <summary><strong>useCountdown</strong></summary>
@@ -353,7 +385,7 @@ function MyComponent () {
 <details>
 <summary><strong>useFormField</strong></summary>
 
-#### `[inputProps, field] = useFormField(options)`
+#### `[props, field] = useFormField( options )`
 
 Form field state controller. Handles input state and validation.
 Useful for organizing controlled inputs or forms, a nice minimal replacement to form hooks libraries.
@@ -392,7 +424,6 @@ return <input {...props} />
 
 </details>
 
-
 <details>
 <summary><strong>useInput</strong></summary>
 
@@ -416,8 +447,55 @@ function MyButton() {
 ```
 </details>
 
+<!--
+<details><summary><strong>useForm</strong></summary>
 
-<!-- - [ ] `useForm` − form state hook -->
+#### `[fields, form] = useForm( fieldOptions )`
+
+High-order hook, combining multiple `useFormFields`. Useful building app forms.
+
+```js
+function MyForm() {
+  let [fields, form] = useForm({
+    username: { required },
+    password: { type: 'password', required }
+  })
+
+  return <form onSubmit={e => {
+    e.preventDefault()
+    if (!form.validate()) return
+    handleSubmit(form.values)
+  }}>
+    <input {...fields.username} />
+    <input {...fields.password} />
+    <input type="submit" />
+  </form>
+}
+```
+
+#### `fieldOptions`
+
+Object with keys as field names and props as props for `useFormField`.
+
+#### `fields`
+
+Object with `useFormField`s.
+
+#### `form`
+
+Form state.
+
+* `valid`
+* `errors`
+* `values`
+* `touched`
+* `set()`
+* `reset()`
+* `validate()`
+
+</details>
+-->
+
 <!-- - [ ] `useTable` − table state hook -->
 <!-- - [ ] `useDialog` − dialog builder helper -->
 <!-- - [ ] `useMenu` − menu builder helper -->
