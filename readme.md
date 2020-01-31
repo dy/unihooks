@@ -29,16 +29,13 @@ _Unihooks_ are not bound to react and work with any hooks-enabled framework:
 * [react](https://ghub.io/react)
 * [preact](https://ghub.io/preact)
 * [haunted](https://ghub.io/haunted)
-* [spect](https://ghub.io/spect)
 * [neverland](https://ghub.io/neverland)
 * [atomico](https://ghub.io/atomico)
-* [augmentor](https://ghub.io/augmentor)
-* [dom-augmentor](https://ghub.io/dom-augmentor)
 * [fuco](https://ghub.io/fuco)
-* [tng-hooks](https://ghub.io/tng-hooks)
-* [fn-with-hooks](https://ghub.io/fn-with-hooks)
-* [unhook](https://ghub.io/unhook)
-* ... see [any-hooks](https://ghub.io/any-hooks) for the full list
+* [spect](https://ghub.io/spect)
+* [augmentor](https://ghub.io/augmentor)
+
+See [any-hooks](https://ghub.io/any-hooks) for the full list.
 
 <!--
 To switch hooks framework:
