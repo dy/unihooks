@@ -117,7 +117,7 @@ function Component () {
 
 #### `[value, setValue] = useStorage(key, init?, options?)`
 
-`useChannel` with persistency to local/session storage.
+`useChannel` with persistency to local/session storage. A lightweight version of [useStore](https://ghub.io/use-store).
 
 ```js
 import { useStorage } from 'unihooks'
