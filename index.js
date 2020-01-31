@@ -346,3 +346,41 @@ export function useFormField(props = {}) {
   return field
 }
 
+export function useInput(ref, init) {
+  if (ref.nodeType) ref = { current: ref }
+
+  let key = ref.current && `${ref.current.id || ''}:${ref.current.type || 'text'}:${ref.current.name || ''}`
+
+  let [value, setValue] = useChannel(key, () => {
+    // init from input
+    let value = ref.current && ref.current.value
+    if (value != null) {
+      if (typeof init === 'function') return init(value)
+      return value
+    }
+    return init
+  })
+
+  hooks.useMemo(() => {
+    // write value if input is rewired
+    if (init === undefined) return
+    if (ref.current && ref.current.value == null) ref.current.setAttribute('value', ref.current.value = value)
+  }, [ref.current])
+
+  hooks.useEffect(() => {
+    // notify listeners, subscribe to input changes
+    let update = e => setValue(e.target.value)
+    ref.current.addEventListener('input', update)
+    ref.current.addEventListener('change', update)
+    return () => {
+      ref.current.removeEventListener('input', update)
+      ref.current.removeEventListener('change', update)
+    }
+  }, [ref.current])
+
+  return [value, (value) => {
+    setValue(value)
+    // main write to input
+    ref.current.setAttribute('value', ref.current.value = value)
+  }]
+}

@@ -117,7 +117,7 @@ function Component () {
 
 #### `[value, setValue] = useStorage(key, init?, options?)`
 
-`useChannel` with persistency to local/session storage. A lightweight version of [useStore](https://ghub.io/use-store).
+`useChannel` with persistency to local/session storage. Subscribes to `storage` event - updates if storage is changed from another tab.
 
 ```js
 import { useStorage } from 'unihooks'
@@ -147,6 +147,8 @@ function Component3 () {
 * `prefix` - prefix that's added to stored keys.
 * `storage` - manually pass session/local/etc storage.
 <!-- * `interval` - persistency interval -->
+
+Reference: [useStore](https://ghub.io/use-store).
 
 </details>
 
@@ -249,30 +251,7 @@ function MyButton() {
 </details>
 -->
 
-<!--
-<details>
-<summary><strong>useInput</strong></summary>
-
-#### `[value, setValue] = useInput( name | selector | element | ref )`
-
-Input element serves as data source. `null`/`undefined` values remove attribute from element.
-Useful for organizing light input controllers, when input element is governed by other components.
-To create UI, see [useFormField](#useFormField).
-
-```js
-function MyButton() {
-  let ref = useRef()
-  let [value, setValue] = useInput(ref)
-
-  return <input ref={ref} value={value}/>
-}
-```
-</details>
--->
-
 <!-- - [ ] `useResource` − async source with state -->
-<!-- - [ ] `useSharedState` − state, shared between browser tabs -->
-<!-- - [ ] `useSharedStorage` − state, shared between browser tabs -->
 <!-- - [ ] `useFiles` -->
 <!-- - [ ] `useDB` -->
 <!-- - [ ] `useClipboard` -->
@@ -344,8 +323,8 @@ function MyComponent () {
 
 #### `[inputProps, field] = useFormField(options)`
 
-Form field state helper. Handles input state and validation.
-Useful for organizing controlled inputs or forms, a nice minimal replacement to form hooks.
+Form field state controller. Handles input state and validation.
+Useful for organizing controlled inputs or forms, a nice minimal replacement to form hooks libraries.
 
 ```js
 let [props, field] = useFormField({
@@ -354,10 +333,10 @@ let [props, field] = useFormField({
   validate: value => !!value
 })
 
-return <input {...props} />
+// to set new input value
+useEffect(() => field.set(newValue))
 
-// spread can be used directly on field too
-// return <input {...field} />
+return <input {...props} />
 ```
 
 #### `options`
@@ -379,7 +358,30 @@ return <input {...props} />
 * `reset()` - reset form state to initial.
 * `validate(value)` - force-validate input.
 
+</details>
 
+
+<details>
+<summary><strong>useInput</strong></summary>
+
+#### `[value, setValue] = useInput( element | ref )`
+
+Uncontrolled input element value hook. Updates whenever input value changes.
+Setting `null` / `undefined` removes attribute from element.
+Useful for organizing simple input controllers, for advanced case see [useFormField](#useFormField).
+
+```js
+function MyButton() {
+  let ref = useRef()
+  let [value, setValue] = useInput(ref)
+
+  useEffect(() => {
+    // side-effect when value changes
+  }, [value])
+
+  return <input ref={ref} />
+}
+```
 </details>
 
 

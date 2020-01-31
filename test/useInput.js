@@ -1,10 +1,12 @@
 import t from 'tst'
-import { useInput, useEffect } from '../src/'
+import { useInput, useEffect, useRef } from '../'
 import enhook from './enhook.js'
 import { tick, idle, frame } from 'wait-please'
+import { render } from 'preact'
+import { html } from 'htm/preact'
 
 
-t('useInput: basic', async t => {
+t('useInput: element', async t => {
   let log = []
   let input = document.createElement('input')
   input.value = 'foo'
@@ -35,31 +37,27 @@ t('useInput: basic', async t => {
 })
 
 
-t('useInput: selector', async t => {
+t('useInput: ref', async t => {
   let log = []
-  let input = document.createElement('input')
-  input.value = 'xyz'
+  let el = document.createElement('div')
 
-  let f = enhook(() => {
-    let [v, setV] = useInput('input', 'foo')
+  render(html`<${() => {
+    let ref = useRef()
+    let [v, setV] = useInput(ref)
     log.push(v)
     useEffect(() => {
-      setV('bar')
+      setV('foo')
     }, [])
-  })
-  f()
 
-  t.deepEqual(log, ['foo'])
+    return html`<input ref=${ref}/>`
+  }}/>`, el)
+
+  let input = el.querySelector('input')
   await frame(2)
-  t.deepEqual(log, ['foo', 'bar'])
+  t.equal(input.value, 'foo')
+  t.deepEqual(log, [undefined, 'foo'])
 
-  document.body.appendChild(input)
-  f()
-  await frame(2)
-  t.deepEqual(log, ['foo', 'bar', 'xyz'])
-  t.equal(input.value, 'xyz')
+  render(null, el)
 
-  document.body.removeChild(input)
-  f.unhook()
   t.end()
 })
