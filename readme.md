@@ -91,7 +91,10 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 
 #### `[value, setValue] = useChannel(key, init?)`
 
-Global value provider. Can be used as value slot, eg. as application model layer without persistency. Also can be used for intercomponent communication.
+Global value provider - `useState` with value identified globally by `key`.
+Can be used as value store, eg. as application model layer without persistency. Also can be used for intercomponent communication.
+
+`init` can be a value or a function, and (re)applies if the `key` changes.
 
 ```js
 import { useChannel } from 'unihooks'
@@ -149,6 +152,35 @@ function Component3 () {
 <!-- * `interval` - persistency interval -->
 
 Reference: [useStore](https://ghub.io/use-store).
+
+</details>
+
+<details>
+<summary><strong>useAction</strong></summary>
+
+#### `[action] = useAction(key, fn)`
+
+Similar to `useChannel`, but used for storing functions. Different from `useChannel` in the same way the `useCallback` is different from `useMemo`.
+
+```js
+function RootComponent() {
+  useAction('load-content', async (slug, fresh = false) => {
+    const url = `/content/${slug}`
+    const cache = fresh ? 'reload' : 'force-cache'
+    const res = await fetch(url, { cache })
+    return await res.text()
+  })
+}
+
+function Content ({ slug = '/' }) {
+  let [content, setContent] = useState()
+  let [load] = useAction('load-content')
+  useEffect(() => load().then(setContent), [slug])
+  return html`
+    <article>${content}</article>
+  `
+}
+```
 
 </details>
 

@@ -37,6 +37,14 @@ export function useChannel(key, init) {
   }]
 }
 
+export function useAction(key, fn) {
+  let [action, setAction] = useChannel('__uhx:action-' + key, () => fn)
+  hooks.useMemo(() => {
+    action[Symbol.iterator] = function*() { yield action; yield setAction; }
+  }, [action])
+  return action
+}
+
 export function useStorage(key, init, o) {
   o = { storage: window.localStorage, prefix: '__uhx:storage-', ...(o || {}) }
   let storeKey = o.prefix + key

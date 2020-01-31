@@ -3,7 +3,7 @@ import t from 'tst'
 import enhook from './enhook.js'
 import { tick, frame, time } from 'wait-please'
 
-t('useChannel: dones not init twice', async t => {
+t('useChannel: does not init twice', async t => {
   let log = []
 
   let f1 = enhook(() => {
@@ -91,6 +91,39 @@ t('useChannel: reinitialize storage is fine', async t => {
   f('foo2', 'baz')
   await frame()
   t.deepEqual(log, ['bar', 'baz'])
+
+  f.unhook()
+
+  t.end()
+})
+
+t('useChannel: call init if key changes', async t => {
+  let log = []
+  let f = enhook((key) => {
+    let [value, setValue] = useChannel(key, (oldValue) => {
+      log.push('init', oldValue)
+      return key
+    })
+    log.push('render', value)
+  })
+
+  f('x')
+  t.deepEqual(log, ['init', undefined, 'render', 'x'])
+  await frame(2)
+  t.deepEqual(log, ['init', undefined, 'render', 'x'])
+  await frame(2)
+
+  f('x')
+  t.deepEqual(log, ['init', undefined, 'render', 'x', 'render', 'x'])
+  await frame(2)
+
+  log = []
+  f('y')
+  t.deepEqual(log, ['init', undefined, 'render', 'y'])
+  await frame(2)
+  f('y')
+  await frame(2)
+  t.deepEqual(log, ['init', undefined, 'render', 'y', 'render', 'y'])
 
   f.unhook()
 

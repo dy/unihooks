@@ -4,7 +4,8 @@
   "description": "Universal poly-framework react hooks",
   "main": "./index.js",
   "dependencies": {
-    "any-hooks": "^4.0.1"
+    "any-hooks": "^4.0.1",
+    "broadcast-channel": "^3.0.3"
   },
   "devDependencies": {
     "atomico": "^0.16.1",
