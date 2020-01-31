@@ -87,17 +87,17 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 ## Hooks
 
 <details>
-<summary><strong>useValue</strong></summary>
+<summary><strong>useChannel</strong></summary>
 
-#### `[value, setValue] = useValue(key, init?)`
+#### `[value, setValue] = useChannel(key, init?)`
 
-Global value provider, aka _useChannel_. Can be used as value slot, eg. as application model layer without persistency. Also can be used for intercomponent communication.
+Global value provider. Can be used as value slot, eg. as application model layer without persistency. Also can be used for intercomponent communication.
 
 ```js
-import { useValue } from 'unihooks'
+import { useChannel } from 'unihooks'
 
 function Component () {
-  let [users, setUsers] = useValue('users', {
+  let [users, setUsers] = useChannel('users', {
     data: [],
     loading: false,
     current: null
@@ -117,7 +117,7 @@ function Component () {
 
 #### `[value, setValue] = useStorage(key, init?, options?)`
 
-`useValue` with persistency to local/session storage.
+`useChannel` with persistency to local/session storage.
 
 ```js
 import { useStorage } from 'unihooks'
@@ -157,7 +157,8 @@ function Component3 () {
 
 Reflect value to `location.search`. `value` is turned to string via [URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams).
 To serialize objects or arrays, provide `.toString` method or convert manually.
-Turns on `history.pushstate` and `history.replacestate` events, as well as same-origin links listener.
+
+**NOTE**. Patches `history.push` and `history.replace` to enable `pushstate` and `replacestate` events.
 
 ```js
 function MyComponent () {
@@ -266,18 +267,6 @@ function MyButton() {
   return <input ref={ref} value={value}/>
 }
 ```
-</details>
--->
-
-
-<!--
-<details>
-<summary><strong>useChannel</strong></summary>
-
-#### `[value, setValue, state] = useChannel(key: string|symbol, init?: any )`
-
-Provides data channel for intercommunication between components. Can be used as a temporary shared state without persistency - instead of exposing props on elements or persisting storage.
-
 </details>
 -->
 

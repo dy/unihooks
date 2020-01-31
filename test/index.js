@@ -1,4 +1,4 @@
-import('./useValue').then()
+import('./useChannel').then()
 import('./useStorage').then()
 import('./useSearchParam').then()
 import('./useCountdown').then()

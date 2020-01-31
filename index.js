@@ -6,7 +6,7 @@ export default setHooks
 const listeners = globalThis.__uhxListeners || (globalThis.__uhxListeners = {}),
   values = globalThis.__uhxValues || (globalThis.__uhxValues = {})
 
-export function useValue(key, init) {
+export function useChannel(key, init) {
   let [, setState] = hooks.useState()
 
   hooks.useMemo(() => {
@@ -40,7 +40,7 @@ export function useValue(key, init) {
 export function useStorage(key, init, o) {
   o = { storage: window.localStorage, prefix: '__uhx:storage-', ...(o || {}) }
   let storeKey = o.prefix + key
-  let [value, setValue] = useValue(key, () => {
+  let [value, setValue] = useChannel(key, () => {
     // init from stored value, if any
     let storedStr = o.storage.getItem(storeKey), storedValue
     if (storedStr != null) {
@@ -78,7 +78,7 @@ wrapHistory('push')
 wrapHistory('replace')
 enableNavigateEvent()
 export function useSearchParam(key, init) {
-  let [value, setValue] = useValue('__uhx:searchParam-' + key, () => {
+  let [value, setValue] = useChannel('__uhx:searchParam-' + key, () => {
     let params = new URLSearchParams(window.location.search)
     if (params.has(key)) {
       let paramValue = params.get(key)
@@ -262,7 +262,7 @@ export function useFormField(props = {}) {
   let key = inputProps.name || inputProps.id || inputProps.key
 
   let inputRef = hooks.useRef()
-  let [init, setValue] = (persist ? useStorage : useValue)(key, value, { storage: window.sessionStorage, prefix })
+  let [init, setValue] = (persist ? useStorage : useChannel)(key, value, { storage: window.sessionStorage, prefix })
   let [focus, setFocus] = hooks.useState(false)
   let [error, validate] = useValidate(rules || (required ? v => !!v : null))
 
