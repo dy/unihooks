@@ -1,7 +1,7 @@
 import t from 'tst'
 import { useInput, useEffect, useRef } from '../'
 import enhook from './enhook.js'
-import { tick, idle, frame } from 'wait-please'
+import { tick, idle, frame, time } from 'wait-please'
 import { render } from 'preact'
 import { html } from 'htm/preact'
 
@@ -12,7 +12,7 @@ t('useInput: element', async t => {
   input.value = 'foo'
 
   let f = enhook(() => {
-    let [v, setV] = useInput(input, 'bar')
+    let [v, setV] = useInput(input)
     log.push(v)
     useEffect(() => {
       setV('bar')
@@ -47,6 +47,10 @@ t('useInput: ref', async t => {
     log.push(v)
     useEffect(() => {
       setV('foo')
+
+      setTimeout(() => {
+        setV(null)
+      }, 50)
     }, [])
 
     return html`<input ref=${ref}/>`
@@ -56,6 +60,8 @@ t('useInput: ref', async t => {
   await frame(2)
   t.equal(input.value, 'foo')
   t.deepEqual(log, [undefined, 'foo'])
+  await time(50)
+  t.ok(!input.hasAttribute('value'))
 
   render(null, el)
 

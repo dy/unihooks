@@ -366,9 +366,9 @@ return <input {...props} />
 
 #### `[value, setValue] = useInput( element | ref )`
 
-Uncontrolled input element value hook. Updates whenever input value changes.
+Uncontrolled input element hook. Updates if input value changes.
 Setting `null` / `undefined` removes attribute from element.
-Useful for organizing simple input controllers, for advanced case see [useFormField](#useFormField).
+Useful for organizing simple input controllers, for advanced cases see [useFormField](#useFormField).
 
 ```js
 function MyButton() {

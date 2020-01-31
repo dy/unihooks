@@ -78,7 +78,7 @@ wrapHistory('push')
 wrapHistory('replace')
 enableNavigateEvent()
 export function useSearchParam(key, init) {
-  let [value, setValue] = useChannel('__uhx:searchParam-' + key, () => {
+  let [value, setValue] = useChannel('__uhx:search-param-' + key, () => {
     let params = new URLSearchParams(window.location.search)
     if (params.has(key)) {
       let paramValue = params.get(key)
@@ -349,7 +349,7 @@ export function useFormField(props = {}) {
 export function useInput(ref, init) {
   if (ref.nodeType) ref = { current: ref }
 
-  let key = ref.current && `${ref.current.id || ''}:${ref.current.type || 'text'}:${ref.current.name || ''}`
+  let key = '__uhx:input-' + (ref.current && `${ref.current.id || ''}:${ref.current.type || 'text'}:${ref.current.name || ''}`)
 
   let [value, setValue] = useChannel(key, () => {
     // init from input
@@ -364,7 +364,10 @@ export function useInput(ref, init) {
   hooks.useMemo(() => {
     // write value if input is rewired
     if (init === undefined) return
-    if (ref.current && ref.current.value == null) ref.current.setAttribute('value', ref.current.value = value)
+    if (ref.current && ref.current.value == null) {
+      ref.current.setAttribute('value', ref.current.value = value)
+      if (value == null) ref.current.removeAttribute(value)
+    }
   }, [ref.current])
 
   hooks.useEffect(() => {
@@ -382,5 +385,6 @@ export function useInput(ref, init) {
     setValue(value)
     // main write to input
     ref.current.setAttribute('value', ref.current.value = value)
+    if (value == null) ref.current.removeAttribute('value')
   }]
 }
