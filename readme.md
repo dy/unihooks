@@ -1,6 +1,6 @@
 # unihooks ![experimental](https://img.shields.io/badge/stability-experimental-yellow) [![Build Status](https://travis-ci.org/unihooks/unihooks.svg?branch=master)](https://travis-ci.org/unihooks/unihooks)
 
-Essential hooks collection for everyday react(-ish) projects.
+Essential hooks collection for everyday react<sup>[1](#user-content-1)</sup> projects.
 
 [![NPM](https://nodei.co/npm/unihooks.png?mini=true)](https://nodei.co/npm/unihooks/)
 
@@ -21,7 +21,7 @@ const MyComponent = () => {
 ## Principles
 
 <details>
-<summary><strong>1. Framework agnostic</strong></summary>
+<summary><strong id="1">1. Framework agnostic</strong></summary>
 <br/>
 
 _Unihooks_ are not bound to react and work with any hooks-enabled framework:
