@@ -3,6 +3,7 @@
   "version": "2.4.0",
   "description": "Universal poly-framework react hooks",
   "main": "./index.js",
+  "module": "./index.js",
   "dependencies": {
     "any-hooks": "^4.0.1",
     "broadcast-channel": "^3.0.3"
@@ -43,20 +44,17 @@
   "keywords": [
     "react",
     "hooks",
-    "enhook",
     "augmentor",
     "preact",
     "haunted",
     "atomico",
+    "fuco",
     "rax",
-    "any-hooks",
-    "use-store",
-    "use-local-storage",
-    "use-query-string",
-    "use-prop",
-    "use-attr",
-    "use-effect",
-    "use-transition"
+    "useStore",
+    "useStorage",
+    "useQueryString",
+    "useSearchParam",
+    "useChannel"
   ],
   "author": "Dmitry Yv. <df.creative@gmail.com>",
   "license": "MIT",
