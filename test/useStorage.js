@@ -128,5 +128,21 @@ t('useStorage: fn init should be called with initial value', async t => {
   t.end()
 })
 
+t('useStorage: fn sometimes does not trigger', async t => {
+  let log = []
+  let f = enhook(() => {
+    let [value] = useStorage('x', () => {
+      log.push(0)
+      return 1
+    })
+    log.push(value)
+  })
+  f()
+  t.deepEqual(log, [0, 1])
 
+  f.unhook()
+  await frame(4)
+
+  t.end()
+})
 

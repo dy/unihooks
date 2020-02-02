@@ -53,13 +53,10 @@ export function useStorage(key, init, o) {
   let storeKey = o.prefix + key
   let [value, setValue] = useChannel(key, () => {
     // init from stored value, if any
-    let storedStr = o.storage.getItem(storeKey), storedValue
-    if (storedStr != null) {
-      storedValue = JSON.parse(storedStr)
-      if (typeof init === 'function') return init(storedValue)
-      return storedValue
-    }
-    return init
+    let stored = o.storage.getItem(storeKey)
+    if (stored != null) stored = JSON.parse(stored)
+    if (typeof init === 'function') return init(stored)
+    return init == null ? stored : init
   })
 
   hooks.useMemo(() => {
@@ -91,12 +88,10 @@ enableNavigateEvent()
 export function useSearchParam(key, init) {
   let [value, setValue] = useChannel('__uhx:search-param-' + key, () => {
     let params = new URLSearchParams(window.location.search)
-    if (params.has(key)) {
-      let paramValue = params.get(key)
-      if (typeof init === 'function') return init(paramValue)
-      return paramValue
-    }
-    return init
+    let param
+    if (params.has(key)) param = params.get(key)
+    if (typeof init === 'function') return init(param)
+    return init == null ? param : init
   })
 
   hooks.useMemo(() => {
