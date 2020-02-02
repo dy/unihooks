@@ -6,30 +6,32 @@ export default setHooks
 const listeners = globalThis.__uhxListeners || (globalThis.__uhxListeners = {}),
   values = globalThis.__uhxValues || (globalThis.__uhxValues = {})
 
-export function useChannel(key, init) {
+export function useChannel(key, init, deps=[]) {
   let [, setState] = hooks.useState()
+  let initKey = hooks.useRef()
 
   hooks.useMemo(() => {
     (listeners[key] || (listeners[key] = [])).push(setState)
 
     if (init === undefined) return
-    if (!(key in values)) {
-      if (typeof init === 'function') {
-        init = init()
-      }
+    // if (key in values) return console.warn(`Channel ${key} is already initialized.`)
+    if (
+      !(key in values) || // init run
+      initKey.current === key // or deps changed
+    ) {
+      initKey.current = key
+      if (typeof init === 'function') init = init()
       values[key] = init
-      if (init && init.then) {
-        init.then(init => {
-          setState(values[key] = init)
-        })
-      }
+      if (init && init.then) init.then(init => setState(values[key] = init))
     }
-  }, [key])
+  }, [key, ...deps])
 
-  hooks.useEffect(() => () => {
+  hooks.useLayoutEffect(() => () => {
     listeners[key].splice(listeners[key].indexOf(setState) >>> 0, 1)
-    if (!listeners[key].length) delete values[key]
-  }, [key])
+    if (!listeners[key].length) {
+      delete values[key]
+    }
+  }, [key, ...deps])
 
   return [values[key], (value) => {
     values[key] = typeof value === 'function' ? value(values[key]) : value
@@ -37,13 +39,13 @@ export function useChannel(key, init) {
   }]
 }
 
-export function useAction(key, init) {
-  let [action, setAction] = useChannel('__uhx:action-' + key, init !== undefined ? () => init : undefined)
+export function useAction(key, init, deps = []) {
+  let [action, setAction] = useChannel('__uhx:action-' + key, init !== undefined ? () => init : undefined, deps)
   return hooks.useMemo(() => {
     if (typeof action !== 'function') return [action]
     action[Symbol.iterator] = function*() { yield action; yield setAction; }
     return action
-  }, [action])
+  }, [action, ...deps])
 }
 
 export function useStorage(key, init, o) {
@@ -271,7 +273,7 @@ export function useFormField(props = {}) {
   let key = inputProps.name || inputProps.id || inputProps.key
 
   let inputRef = hooks.useRef()
-  let [init, setValue] = (persist ? useStorage : useChannel)(key, value, { storage: window.sessionStorage, prefix })
+  let [init, setValue] = persist ? useStorage(key, value, { storage: window.sessionStorage, prefix }) : useChannel(key, value)
   let [focus, setFocus] = hooks.useState(false)
   let [error, validate] = useValidate(rules || (required ? v => !!v : null))
 

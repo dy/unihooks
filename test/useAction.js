@@ -65,3 +65,18 @@ t('useAction: null value', async t => {
 
   t.end()
 })
+
+t('useAction: should support deps', async t => {
+  let log = []
+  let f = enhook((arg) => {
+    let act = useAction('x', () => log.push(arg), [arg])
+    act()
+  })
+  f(1)
+  f(2)
+
+  t.deepEqual(log, [1, 2])
+  f.unhook()
+
+  t.end()
+})

@@ -89,12 +89,12 @@ const MyComponent = () => { let ua = navigator.userAgent } // ✔ − direct API
 <details>
 <summary><strong>useChannel</strong></summary>
 
-#### `[value, setValue] = useChannel(key, init?)`
+#### `[value, setValue] = useChannel(key, init?, deps?)`
 
 Global value provider - `useState` with value identified globally by `key`.
 Can be used as value store, eg. as application model layer without persistency. Also can be used for intercomponent communication.
 
-`init` can be a value or a function, and (re)applies if the `key` changes.
+`init` can be a value or a function, and (re)applies if the `key` (or `deps`) changes.
 
 ```js
 import { useChannel } from 'unihooks'
@@ -158,9 +158,9 @@ Reference: [useStore](https://ghub.io/use-store).
 <details>
 <summary><strong>useAction</strong></summary>
 
-#### `[action] = useAction(key, fn)`
+#### `[action] = useAction(key, cb, deps?)`
 
-Similar to `useChannel`, but used for storing functions. Different from `useChannel` in the same way the `useCallback` is different from `useMemo`.
+Similar to `useChannel`, but used for storing functions. Different from `useChannel` in the same way the `useCallback` is different from `useMemo`. `deps` indicate if value must be reinitialized.
 
 ```js
 function RootComponent() {
