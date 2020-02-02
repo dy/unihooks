@@ -30,16 +30,38 @@ t('useAction: basic', async t => {
 
 t('useAction: passes args & returns result', async t => {
   let log = []
-  enhook(() => {
+  let f = enhook(() => {
     let action = useAction('args', function (...args) {
       log.push(...args)
       return 4
     })
     log.push(action(1, 2, 3))
-  })()
+  })
+  f()
 
   t.deepEqual(log, [1, 2, 3, 4])
 
+  f.unhook()
   t.end()
 })
 
+t('useAction: null value', async t => {
+  let log = []
+  let f1 = enhook(() => {
+    let a = useAction('x')
+    log.push(a[0])
+  })
+  let f2 = enhook(() => {
+    let a = useAction('x', 123)
+    log.push(a[0])
+  })
+  f1()
+  f2()
+
+  t.deepEqual(log,[undefined, 123])
+
+  f1.unhook()
+  f2.unhook()
+
+  t.end()
+})
