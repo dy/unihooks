@@ -56,7 +56,7 @@ export function useStorage(key, init, o) {
     let stored = o.storage.getItem(storeKey)
     if (stored != null) stored = JSON.parse(stored)
     if (typeof init === 'function') return init(stored)
-    return init == null ? stored : init
+    return stored == null ? init : stored
   })
 
   hooks.useMemo(() => {
@@ -91,7 +91,7 @@ export function useSearchParam(key, init) {
     let param
     if (params.has(key)) param = params.get(key)
     if (typeof init === 'function') return init(param)
-    return init == null ? param : init
+    return param == null ? init : param
   })
 
   hooks.useMemo(() => {

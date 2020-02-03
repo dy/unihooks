@@ -206,6 +206,23 @@ t.browser('useSearchParam: default array', async t => {
   t.end()
 })
 
+t.browser('useSearchParam: init from empty string', async t => {
+  let log = []
+
+  window.history.pushState(null, '', '?x=1')
+  let f = enhook(() => {
+    let [x] = useSearchParam('x', '')
+    log.push(x)
+  })
+  f()
+  t.deepEqual(log, ['1'])
+
+  f.unhook()
+
+  clearSearch()
+  t.end()
+})
+
 function clearSearch() {
   window.history.pushState(null, '', window.location.href.split('?')[0])
 }
