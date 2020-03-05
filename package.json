@@ -2,11 +2,9 @@
   "name": "unihooks",
   "version": "2.5.4",
   "description": "Universal poly-framework react hooks",
-  "main": "./index.js",
-  "module": "./index.js",
-  "files": [
-    "./index.js"
-  ],
+  "main": "index.js",
+  "module": "index.js",
+  "files": ["index.js"],
   "dependencies": {
     "any-hooks": "^4.0.1"
   },
