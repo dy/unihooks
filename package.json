@@ -5,8 +5,7 @@
   "main": "./index.js",
   "module": "./index.js",
   "dependencies": {
-    "any-hooks": "^4.0.1",
-    "broadcast-channel": "^3.0.3"
+    "any-hooks": "^4.0.1"
   },
   "devDependencies": {
     "atomico": "^0.16.1",
