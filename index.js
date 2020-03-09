@@ -107,7 +107,9 @@ export function useSearchParam(key, init) {
     const update = (e) => {
       let params = new URLSearchParams(window.location.search)
       let newValue = params.get(key)
-      if (newValue !== value) setValue(newValue)
+      // FIXME: there's a test case failing here from wishbox - lang didn't switch more than once.
+      // if (newValue !== value) setValue(newValue)
+      setValue(newValue)
     }
 
     window.addEventListener('popstate', update)
