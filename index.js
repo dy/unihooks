@@ -247,7 +247,15 @@ export function useValidate(validator, init) {
         return e
       }
     }
-    if (Array.isArray(validator)) return validator.every(validator => check(value, validator))
+
+    if (Array.isArray(validator)) {
+      for (let i = 0, error; i < validator.length; i++) {
+        error = check(value, validator[i])
+        if (error !== null) return error
+      }
+      return null
+    }
+
     return check(value, validator)
   }, [])
 
@@ -266,7 +274,7 @@ export function useValidate(validator, init) {
 export function useFormField(props = {}) {
   const prefix = '__uhx:form-field-'
 
-  let { value, validate: rules, required, persist, ...inputProps } = props
+  let { value='', validate: rules, required, persist, ...inputProps } = props
   let key = inputProps.name || inputProps.id || inputProps.key
 
   let inputRef = hooks.useRef()

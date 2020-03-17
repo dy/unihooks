@@ -1,6 +1,6 @@
 import t from 'tst'
 import enhook from './enhook.js'
-import { useValidate, useEffect } from '../src/'
+import { useValidate, useEffect } from '../'
 import { tick, frame, time } from 'wait-please'
 
 t('useValidate: validates single', async t => {
@@ -42,17 +42,17 @@ t('useValidate: validates array', async t => {
 
   log = []
   f('b')
-  await time(10)
+  await frame(2)
   t.deepEqual(log, ['b', true, false, 'b', true, null])
 
   t.end()
 })
 
-t('useValidate: error in validator', async t => {
+t.skip('useValidate: error in validator', async t => {
   let log = []
 
   let f = enhook((arg) => {
-    let [err, validate] = useValidate(arg => xxx )
+    let [err, validate] = useValidate(arg => xxx)
     log.push(arg, validate(arg), err)
   })
 
@@ -60,6 +60,24 @@ t('useValidate: error in validator', async t => {
   await time(10)
   log[5] = log[5].name
   t.deepEqual(log, ['', false, null, '', false, 'ReferenceError'])
+
+  t.end()
+})
+
+t('useValidate: error in array', async t => {
+  let log = []
+
+  let f = enhook((arg) => {
+    let [err, validate] = useValidate([v => true, v => v === 'b' ? true : 'ugh'])
+    log.push(arg, validate(arg), err)
+  })
+
+  await time(10)
+
+  log = []
+  f('a')
+  await time(10)
+  t.deepEqual(log, ["a", false, null, 'a', false, 'ugh'])
 
   t.end()
 })

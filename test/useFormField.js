@@ -66,7 +66,7 @@ t('useFormField: state should reflect interactions', async t => {
   input.dispatchEvent(new InputEvent('input', { data: 'a'}))
 
   await frame(2)
-  t.deepEqual(log, [undefined, false, 'a', true])
+  t.deepEqual(log, ['', false, 'a', true])
 
   // document.body.removeChild(el)
   render(null, el)
@@ -302,3 +302,5 @@ t('useFormField: changed input props must be updated', async t => {
 
   t.end()
 })
+
+t.todo('useFormField: initial value should not be null')
