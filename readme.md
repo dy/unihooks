@@ -447,6 +447,32 @@ function MyButton() {
 ```
 </details>
 
+
+<details>
+<summary><strong>useObservable</strong></summary>
+
+#### `[state, setState] = useObservable(observable)`
+
+Observable as hook. Plug in any [spect/v](https://ghub.io/spect), [observable](https://ghub.io/observable), [mutant](https://ghub.io/mutant), [observ](https://ghub.io/observ) be free.
+
+```js
+import { v } from 'spect/v'
+
+const vCount = v(0)
+
+function MyComponent () {
+  let [count, setCount] = useObservable(vCount)
+
+  useEffect(() => {
+    let id = setInterval(() => setCount(count++), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  return <>Count: { count }</>
+}
+```
+</details>
+
 <!--
 <details><summary><strong>useForm</strong></summary>
 

@@ -404,3 +404,9 @@ export function useInput(ref, init) {
     if (value == null) ref.current.removeAttribute('value')
   }]
 }
+
+export function useObservable(v) {
+  let [state, setState] = hooks.useState(v())
+  hooks.useEffect(() => v(v => setState(v)), [])
+  return [state, state => v(state)]
+}
