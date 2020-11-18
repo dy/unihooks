@@ -652,6 +652,10 @@ useResetState
 * [any-hooks](https://ghub.io/any-hooks) - cross-framework standard hooks provider.
 * [enhook](https://ghub.io/enhook) - run hooks in regular functions.
 
+## Alternatives
+
+* [valtio](https://github.com/pmndrs/valtio)
+
 ## License
 
 MIT
